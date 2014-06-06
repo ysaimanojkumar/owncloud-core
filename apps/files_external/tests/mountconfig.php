@@ -46,6 +46,7 @@ class Test_Mount_Config extends \PHPUnit_Framework_TestCase {
 	const TEST_GROUP2B = 'group2b';
 
 	public function setUp() {
+		OC_Mount_Config::$skipTest = true;
 		\OC_User::createUser(self::TEST_USER1, self::TEST_USER1);
 		\OC_User::createUser(self::TEST_USER2, self::TEST_USER2);
 
@@ -77,8 +78,6 @@ class Test_Mount_Config extends \PHPUnit_Framework_TestCase {
 			'user_mounting_backends',
 			implode(',', array_keys($this->allBackends))
 		);
-
-		OC_Mount_Config::$skipTest = true;
 	}
 
 	public function tearDown() {
