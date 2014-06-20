@@ -866,7 +866,7 @@ class Access extends LDAPUtility {
 	private function countEntriesInSearchResults($searchResults, $limit,
 																&$hasHitLimit) {
 		$cr = $this->connection->getConnectionResource();
-		$count = 0;
+		$counter = 0;
 
 		foreach($searchResults as $res) {
 			$count = intval($this->ldap->countEntries($cr, $res));
