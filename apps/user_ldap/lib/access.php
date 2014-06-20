@@ -638,7 +638,7 @@ class Access extends LDAPUtility {
 
 		$sqlAdjustment = '';
 		$dbtype = \OCP\Config::getSystemValue('dbtype');
-		if($dbtype === 'mysql') {
+		if($dbtype === 'mysql' || $dbtype == 'oci') {
 			$sqlAdjustment = 'FROM DUAL';
 		}
 
