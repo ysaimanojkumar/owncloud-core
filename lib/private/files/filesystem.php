@@ -348,8 +348,14 @@ class Filesystem {
 			$homeStorage['arguments']['user'] = $userObject;
 
 			// check for legacy home id (<= 5.0.12)
-			if (\OC\Files\Cache\Storage::exists('local::' . $root . '/')) {
-				$homeStorage['arguments']['legacy'] = true;
+			$legacyStorageId = 'local::' . $root . '/';
+			if (\OC\Files\Cache\Storage::exists($legacyStorageId)) {
+				// try to convert to new one
+				// TODO: prevent concurrency!
+				if (!\OC\Files\Cache\Storage::rename($legacyStorageId, 'home::' . $homeStorage['arguments']['user']->getUID())) {
+					// keep using legacy storage as it could not be renamed properly
+					$homeStorage['arguments']['legacy'] = true;
+				}
 			}
 
 			self::mount($homeStorage['class'], $homeStorage['arguments'], $user);
