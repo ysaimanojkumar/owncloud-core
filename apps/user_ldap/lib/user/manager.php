@@ -66,6 +66,10 @@ class Manager {
 		'byDN'  => array(),
 		'byUid' => array(),
 	);
+	/**
+	 * @var IUser[]
+	 */
+	protected $deletedUsers = array();
 
 	/**
 	 * @brief Constructor
@@ -76,11 +80,13 @@ class Manager {
 	 * @param  \OCA\user_ldap\lib\LogWrapper
 	 * @param \OCP\IAvatarManager
 	 * @param \OCP\Image an empty image instance
+	 * @param \OC\Hooks\Emitter
 	 * @throws Exception when the methods mentioned above do not exist
 	 */
 	public function __construct(\OCP\IConfig $ocConfig,
 		FilesystemHelper $ocFilesystem, LogWrapper $ocLog,
-		\OCP\IAvatarManager $avatarManager, \OCP\Image $image) {
+		\OCP\IAvatarManager $avatarManager, \OCP\Image $image,
+		\OC\Hooks\Emitter $emitter) {
 
 		if(!method_exists($ocConfig, 'setUserValue')
 		   || !method_exists($ocConfig, 'getUserValue')) {
@@ -91,6 +97,7 @@ class Manager {
 		$this->ocLog         = $ocLog;
 		$this->avatarManager = $avatarManager;
 		$this->image         = $image;
+		$emitter->listen('\OC\User', 'postDelete', array($this, 'processDeleted'));
 	}
 
 	/**
@@ -163,6 +170,31 @@ class Manager {
 			return $this->createAndCache($dn, $id);
 		}
 		return null;
+	}
+
+	public function markDeleted(IUser $user) {
+		$this->deletedUsers[$user->getUsername()] = $user;
+	}
+
+	/**
+	 * cleans up after an LDAP user has been detected as deleted
+	 * @param \OC\User\User
+	 */
+	public function processDeleted(\OC\User\User $user) {
+		$ocname= $user->getUID();
+		if(!isset($this->deletedUsers[$ocname])) {
+			//not ours
+			return;
+		}
+		$dn  = $user->getDN();
+
+		//remove mapping
+		$this->access->removedMappedUser($ocname, $dn);
+
+		//clean up instances
+		unset($this->users['byUid'][$ocname]);
+		unset($this->users['byDN'][$dn]);
+		unset($this->deletedUsers[$ocname]);
 	}
 
 }

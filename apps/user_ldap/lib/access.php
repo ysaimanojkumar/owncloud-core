@@ -442,6 +442,23 @@ class Access extends LDAPUtility implements user\IUserTools {
 	}
 
 	/**
+	 * removes a user from the mappings table
+	 * @param string
+	 * @param string $dn
+	 * @return bool
+	 */
+	private function removeMappedUser($ocName, $dn) {
+		$query = \OCP\DB::prepare('
+			DELETE
+			FROM `'.$this->getMapTable(true).'`
+			WHERE  `owncloud_name` = ?
+				AND `ldap_dn` = ?'
+		);
+		$res = $query->execute(array($ocName, $dn));
+		return $res ? true : false;
+	}
+
+	/**
 	 * @param string $dn
 	 * @return bool|string
 	 */

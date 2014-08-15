@@ -31,7 +31,8 @@ if(count($configPrefixes) === 1) {
 		new OCA\user_ldap\lib\FilesystemHelper(),
 		new OCA\user_ldap\lib\LogWrapper(),
 		\OC::$server->getAvatarManager(),
-		new \OCP\Image());
+		new \OCP\Image(),
+		OC::$server->getUserSession());
 	$connector = new OCA\user_ldap\lib\Connection($ldapWrapper, $configPrefixes[0]);
 	$ldapAccess = new OCA\user_ldap\lib\Access($connector, $ldapWrapper, $userManager);
 	$userBackend  = new OCA\user_ldap\USER_LDAP($ldapAccess);
@@ -41,19 +42,15 @@ if(count($configPrefixes) === 1) {
 	$groupBackend  = new OCA\user_ldap\Group_Proxy($configPrefixes, $ldapWrapper);
 }
 
+// $userSession = OC::$server->getUserSession();
+// $userSession->listen('\OC\User', 'preDelete', $CALLBACK);
+// $userSession->listen('\OC\User', 'postDelete', $CALLBACK);
+
 if(count($configPrefixes) > 0) {
 	// register user backend
 	OC_User::useBackend($userBackend);
 	OC_Group::useBackend($groupBackend);
 }
-
-// add settings page to navigation
-$entry = array(
-	'id' => 'user_ldap_settings',
-	'order'=>1,
-	'href' => OCP\Util::linkTo( 'user_ldap', 'settings.php' ),
-	'name' => 'LDAP'
-);
 
 OCP\Backgroundjob::registerJob('OCA\user_ldap\lib\Jobs');
 if(OCP\App::isEnabled('user_webdavauth')) {

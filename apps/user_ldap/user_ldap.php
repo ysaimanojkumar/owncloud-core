@@ -160,7 +160,20 @@ class USER_LDAP extends BackendUtility implements \OCP\UserInterface {
 	* Deletes a user
 	*/
 	public function deleteUser($uid) {
-		return false;
+		if($this->userExists($uid)) {
+			//user is available in LDAP
+			return false;
+		}
+
+		$user = $this->access->userManager->get($uid);
+		if(is_null($user)) {
+			//not a known LDAP user
+			return false;
+		}
+
+		$this->access->userManager->markDeleted($user);
+
+		return true;
 	}
 
 	/**
@@ -171,6 +184,14 @@ class USER_LDAP extends BackendUtility implements \OCP\UserInterface {
 	public function getHome($uid) {
 		// user Exists check required as it is not done in user proxy!
 		if(!$this->userExists($uid)) {
+			//deleted on LDAP? let's see if we can find a trace of him
+			$user = $this->access->userManager->get($uid);
+			if(is_null($user)) {
+				return false;
+			}
+			//indeed! Maybe there was a custom home folder set up. Return this
+			//so it can be deleted
+			$homedir = \OCP\Config::setUserValue($uid, 'user_ldap', 'customUserHome', false);
 			return false;
 		}
 
@@ -197,6 +218,7 @@ class USER_LDAP extends BackendUtility implements \OCP\UserInterface {
 						\OC::$SERVERROOT.'/data' ) . '/' . $homedir[0];
 				}
 				$this->access->connection->writeToCache($cacheKey, $homedir);
+				\OCP\Config::setUserValue($uid, 'user_ldap', 'customUserHome', $homedir);
 				return $homedir;
 			}
 		}
