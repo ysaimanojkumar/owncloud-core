@@ -31,6 +31,26 @@ class OC_Connector_Sabre_Server extends Sabre_DAV_Server {
 	/**
 	 * @see Sabre_DAV_Server
 	 */
+	public function getHTTPRange() {
+		if ($this->ignoreRangeHeader) {
+			return null;
+		}
+		return parent::getHTTPRange();
+	}
+
+	protected function httpGet($uri) {
+		$range = $this->getHTTPRange();
+
+		if (OC_App::isEnabled('files_encryption') && $range) {
+			// encryption does not support range requests
+			$this->ignoreRangeHeader = true;	
+		}
+		return parent::httpGet($uri);
+	}
+
+	/**
+	 * @see \Sabre\DAV\Server
+	 */
 	protected function httpPropfind($uri) {
 
 		// $xml = new Sabre_DAV_XMLReader(file_get_contents('php://input'));
