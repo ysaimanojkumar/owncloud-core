@@ -21,11 +21,36 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 	 */
 	protected $limit = 50;
 
+	/**
+	 * @var \OCP\UserInterface $userBackend
+	 */
+	protected $userBackend;
+
+	/**
+	 * @var \OCP\IConfig $ocConfig
+	 */
+	protected $ocConfig;
+
+	/**
+	 * @var \OCP\IDBConnection $db
+	 */
+	protected $db;
+
+	/**
+	 * @var false $userIntf
+	 */
+	protected $userIntf;
+
 	public function __construct() {
 		$this->setInterval(23);
 	}
 
 	public function run($argument) {
+		$this->userBackend = $argument['userBackend'];
+		$this->ocConfig    = $argument['ocConfig'];
+		$this->db          = $argument['db'];
+		$this->userIntf    = $argument['userIntf'];
+
 		$users = $this->getMappedUsers($this->limit, $this->getOffset());
 		if(!is_array($users)) {
 			//something wrong? Let's start from the beginning next time and
@@ -39,27 +64,14 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 	}
 
 	/**
-	 * returns an LDAP user backend
-	 * @return \OCP\UserInterface
-	 */
-	private function getUserBackend() {
-		$ldapWrapper = new LDAP();
-		$configPrefixes = Helper::getServerConfigurationPrefixes(true);
-		$backend = new \OCA\user_ldap\User_Proxy($configPrefixes, $ldapWrapper);
-		return $backend;
-	}
-
-	/**
 	 * checks users whether they are still existing
 	 * @param array $users result from getMappedUsers()
 	 * @return int number of users that have been found as deleted
 	 */
 	private function checkUsers($users) {
 		$deletionCounter = 0;
-		$backend = $this->getUserBackend();
-		$allConfig = \OC::$server->getAllConfig();
 		foreach($users as $user) {
-			$this->checkUser($user, $backend, $allConfig, $deletionCounter);
+			$this->checkUser($user, $this->ocConfig, $deletionCounter);
 		}
 		return $deletionCounter;
 	}
@@ -67,20 +79,23 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 	/**
 	 * checks whether a user is still existing in LDAP
 	 * @param string[] $user
-	 * @param \OCP\UserInterface $backend the user backend
-	 * @param \OCP\IConfig $config access to user preferences
 	 * @param int &$deletionCounter
 	 */
 	private function checkUser(
-		$user, \OCP\UserInterface $backend, \OCP\IConfig $config, &$deletionCounter) {
+		$user, &$deletionCounter) {
 
-		if($backend->userExists($user['name'])) {
+		if($this->userBackend->userExists($user['name'])) {
 			//still available, all good
 			return;
 		}
 
-		$config->setUserValue($user['name'], 'user_ldap', 'isDeleted', '1');
-		\OC_User::deleteUser($user['name']);
+		$this->ocConfig->setUserValue($user['name'], 'user_ldap', 'isDeleted', '1');
+		if($this->userIntf !== false) {
+			//working around static classes for testing
+			$this->userIntf->deleteUser($user['name']);
+		} else {
+			\OC_User::deleteUser($user['name']);
+		}
 		$deletionCounter++;
 	}
 
@@ -91,9 +106,7 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 	 * @return array
 	 */
 	private function getMappedUsers($limit, $offset) {
-		$db = \OC::$server->getDatabaseConnection();
-
-		$query = $db->prepare('
+		$query = $this->db->prepare('
 			SELECT
 				`ldap_dn` AS `dn`,
 				`owncloud_name` AS `name`,
@@ -111,8 +124,7 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 	 * @return int
 	 */
 	private function getOffset() {
-		$appconfig = \OC::$server->getAppConfig();
-		return $appconfig->getValue('user_ldap', 'cleanUpJobOffset', 0);
+		return $this->ocConfig->getAppValue('user_ldap', 'cleanUpJobOffset', 0);
 	}
 
 	/**
@@ -123,8 +135,7 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 	public function setOffset($deletedUsers = 0, $reset = false) {
 		$newOffset = $reset ? 0 :
 			$this->getOffset() + $this->limit - $deletedUsers;
-		$appconfig = \OC::$server->getAppConfig();
-		$appconfig->setValue('user_ldap', 'cleanUpJobOffset', $newOffset);
+		$this->ocConfig->setAppValue('user_ldap', 'cleanUpJobOffset', $newOffset);
 	}
 
 }
