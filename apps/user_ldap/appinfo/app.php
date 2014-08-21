@@ -5,6 +5,7 @@
 *
 * @author Dominik Schmidt
 * @copyright 2011 Dominik Schmidt dev@dominik-schmidt.de
+* @copyright 2014 Arthur Schiwon <blizzz@owncloud.com>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
@@ -20,6 +21,8 @@
 * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 *
 */
+
+OC::$CLASSPATH['OCA\user_ldap\lib\CleanUp'] = 'user_ldap/lib/jobs/cleanup.php';
 
 OCP\App::registerAdmin('user_ldap', 'settings');
 
@@ -47,15 +50,9 @@ if(count($configPrefixes) > 0) {
 	OC_Group::useBackend($groupBackend);
 }
 
-// add settings page to navigation
-$entry = array(
-	'id' => 'user_ldap_settings',
-	'order'=>1,
-	'href' => OCP\Util::linkTo( 'user_ldap', 'settings.php' ),
-	'name' => 'LDAP'
-);
-
 OCP\Backgroundjob::registerJob('OCA\user_ldap\lib\Jobs');
+OCP\Backgroundjob::registerJob('OCA\user_ldap\lib\CleanUp');
+
 if(OCP\App::isEnabled('user_webdavauth')) {
 	OCP\Util::writeLog('user_ldap',
 		'user_ldap and user_webdavauth are incompatible. You may experience unexpected behaviour',
