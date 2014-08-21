@@ -602,41 +602,6 @@ class Access extends LDAPUtility implements user\IUserTools {
 	}
 
 	/**
-	 * retrieves all known groups from the mappings table
-	 * @return array with the results
-	 *
-	 * retrieves all known groups from the mappings table
-	 */
-	private function mappedGroups() {
-		return $this->mappedComponents(false);
-	}
-
-	/**
-	 * retrieves all known users from the mappings table
-	 * @return array with the results
-	 *
-	 * retrieves all known users from the mappings table
-	 */
-	private function mappedUsers() {
-		return $this->mappedComponents(true);
-	}
-
-	/**
-	 * @param boolean $isUsers
-	 * @return array
-	 */
-	private function mappedComponents($isUsers) {
-		$table = $this->getMapTable($isUsers);
-
-		$query = \OCP\DB::prepare('
-			SELECT `ldap_dn`, `owncloud_name`
-			FROM `'. $table . '`'
-		);
-
-		return $query->execute()->fetchAll();
-	}
-
-	/**
 	 * inserts a new user or group into the mappings table
 	 * @param string $dn the record in question
 	 * @param string $ocName the name to use in ownCloud
