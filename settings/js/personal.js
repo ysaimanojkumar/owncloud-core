@@ -161,27 +161,36 @@ $(document).ready(function(){
 		if ($('#pass1').val() !== '' && $('#pass2').val() !== '') {
 			// Serialize the data
 			var post = $( "#passwordform" ).serialize();
-			$('#passwordchanged').hide();
-			$('#passworderror').hide();
 			// Ajax foo
 			$.post(OC.generateUrl('/settings/personal/changepassword'), post, function(data){
 				if( data.status === "success" ){
 					$('#pass1').val('');
 					$('#pass2').val('');
-					$('#passwordchanged').show();
+					// Hide a possible errormsg and show successmsg
+					$('#passwordchanged').removeClass("hidden");
+					$('#passwordchanged').addClass("inlineblock");
+					$('#passworderror').removeClass("inlineblock");
+					$('#passworderror').addClass("hidden");
 				} else{
 					if (typeof(data.data) !== "undefined") {
 						$('#passworderror').html(data.data.message);
 					} else {
 						$('#passworderror').html(t('Unable to change password'));
 					}
-					$('#passworderror').show();
+					// Hide a possible successmsg and show errormsg
+					$('#passwordchanged').removeClass("inlineblock");
+					$('#passwordchanged').addClass("hidden");
+					$('#passworderror').removeClass("hidden");
+					$('#passworderror').addClass("inlineblock");
 				}
 			});
 			return false;
 		} else {
-			$('#passwordchanged').hide();
-			$('#passworderror').show();
+			// Hide a possible successmsg and show errormsg
+			$('#passwordchanged').removeClass("inlineblock");
+			$('#passwordchanged').addClass("hidden");
+			$('#passworderror').removeClass("hidden");
+			$('#passworderror').addClass("inlineblock");
 			return false;
 		}
 
