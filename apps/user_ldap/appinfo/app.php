@@ -26,7 +26,8 @@ OC::$CLASSPATH['OCA\user_ldap\lib\CleanUp'] = 'user_ldap/lib/jobs/cleanup.php';
 
 OCP\App::registerAdmin('user_ldap', 'settings');
 
-$configPrefixes = OCA\user_ldap\lib\Helper::getServerConfigurationPrefixes(true);
+$helper = new \OCA\user_ldap\lib\Helper();
+$configPrefixes = $helper->getServerConfigurationPrefixes(true);
 $ldapWrapper = new OCA\user_ldap\lib\LDAP();
 if(count($configPrefixes) === 1) {
 	$ocConfig = \OC::$server->getConfig();
