@@ -41,15 +41,37 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 	 */
 	protected $userIntf;
 
+	/**
+	 * @var Helper $ldapHelper
+	 */
+	protected $ldapHelper;
+
 	public function __construct() {
-		$this->setInterval(23);
+		$this->setInterval(23 * 60);
 	}
 
+	/**
+	 * assigns the instances passed to run() to the class properties
+	 * @param array $arguments
+	 */
+	public function setArguments($arguments) {
+		$this->userBackend = $arguments['userBackend'];
+		$this->ocConfig    = $arguments['ocConfig'];
+		$this->db          = $arguments['db'];
+		$this->userIntf    = $arguments['userIntf'];
+		$this->ldapHelper  = $arguments['helper'];
+	}
+
+	/**
+	 * makes the background job do its work
+	 * @param array $argument
+	 */
 	public function run($argument) {
-		$this->userBackend = $argument['userBackend'];
-		$this->ocConfig    = $argument['ocConfig'];
-		$this->db          = $argument['db'];
-		$this->userIntf    = $argument['userIntf'];
+		$this->setArguments($argument);
+
+		if(!$this->isCleanUpAllowed()) {
+			return;
+		}
 
 		$users = $this->getMappedUsers($this->limit, $this->getOffset());
 		if(!is_array($users)) {
@@ -61,6 +83,48 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 		$resetOffset = (count($users) < $this->limit) ? true : false;
 		$deleted = $this->checkUsers($users);
 		$this->setOffset($deleted, $resetOffset);
+	}
+
+	/**
+	 * checks whether cleaning up LDAP users is allowed
+	 * @return true
+	 */
+	public function isCleanUpAllowed() {
+		try {
+			if($this->haveDisabledConfigurations()) {
+				return false;
+			}
+		} catch (\Exception $e) {
+			return false;
+		}
+
+		$enabled = $this->isCleanUpEnabled();
+
+		return $enabled;
+	}
+
+	/**
+	 * checks whether clean up is enabled by configuration
+	 * @return bool
+	 */
+	public function isCleanUpEnabled() {
+		return $this->ocConfig->getSystemValue('ldapUserCleanupEnabled', false);
+	}
+
+	/**
+	 * checks whether there is one or more disabled LDAP configurations
+	 * @throws \Exception
+	 * @return bool
+	 */
+	public function haveDisabledConfigurations() {
+		$all = $this->ldapHelper->getServerConfigurationPrefixes(false);
+		$active = $this->ldapHelper->getServerConfigurationPrefixes(true);
+
+		if(!is_array($all) || !is_array($active)) {
+			throw new \Exception('Unexpected Return Value');
+		}
+
+		return count($all) !== count($active) || count($all) === 0;
 	}
 
 	/**

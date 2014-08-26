@@ -22,7 +22,7 @@
 *
 */
 
-OC::$CLASSPATH['OCA\user_ldap\lib\CleanUp'] = 'user_ldap/lib/jobs/cleanup.php';
+require_once __DIR__ . '/classpath.php';
 
 OCP\App::registerAdmin('user_ldap', 'settings');
 
@@ -56,9 +56,10 @@ $args = array(
 	'userBackend' => $userBackend,
 	'ocConfig'    => \OC::$server->getAllConfig(),
 	'db'          => \OC::$server->getDatabaseConnection(),
-	'userIntf'    => false
+	'userIntf'    => false,
+	'helper'      => new OCA\user_ldap\lib\Helper()
 );
-OCP\Backgroundjob::registerJob('OCA\user_ldap\lib\CleanUp');
+OCP\Backgroundjob::registerJob('OCA\user_ldap\lib\CleanUp', $args);
 
 if(OCP\App::isEnabled('user_webdavauth')) {
 	OCP\Util::writeLog('user_ldap',
