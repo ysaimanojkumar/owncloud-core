@@ -182,4 +182,12 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 		$this->ocConfig->setAppValue('user_ldap', 'cleanUpJobOffset', $newOffset);
 	}
 
+	/**
+	 * returns the chunk size (limit in DB speak)
+	 * @return int
+	 */
+	public function getChunkSize() {
+		return $this->limit;
+	}
+
 }
