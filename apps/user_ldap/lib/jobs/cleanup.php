@@ -74,9 +74,18 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 			$this->setOffset(0, true);
 			return;
 		}
-		$resetOffset = (count($users) < $this->limit) ? true : false;
+		$resetOffset = $this->isOffsetResetNecessary(count($users));
 		$this->checkUsers($users);
 		$this->setOffset($resetOffset);
+	}
+
+	/**
+	 * checks whether next run should start at 0 again
+	 * @param int $resultCount
+	 * @return bool
+	 */
+	public function isOffsetResetNecessary($resultCount) {
+		return ($resultCount < $this->limit) ? true : false;
 	}
 
 	/**
