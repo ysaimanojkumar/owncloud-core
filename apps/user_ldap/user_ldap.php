@@ -197,7 +197,7 @@ class USER_LDAP extends BackendUtility implements \OCP\UserInterface {
 		if($this->access->connection->isCached($cacheKey)) {
 			return $this->access->connection->getFromCache($cacheKey);
 		}
-		$pref = \OC::$server->getAllConfig();
+		$pref = \OC::$server->getConfig();
 		if(strpos($this->access->connection->homeFolderNamingRule, 'attr:') === 0) {
 			$attr = substr($this->access->connection->homeFolderNamingRule, strlen('attr:'));
 			$homedir = $this->access->readAttribute(

@@ -54,7 +54,7 @@ if(count($configPrefixes) > 0) {
 OCP\Backgroundjob::registerJob('OCA\user_ldap\lib\Jobs');
 $args = array(
 	'userBackend' => $userBackend,
-	'ocConfig'    => \OC::$server->getAllConfig(),
+	'ocConfig'    => \OC::$server->getConfig(),
 	'db'          => \OC::$server->getDatabaseConnection(),
 	'userIntf'    => false,
 	'helper'      => new OCA\user_ldap\lib\Helper()
