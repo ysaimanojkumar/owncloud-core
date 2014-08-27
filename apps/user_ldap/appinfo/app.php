@@ -56,7 +56,6 @@ $args = array(
 	'userBackend' => $userBackend,
 	'ocConfig'    => \OC::$server->getConfig(),
 	'db'          => \OC::$server->getDatabaseConnection(),
-	'userIntf'    => false,
 	'helper'      => new OCA\user_ldap\lib\Helper()
 );
 OCP\Backgroundjob::registerJob('OCA\user_ldap\lib\CleanUp', $args);

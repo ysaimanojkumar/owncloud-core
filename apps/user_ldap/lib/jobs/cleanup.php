@@ -37,11 +37,6 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 	protected $db;
 
 	/**
-	 * @var false $userIntf
-	 */
-	protected $userIntf;
-
-	/**
 	 * @var Helper $ldapHelper
 	 */
 	protected $ldapHelper;
@@ -58,7 +53,6 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 		$this->userBackend = $arguments['userBackend'];
 		$this->ocConfig    = $arguments['ocConfig'];
 		$this->db          = $arguments['db'];
-		$this->userIntf    = $arguments['userIntf'];
 		$this->ldapHelper  = $arguments['helper'];
 	}
 
@@ -81,8 +75,8 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 			return;
 		}
 		$resetOffset = (count($users) < $this->limit) ? true : false;
-		$deleted = $this->checkUsers($users);
-		$this->setOffset($deleted, $resetOffset);
+		$this->checkUsers($users);
+		$this->setOffset($resetOffset);
 	}
 
 	/**
@@ -130,37 +124,24 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 	/**
 	 * checks users whether they are still existing
 	 * @param array $users result from getMappedUsers()
-	 * @return int number of users that have been found as deleted
 	 */
 	private function checkUsers($users) {
-		$deletionCounter = 0;
 		foreach($users as $user) {
-			$this->checkUser($user, $this->ocConfig, $deletionCounter);
+			$this->checkUser($user, $this->ocConfig);
 		}
-		return $deletionCounter;
 	}
 
 	/**
 	 * checks whether a user is still existing in LDAP
 	 * @param string[] $user
-	 * @param int &$deletionCounter
 	 */
-	private function checkUser(
-		$user, &$deletionCounter) {
-
+	private function checkUser($user) {
 		if($this->userBackend->userExists($user['name'])) {
 			//still available, all good
 			return;
 		}
 
 		$this->ocConfig->setUserValue($user['name'], 'user_ldap', 'isDeleted', '1');
-		if($this->userIntf !== false) {
-			//working around static classes for testing
-			$this->userIntf->deleteUser($user['name']);
-		} else {
-			\OC_User::deleteUser($user['name']);
-		}
-		$deletionCounter++;
 	}
 
 	/**
@@ -193,12 +174,11 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 
 	/**
 	 * sets the new offset for the next run
-	 * @param int $deletedUsers number of users that have been removed
 	 * @param bool $reset whether the offset should be set to 0
 	 */
-	public function setOffset($deletedUsers = 0, $reset = false) {
+	public function setOffset($reset = false) {
 		$newOffset = $reset ? 0 :
-			$this->getOffset() + $this->limit - $deletedUsers;
+			$this->getOffset() + $this->limit;
 		$this->ocConfig->setAppValue('user_ldap', 'cleanUpJobOffset', $newOffset);
 	}
 
