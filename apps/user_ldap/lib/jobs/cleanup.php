@@ -107,7 +107,7 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 	 * checks whether clean up is enabled by configuration
 	 * @return bool
 	 */
-	public function isCleanUpEnabled() {
+	private function isCleanUpEnabled() {
 		return $this->ocConfig->getSystemValue('ldapUserCleanupEnabled', false);
 	}
 
@@ -116,7 +116,7 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 	 * @throws \Exception
 	 * @return bool
 	 */
-	public function haveDisabledConfigurations() {
+	private function haveDisabledConfigurations() {
 		$all = $this->ldapHelper->getServerConfigurationPrefixes(false);
 		$active = $this->ldapHelper->getServerConfigurationPrefixes(true);
 
