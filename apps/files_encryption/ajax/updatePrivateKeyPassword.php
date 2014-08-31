@@ -15,7 +15,7 @@ use OCA\Encryption;
 \OCP\JSON::checkAppEnabled('files_encryption');
 \OCP\JSON::callCheck();
 
-$l = OC_L10N::get('core');
+$l = \OC::$server->getL10N('core');
 
 $return = false;
 
@@ -35,13 +35,13 @@ $encryptedKey = $view->file_get_contents($keyPath);
 $decryptedKey = \OCA\Encryption\Crypt::decryptPrivateKey($encryptedKey, $oldPassword);
 
 if ($decryptedKey) {
-
-	$encryptedKey = \OCA\Encryption\Crypt::symmetricEncryptFileContent($decryptedKey, $newPassword);
-	$view->file_put_contents($keyPath, $encryptedKey);
-
-	$session->setPrivateKey($decryptedKey);
-
-	$return = true;
+	$cipher = \OCA\Encryption\Helper::getCipher();
+	$encryptedKey = \OCA\Encryption\Crypt::symmetricEncryptFileContent($decryptedKey, $newPassword, $cipher);
+	if ($encryptedKey) {
+		\OCA\Encryption\Keymanager::setPrivateKey($encryptedKey, $user);
+		$session->setPrivateKey($decryptedKey);
+		$return = true;
+	}
 }
 
 \OC_FileProxy::$enabled = $proxyStatus;

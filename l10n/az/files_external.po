@@ -3,12 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# unixidzero <unixidzero@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud\n"
 "Report-Msgid-Bugs-To: translations@owncloud.org\n"
-"POT-Creation-Date: 2014-07-17 01:54-0400\n"
-"PO-Revision-Date: 2014-07-17 05:54+0000\n"
+"POT-Creation-Date: 2014-08-31 01:54-0400\n"
+"PO-Revision-Date: 2014-08-31 05:54+0000\n"
 "Last-Translator: I Robot\n"
 "Language-Team: Azerbaijani (http://www.transifex.com/projects/p/owncloud/language/az/)\n"
 "MIME-Version: 1.0\n"
@@ -21,17 +22,17 @@ msgstr ""
 msgid ""
 "Fetching request tokens failed. Verify that your Dropbox app key and secret "
 "are correct."
-msgstr ""
+msgstr "Müraciət token-nin alınmasında səhv baş verdi. Əmin olun ki, sizin Dropbox proqraminin açarı və gizlisi düzgündür."
 
 #: ajax/dropbox.php:40
 msgid ""
 "Fetching access tokens failed. Verify that your Dropbox app key and secret "
 "are correct."
-msgstr ""
+msgstr "Müraciət token-nin alınmasında səhv baş verdi. Əmin olun ki, sizin Dropbox proqraminin açarı və gizlisi düzgündür."
 
 #: ajax/dropbox.php:48 js/dropbox.js:102
 msgid "Please provide a valid Dropbox app key and secret."
-msgstr ""
+msgstr "Xahiş olunur düzgün Dropbox proqram açarı və gizlisini təqdim edəsiniz."
 
 #: ajax/google.php:27
 #, php-format
@@ -41,11 +42,11 @@ msgstr ""
 #: ajax/google.php:38
 #, php-format
 msgid "Step 2 failed. Exception: %s"
-msgstr ""
+msgstr "2-ci addım. İstisna: %s"
 
 #: appinfo/app.php:35 js/app.js:32 templates/settings.php:9
 msgid "External storage"
-msgstr ""
+msgstr "Kənar informasıya daşıyıcısı"
 
 #: appinfo/app.php:44
 msgid "Local"
@@ -53,7 +54,7 @@ msgstr ""
 
 #: appinfo/app.php:47
 msgid "Location"
-msgstr ""
+msgstr "Yerləşdiyiniz ünvan"
 
 #: appinfo/app.php:50
 msgid "Amazon S3"
@@ -61,13 +62,13 @@ msgstr ""
 
 #: appinfo/app.php:53
 msgid "Key"
-msgstr ""
+msgstr "Açar"
 
 #: appinfo/app.php:54
 msgid "Secret"
-msgstr ""
+msgstr "Gizli"
 
-#: appinfo/app.php:55 appinfo/app.php:64
+#: appinfo/app.php:55 appinfo/app.php:64 appinfo/app.php:112
 msgid "Bucket"
 msgstr ""
 
@@ -84,20 +85,20 @@ msgid "Secret Key"
 msgstr ""
 
 #: appinfo/app.php:65
-msgid "Hostname (optional)"
+msgid "Hostname"
 msgstr ""
 
 #: appinfo/app.php:66
-msgid "Port (optional)"
+msgid "Port"
 msgstr ""
 
 #: appinfo/app.php:67
-msgid "Region (optional)"
+msgid "Region"
 msgstr ""
 
 #: appinfo/app.php:68
 msgid "Enable SSL"
-msgstr ""
+msgstr "SSL-i işə sal"
 
 #: appinfo/app.php:69
 msgid "Enable Path Style"
@@ -114,17 +115,17 @@ msgstr ""
 #: appinfo/app.php:88 appinfo/app.php:129 appinfo/app.php:140
 #: appinfo/app.php:173
 msgid "Host"
-msgstr ""
+msgstr "Şəbəkədə ünvan"
 
-#: appinfo/app.php:89 appinfo/app.php:130 appinfo/app.php:152
-#: appinfo/app.php:163 appinfo/app.php:174
+#: appinfo/app.php:89 appinfo/app.php:111 appinfo/app.php:130
+#: appinfo/app.php:152 appinfo/app.php:163 appinfo/app.php:174
 msgid "Username"
-msgstr ""
+msgstr "İstifadəçi adı"
 
 #: appinfo/app.php:90 appinfo/app.php:131 appinfo/app.php:153
 #: appinfo/app.php:164 appinfo/app.php:175
 msgid "Password"
-msgstr ""
+msgstr "Şifrə"
 
 #: appinfo/app.php:91 appinfo/app.php:133 appinfo/app.php:143
 #: appinfo/app.php:154 appinfo/app.php:176
@@ -145,14 +146,6 @@ msgstr ""
 
 #: appinfo/app.php:108
 msgid "OpenStack Object Storage"
-msgstr ""
-
-#: appinfo/app.php:111
-msgid "Username (required)"
-msgstr ""
-
-#: appinfo/app.php:112
-msgid "Bucket (required)"
 msgstr ""
 
 #: appinfo/app.php:113
@@ -180,12 +173,12 @@ msgid "URL of identity endpoint (required for OpenStack Object Storage)"
 msgstr ""
 
 #: appinfo/app.php:119
-msgid "Timeout of HTTP requests in seconds (optional)"
+msgid "Timeout of HTTP requests in seconds"
 msgstr ""
 
 #: appinfo/app.php:132 appinfo/app.php:142
 msgid "Share"
-msgstr ""
+msgstr "Yayımla"
 
 #: appinfo/app.php:137
 msgid "SMB / CIFS using OC login"
@@ -197,7 +190,7 @@ msgstr ""
 
 #: appinfo/app.php:151 appinfo/app.php:162
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: appinfo/app.php:155 appinfo/app.php:166
 msgid "Secure https://"
@@ -225,39 +218,47 @@ msgstr ""
 
 #: js/mountsfilelist.js:34
 msgid "Personal"
-msgstr ""
+msgstr "Şəxsi"
 
 #: js/mountsfilelist.js:36
 msgid "System"
 msgstr ""
 
-#: js/settings.js:325 js/settings.js:332
-msgid "Saved"
+#: js/settings.js:208
+msgid "All users. Type to select user or group."
 msgstr ""
 
-#: lib/config.php:712
+#: js/settings.js:291
+msgid "(group)"
+msgstr ""
+
+#: js/settings.js:467 js/settings.js:474
+msgid "Saved"
+msgstr "Saxlanıldı"
+
+#: lib/config.php:717
 msgid "<b>Note:</b> "
 msgstr ""
 
-#: lib/config.php:722
+#: lib/config.php:727
 msgid " and "
 msgstr ""
 
-#: lib/config.php:744
+#: lib/config.php:749
 #, php-format
 msgid ""
 "<b>Note:</b> The cURL support in PHP is not enabled or installed. Mounting "
 "of %s is not possible. Please ask your system administrator to install it."
 msgstr ""
 
-#: lib/config.php:746
+#: lib/config.php:751
 #, php-format
 msgid ""
 "<b>Note:</b> The FTP support in PHP is not enabled or installed. Mounting of"
 " %s is not possible. Please ask your system administrator to install it."
 msgstr ""
 
-#: lib/config.php:748
+#: lib/config.php:753
 #, php-format
 msgid ""
 "<b>Note:</b> \"%s\" is not installed. Mounting of %s is not possible. Please"
@@ -270,7 +271,7 @@ msgstr ""
 
 #: templates/list.php:16
 msgid "Name"
-msgstr ""
+msgstr "Ad"
 
 #: templates/list.php:20
 msgid "Storage type"
@@ -286,7 +287,7 @@ msgstr ""
 
 #: templates/settings.php:8 templates/settings.php:27
 msgid "Folder name"
-msgstr ""
+msgstr "Qovluq adı"
 
 #: templates/settings.php:10
 msgid "Configuration"
@@ -300,39 +301,23 @@ msgstr ""
 msgid "Add storage"
 msgstr ""
 
-#: templates/settings.php:93
-msgid "No user or group"
-msgstr ""
-
-#: templates/settings.php:96
-msgid "All Users"
-msgstr ""
-
-#: templates/settings.php:98
-msgid "Groups"
-msgstr ""
-
-#: templates/settings.php:106
-msgid "Users"
-msgstr ""
-
-#: templates/settings.php:119 templates/settings.php:120
-#: templates/settings.php:159 templates/settings.php:160
+#: templates/settings.php:96 templates/settings.php:97
+#: templates/settings.php:136 templates/settings.php:137
 msgid "Delete"
-msgstr ""
+msgstr "Sil"
 
-#: templates/settings.php:133
+#: templates/settings.php:110
 msgid "Enable User External Storage"
 msgstr ""
 
-#: templates/settings.php:136
+#: templates/settings.php:113
 msgid "Allow users to mount the following external storage"
 msgstr ""
 
-#: templates/settings.php:151
+#: templates/settings.php:128
 msgid "SSL root certificates"
 msgstr ""
 
-#: templates/settings.php:169
+#: templates/settings.php:146
 msgid "Import Root Certificate"
 msgstr ""

@@ -169,6 +169,7 @@ class OC_Mount_Config {
 				foreach ($options as &$option) {
 					$option = self::setUserVars($user, $option);
 				}
+				$options['personal'] = false;
 				$options['options'] = self::decryptPasswords($options['options']);
 				if (!isset($options['priority'])) {
 					$options['priority'] = $backends[$options['class']]['priority'];
@@ -238,17 +239,21 @@ class OC_Mount_Config {
 			}
 		}
 
+		$personalBackends = self::getPersonalBackends();
+
 		// Load personal mount points
 		$mountConfig = self::readData($user);
 		if (isset($mountConfig[self::MOUNT_TYPE_USER][$user])) {
 			foreach ($mountConfig[self::MOUNT_TYPE_USER][$user] as $mountPoint => $options) {
-				$options['personal'] = true;
-				$options['options'] = self::decryptPasswords($options['options']);
+				if (isset($personalBackends[$options['class']])) {
+					$options['personal'] = true;
+					$options['options'] = self::decryptPasswords($options['options']);
 
-				// Always override previous config
-				$options['priority_type'] = self::MOUNT_TYPE_PERSONAL;
-				$options['backend'] = $backends[$options['class']]['backend'];
-				$mountPoints[$mountPoint] = $options;
+					// Always override previous config
+					$options['priority_type'] = self::MOUNT_TYPE_PERSONAL;
+					$options['backend'] = $backends[$options['class']]['backend'];
+					$mountPoints[$mountPoint] = $options;
+				}
 			}
 		}
 
@@ -612,53 +617,6 @@ class OC_Mount_Config {
 		$content = json_encode($data, $options);
 		@file_put_contents($file, $content);
 		@chmod($file, 0640);
-	}
-
-	/**
-	 * Returns all user uploaded ssl root certificates
-	 * @return array
-	 */
-	public static function getCertificates() {
-		$path=OC_User::getHome(OC_User::getUser()) . '/files_external/uploads/';
-		\OCP\Util::writeLog('files_external', 'checking path '.$path, \OCP\Util::INFO);
-		if ( ! is_dir($path)) {
-			//path might not exist (e.g. non-standard OC_User::getHome() value)
-			//in this case create full path using 3rd (recursive=true) parameter.
-			mkdir($path, 0777, true);
-		}
-		$result = array();
-		$handle = opendir($path);
-		if(!is_resource($handle)) {
-			return array();
-		}
-		while (false !== ($file = readdir($handle))) {
-			if ($file != '.' && $file != '..') $result[] = $file;
-		}
-		return $result;
-	}
-
-	/**
-	 * creates certificate bundle
-	 */
-	public static function createCertificateBundle() {
-		$path=OC_User::getHome(OC_User::getUser()) . '/files_external';
-
-		$certs = OC_Mount_Config::getCertificates();
-		$fh_certs = fopen($path."/rootcerts.crt", 'w');
-		foreach ($certs as $cert) {
-			$file=$path.'/uploads/'.$cert;
-			$fh = fopen($file, "r");
-			$data = fread($fh, filesize($file));
-			fclose($fh);
-			if (strpos($data, 'BEGIN CERTIFICATE')) {
-				fwrite($fh_certs, $data);
-				fwrite($fh_certs, "\r\n");
-			}
-		}
-
-		fclose($fh_certs);
-
-		return true;
 	}
 
 	/**

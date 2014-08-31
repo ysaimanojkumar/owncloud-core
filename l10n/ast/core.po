@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud\n"
 "Report-Msgid-Bugs-To: translations@owncloud.org\n"
-"POT-Creation-Date: 2014-08-10 01:54-0400\n"
-"PO-Revision-Date: 2014-08-10 05:54+0000\n"
+"POT-Creation-Date: 2014-08-31 01:54-0400\n"
+"PO-Revision-Date: 2014-08-30 16:22+0000\n"
 "Last-Translator: I Robot\n"
 "Language-Team: Asturian (http://www.transifex.com/projects/p/owncloud/language/ast/)\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Language: ast\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ajax/share.php:116 ajax/share.php:158
+#: ajax/share.php:117 ajax/share.php:159
 #, php-format
 msgid "Couldn't send mail to following users: %s "
 msgstr "Nun pudo unviase'l corréu a los usuarios siguientes: %s"
@@ -42,7 +42,16 @@ msgstr "Base de datos anovada"
 msgid "Checked database schema update"
 msgstr "Anovamientu del esquema de base de datos revisáu"
 
-#: ajax/update.php:27
+#: ajax/update.php:22
+msgid "Checked database schema update for apps"
+msgstr ""
+
+#: ajax/update.php:25
+#, php-format
+msgid "Updated \"%s\" to %s"
+msgstr ""
+
+#: ajax/update.php:33
 #, php-format
 msgid "Disabled incompatible apps: %s"
 msgstr "Aplicaciones incompatibles desactivaes: %s"
@@ -143,77 +152,29 @@ msgstr "Payares"
 msgid "December"
 msgstr "Avientu"
 
-#: js/js.js:501
+#: js/js.js:497
 msgid "Settings"
 msgstr "Axustes"
 
-#: js/js.js:590
+#: js/js.js:586
 msgid "File"
 msgstr "Ficheru"
 
-#: js/js.js:591
+#: js/js.js:587
 msgid "Folder"
 msgstr "Carpeta"
 
-#: js/js.js:592
+#: js/js.js:588
 msgid "Image"
 msgstr "Imaxe"
 
-#: js/js.js:593
+#: js/js.js:589
 msgid "Audio"
 msgstr "Audiu"
 
-#: js/js.js:607
+#: js/js.js:603
 msgid "Saving..."
 msgstr "Guardando..."
-
-#: js/js.js:1278
-msgid "seconds ago"
-msgstr "hai segundos"
-
-#: js/js.js:1279
-msgid "%n minute ago"
-msgid_plural "%n minutes ago"
-msgstr[0] "hai %n minutu"
-msgstr[1] "hai %n minutos"
-
-#: js/js.js:1280
-msgid "%n hour ago"
-msgid_plural "%n hours ago"
-msgstr[0] "hai %n hora"
-msgstr[1] "hai %n hores"
-
-#: js/js.js:1281
-msgid "today"
-msgstr "güei"
-
-#: js/js.js:1282
-msgid "yesterday"
-msgstr "ayeri"
-
-#: js/js.js:1283
-msgid "%n day ago"
-msgid_plural "%n days ago"
-msgstr[0] "hai %n día"
-msgstr[1] "hai %n díes"
-
-#: js/js.js:1284
-msgid "last month"
-msgstr "mes caberu"
-
-#: js/js.js:1285
-msgid "%n month ago"
-msgid_plural "%n months ago"
-msgstr[0] "fai %n mes"
-msgstr[1] "hai %n meses"
-
-#: js/js.js:1286
-msgid "last year"
-msgstr "añu caberu"
-
-#: js/js.js:1287
-msgid "years ago"
-msgstr "hai años"
 
 #: js/lostpassword.js:3 lostpassword/controller/lostcontroller.php:198
 msgid "Couldn't send reset email. Please contact your administrator."
@@ -350,12 +311,12 @@ msgstr "Compartío con {recipients}"
 msgid "Share"
 msgstr "Compartir"
 
-#: js/share.js:326 js/share.js:340 js/share.js:347 js/share.js:1007
+#: js/share.js:326 js/share.js:340 js/share.js:347 js/share.js:1002
 #: templates/installation.php:10
 msgid "Error"
 msgstr "Fallu"
 
-#: js/share.js:328 js/share.js:1070
+#: js/share.js:328 js/share.js:1065
 msgid "Error while sharing"
 msgstr "Fallu mientres la compartición"
 
@@ -416,79 +377,71 @@ msgstr "Afitar la data de caducidá"
 msgid "Expiration date"
 msgstr "Data de caducidá"
 
-#: js/share.js:455
-msgid "Share via email:"
-msgstr "Compartir vía corréu electrónicu:"
-
-#: js/share.js:458
-msgid "No people found"
-msgstr "Nun s'atoparon persones"
-
-#: js/share.js:507 js/share.js:575
+#: js/share.js:496 js/share.js:564
 msgid "group"
 msgstr "grupu"
 
-#: js/share.js:540
+#: js/share.js:529
 msgid "Resharing is not allowed"
 msgstr "Recompartir nun ta permitíu"
 
-#: js/share.js:591
+#: js/share.js:580
 msgid "Shared in {item} with {user}"
 msgstr "Compartíu en {item} con {user}"
 
-#: js/share.js:613
+#: js/share.js:602
 msgid "Unshare"
 msgstr "Dexar de compartir"
 
-#: js/share.js:621
+#: js/share.js:610
 msgid "notify by email"
 msgstr "notificar per corréu"
 
-#: js/share.js:624
+#: js/share.js:613
 msgid "can share"
 msgstr "pue compartir"
 
-#: js/share.js:627
+#: js/share.js:616
 msgid "can edit"
 msgstr "pue editar"
 
-#: js/share.js:629
+#: js/share.js:618
 msgid "access control"
 msgstr "control d'accesu"
 
-#: js/share.js:632
+#: js/share.js:621
 msgid "create"
 msgstr "crear"
 
-#: js/share.js:635
+#: js/share.js:624
 msgid "update"
 msgstr "xubir"
 
-#: js/share.js:638
+#: js/share.js:627
 msgid "delete"
 msgstr "desaniciar"
 
-#: js/share.js:988
+#: js/share.js:983
 msgid "Password protected"
 msgstr "Contraseña protexida"
 
-#: js/share.js:1007
+#: js/share.js:1002
 msgid "Error unsetting expiration date"
 msgstr "Fallu desafitando la data de caducidá"
 
-#: js/share.js:1028
+#: js/share.js:1023
 msgid "Error setting expiration date"
 msgstr "Fallu afitando la fecha de caducidá"
 
-#: js/share.js:1057
+#: js/share.js:1052
 msgid "Sending ..."
 msgstr "Unviando ..."
 
-#: js/share.js:1068
+#: js/share.js:1063
 msgid "Email sent"
 msgstr "Corréu unviáu"
 
-#: js/share.js:1092
+#: js/share.js:1087
 msgid "Warning"
 msgstr "Avisu"
 
@@ -676,7 +629,8 @@ msgstr "Hola, ¿qué hai?\n\nnamái déxanos dicite que %s compartió %s contigo
 msgid "The share will expire on %s."
 msgstr "La compartición va caducar el %s."
 
-#: templates/altmail.php:7 templates/mail.php:20
+#. TRANSLATORS term at the end of a mail
+#: templates/altmail.php:8 templates/mail.php:21
 msgid "Cheers!"
 msgstr "¡Salú!"
 
@@ -844,6 +798,28 @@ msgstr "Contauta col alministrador si esti problema sigui apaeciendo."
 msgid "Thank you for your patience."
 msgstr "Gracies pola to paciencia."
 
+#: templates/untrustedDomain.php:5
+msgid "You are accessing the server from an untrusted domain."
+msgstr "Tas accediendo al sirvidor dende un dominiu non confiáu."
+
+#: templates/untrustedDomain.php:8
+msgid ""
+"Please contact your administrator. If you are an administrator of this "
+"instance, configure the \"trusted_domain\" setting in config/config.php. An "
+"example configuration is provided in config/config.sample.php."
+msgstr "Por favor, contauta col alministrador. Si yes l'alministrador, configura l'axuste \"trusted_domain\" en config/config.php. Hai un exemplu en config/config.sample.php."
+
+#: templates/untrustedDomain.php:10
+msgid ""
+"Depending on your configuration, as an administrator you might also be able "
+"to use the button below to trust this domain."
+msgstr ""
+
+#: templates/untrustedDomain.php:14
+#, php-format
+msgid "Add \"%s\" as trusted domain"
+msgstr ""
+
 #: templates/update.admin.php:3
 #, php-format
 msgid "%s will be updated to version %s."
@@ -867,6 +843,12 @@ msgstr "Enantes de siguir, asegúrate de que se fizo una copia de seguridá de l
 #: templates/update.admin.php:23
 msgid "Start update"
 msgstr "Aniciar anovamientu"
+
+#: templates/update.admin.php:25
+msgid ""
+"To avoid timeouts with larger installations, you can instead run the "
+"following command from your installation directory:"
+msgstr ""
 
 #: templates/update.user.php:3
 msgid ""

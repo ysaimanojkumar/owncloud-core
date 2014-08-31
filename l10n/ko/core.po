@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud\n"
 "Report-Msgid-Bugs-To: translations@owncloud.org\n"
-"POT-Creation-Date: 2014-08-10 01:54-0400\n"
-"PO-Revision-Date: 2014-08-10 05:54+0000\n"
+"POT-Creation-Date: 2014-08-31 01:54-0400\n"
+"PO-Revision-Date: 2014-08-30 16:22+0000\n"
 "Last-Translator: I Robot\n"
 "Language-Team: Korean (http://www.transifex.com/projects/p/owncloud/language/ko/)\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Language: ko\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ajax/share.php:116 ajax/share.php:158
+#: ajax/share.php:117 ajax/share.php:159
 #, php-format
 msgid "Couldn't send mail to following users: %s "
 msgstr "%s 님에게 메일을 보낼 수 없습니다."
@@ -45,7 +45,16 @@ msgstr "데이터베이스 업데이트 됨"
 msgid "Checked database schema update"
 msgstr ""
 
-#: ajax/update.php:27
+#: ajax/update.php:22
+msgid "Checked database schema update for apps"
+msgstr ""
+
+#: ajax/update.php:25
+#, php-format
+msgid "Updated \"%s\" to %s"
+msgstr ""
+
+#: ajax/update.php:33
 #, php-format
 msgid "Disabled incompatible apps: %s"
 msgstr ""
@@ -146,73 +155,29 @@ msgstr "11월"
 msgid "December"
 msgstr "12월"
 
-#: js/js.js:501
+#: js/js.js:497
 msgid "Settings"
 msgstr "설정"
 
-#: js/js.js:590
+#: js/js.js:586
 msgid "File"
 msgstr "파일"
 
-#: js/js.js:591
+#: js/js.js:587
 msgid "Folder"
 msgstr "폴더"
 
-#: js/js.js:592
+#: js/js.js:588
 msgid "Image"
 msgstr "그림"
 
-#: js/js.js:593
+#: js/js.js:589
 msgid "Audio"
 msgstr ""
 
-#: js/js.js:607
+#: js/js.js:603
 msgid "Saving..."
 msgstr "저장 중..."
-
-#: js/js.js:1278
-msgid "seconds ago"
-msgstr "초 전"
-
-#: js/js.js:1279
-msgid "%n minute ago"
-msgid_plural "%n minutes ago"
-msgstr[0] "%n분 전 "
-
-#: js/js.js:1280
-msgid "%n hour ago"
-msgid_plural "%n hours ago"
-msgstr[0] "%n시간 전 "
-
-#: js/js.js:1281
-msgid "today"
-msgstr "오늘"
-
-#: js/js.js:1282
-msgid "yesterday"
-msgstr "어제"
-
-#: js/js.js:1283
-msgid "%n day ago"
-msgid_plural "%n days ago"
-msgstr[0] "%n일 전 "
-
-#: js/js.js:1284
-msgid "last month"
-msgstr "지난 달"
-
-#: js/js.js:1285
-msgid "%n month ago"
-msgid_plural "%n months ago"
-msgstr[0] "%n달 전 "
-
-#: js/js.js:1286
-msgid "last year"
-msgstr "작년"
-
-#: js/js.js:1287
-msgid "years ago"
-msgstr "년 전"
 
 #: js/lostpassword.js:3 lostpassword/controller/lostcontroller.php:198
 msgid "Couldn't send reset email. Please contact your administrator."
@@ -348,12 +313,12 @@ msgstr ""
 msgid "Share"
 msgstr "공유"
 
-#: js/share.js:326 js/share.js:340 js/share.js:347 js/share.js:1007
+#: js/share.js:326 js/share.js:340 js/share.js:347 js/share.js:1002
 #: templates/installation.php:10
 msgid "Error"
 msgstr "오류"
 
-#: js/share.js:328 js/share.js:1070
+#: js/share.js:328 js/share.js:1065
 msgid "Error while sharing"
 msgstr "공유하는 중 오류 발생"
 
@@ -414,79 +379,71 @@ msgstr "만료 날짜 설정"
 msgid "Expiration date"
 msgstr "만료 날짜"
 
-#: js/share.js:455
-msgid "Share via email:"
-msgstr "이메일로 공유:"
-
-#: js/share.js:458
-msgid "No people found"
-msgstr "발견된 사람 없음"
-
-#: js/share.js:507 js/share.js:575
+#: js/share.js:496 js/share.js:564
 msgid "group"
 msgstr "그룹"
 
-#: js/share.js:540
+#: js/share.js:529
 msgid "Resharing is not allowed"
 msgstr "다시 공유할 수 없습니다"
 
-#: js/share.js:591
+#: js/share.js:580
 msgid "Shared in {item} with {user}"
 msgstr "{user} 님과 {item}에서 공유 중"
 
-#: js/share.js:613
+#: js/share.js:602
 msgid "Unshare"
 msgstr "공유 해제"
 
-#: js/share.js:621
+#: js/share.js:610
 msgid "notify by email"
 msgstr "이메일로 알림"
 
-#: js/share.js:624
+#: js/share.js:613
 msgid "can share"
 msgstr "공유 가능"
 
-#: js/share.js:627
+#: js/share.js:616
 msgid "can edit"
 msgstr "편집 가능"
 
-#: js/share.js:629
+#: js/share.js:618
 msgid "access control"
 msgstr "접근 제어"
 
-#: js/share.js:632
+#: js/share.js:621
 msgid "create"
 msgstr "생성"
 
-#: js/share.js:635
+#: js/share.js:624
 msgid "update"
 msgstr "업데이트"
 
-#: js/share.js:638
+#: js/share.js:627
 msgid "delete"
 msgstr "삭제"
 
-#: js/share.js:988
+#: js/share.js:983
 msgid "Password protected"
 msgstr "암호로 보호됨"
 
-#: js/share.js:1007
+#: js/share.js:1002
 msgid "Error unsetting expiration date"
 msgstr "만료 날짜 해제 오류"
 
-#: js/share.js:1028
+#: js/share.js:1023
 msgid "Error setting expiration date"
 msgstr "만료 날짜 설정 오류"
 
-#: js/share.js:1057
+#: js/share.js:1052
 msgid "Sending ..."
 msgstr "전송 중..."
 
-#: js/share.js:1068
+#: js/share.js:1063
 msgid "Email sent"
 msgstr "이메일 발송됨"
 
-#: js/share.js:1092
+#: js/share.js:1087
 msgid "Warning"
 msgstr "경고"
 
@@ -674,7 +631,8 @@ msgstr "안녕하세요,\n\n%s 님이 %s을(를) 공유하였음을 알려 드�
 msgid "The share will expire on %s."
 msgstr "이 공유는 %s 까지 유지됩니다."
 
-#: templates/altmail.php:7 templates/mail.php:20
+#. TRANSLATORS term at the end of a mail
+#: templates/altmail.php:8 templates/mail.php:21
 msgid "Cheers!"
 msgstr "감사합니다!"
 
@@ -842,6 +800,28 @@ msgstr "이 메시지가 계속 표시되거나, 예상하지 못하였을 때 �
 msgid "Thank you for your patience."
 msgstr "기다려 주셔서 감사합니다."
 
+#: templates/untrustedDomain.php:5
+msgid "You are accessing the server from an untrusted domain."
+msgstr ""
+
+#: templates/untrustedDomain.php:8
+msgid ""
+"Please contact your administrator. If you are an administrator of this "
+"instance, configure the \"trusted_domain\" setting in config/config.php. An "
+"example configuration is provided in config/config.sample.php."
+msgstr ""
+
+#: templates/untrustedDomain.php:10
+msgid ""
+"Depending on your configuration, as an administrator you might also be able "
+"to use the button below to trust this domain."
+msgstr ""
+
+#: templates/untrustedDomain.php:14
+#, php-format
+msgid "Add \"%s\" as trusted domain"
+msgstr ""
+
 #: templates/update.admin.php:3
 #, php-format
 msgid "%s will be updated to version %s."
@@ -865,6 +845,12 @@ msgstr ""
 #: templates/update.admin.php:23
 msgid "Start update"
 msgstr "업데이트 시작"
+
+#: templates/update.admin.php:25
+msgid ""
+"To avoid timeouts with larger installations, you can instead run the "
+"following command from your installation directory:"
+msgstr ""
 
 #: templates/update.user.php:3
 msgid ""

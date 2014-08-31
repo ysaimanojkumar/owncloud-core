@@ -2,7 +2,7 @@
 
 OCP\JSON::checkLoggedIn();
 OCP\JSON::callCheck();
-\OC::$session->close();
+\OC::$server->getSession()->close();
 
 
 // Get data
@@ -26,7 +26,8 @@ $success = true;
 
 //Now delete
 foreach ($files as $file) {
-	if (($dir === '' && $file === 'Shared') || !\OC\Files\Filesystem::unlink($dir . '/' . $file)) {
+	if (\OC\Files\Filesystem::file_exists($dir . '/' . $file) &&
+			!\OC\Files\Filesystem::unlink($dir . '/' . $file)) {
 		$filesWithError .= $file . "\n";
 		$success = false;
 	}

@@ -90,7 +90,7 @@ if (isset($_POST['action']) && isset($_POST['itemType']) && isset($_POST['itemSo
 			}
 			break;
 		case 'informRecipients':
-			$l = OC_L10N::get('core');
+			$l = \OC::$server->getL10N('core');
 			$shareType = (int) $_POST['shareType'];
 			$itemType = $_POST['itemType'];
 			$itemSource = $_POST['itemSource'];
@@ -107,7 +107,7 @@ if (isset($_POST['action']) && isset($_POST['itemType']) && isset($_POST['itemSo
 			$mailNotification = new OC\Share\MailNotifications();
 			$result = $mailNotification->sendInternalShareMail($recipientList, $itemSource, $itemType);
 
-			\OCP\Share::setSendMailStatus($itemType, $itemSource, $shareType, true);
+			\OCP\Share::setSendMailStatus($itemType, $itemSource, $shareType, $recipient, true);
 
 			if (empty($result)) {
 				OCP\JSON::success();
@@ -126,7 +126,7 @@ if (isset($_POST['action']) && isset($_POST['itemType']) && isset($_POST['itemSo
 			$shareType = $_POST['shareType'];
 			$itemType = $_POST['itemType'];
 			$recipient = $_POST['recipient'];
-			\OCP\Share::setSendMailStatus($itemType, $itemSource, $shareType, false);
+			\OCP\Share::setSendMailStatus($itemType, $itemSource, $shareType, $recipient, false);
 			OCP\JSON::success();
 			break;
 
@@ -153,7 +153,7 @@ if (isset($_POST['action']) && isset($_POST['itemType']) && isset($_POST['itemSo
 			if(empty($result)) {
 				\OCP\JSON::success();
 			} else {
-				$l = OC_L10N::get('core');
+				$l = \OC::$server->getL10N('core');
 				OCP\JSON::error(array(
 					'data' => array(
 						'message' => $l->t("Couldn't send mail to following users: %s ",
@@ -287,7 +287,7 @@ if (isset($_POST['action']) && isset($_POST['itemType']) && isset($_POST['itemSo
 				$count = 0;
 
 				// enable l10n support
-				$l = OC_L10N::get('core');
+				$l = \OC::$server->getL10N('core');
 
 				foreach ($groups as $group) {
 					if ($count < 15) {

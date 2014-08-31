@@ -22,16 +22,6 @@ $TRANSLATIONS = array(
 "November" => "Noviembre",
 "December" => "Diciembre",
 "Settings" => "Configuración",
-"seconds ago" => "segundos antes",
-"_%n minute ago_::_%n minutes ago_" => array("",""),
-"_%n hour ago_::_%n hours ago_" => array("",""),
-"today" => "hoy",
-"yesterday" => "ayer",
-"_%n day ago_::_%n days ago_" => array("",""),
-"last month" => "mes anterior",
-"_%n month ago_::_%n months ago_" => array("",""),
-"last year" => "último año",
-"years ago" => "años anteriores",
 "No" => "No",
 "Yes" => "Si",
 "Choose" => "Choose",
@@ -50,6 +40,8 @@ $TRANSLATIONS = array(
 "Users" => "Usuarios",
 "Admin" => "Administración",
 "Help" => "Ayuda",
-"Password" => "Clave"
+"Password" => "Clave",
+"You are accessing the server from an untrusted domain." => "Usted está accediendo al servidor desde un dominio no confiable.",
+"Please contact your administrator. If you are an administrator of this instance, configure the \"trusted_domain\" setting in config/config.php. An example configuration is provided in config/config.sample.php." => "Por favor contacte con su administrador. Si usted es el administrador de esta instancia, configure la opción \"trusted_domain\" en \"config/config.php\". Un ejemplo de la configuración está disponible en config/config.sample.php"
 );
 $PLURAL_FORMS = "nplurals=2; plural=(n != 1);";

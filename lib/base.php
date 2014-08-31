@@ -71,6 +71,7 @@ class OC {
 	public static $CLI = false;
 
 	/**
+	 * @deprecated use \OC::$server->getSession() instead
 	 * @var \OC\Session\Session
 	 */
 	public static $session = null;
@@ -135,7 +136,7 @@ class OC {
 		OC::$THIRDPARTYROOT = OC_Config::getValue('3rdpartyroot', null);
 		OC::$THIRDPARTYWEBROOT = OC_Config::getValue('3rdpartyurl', null);
 		
-		if (is_null(OC::$THIRDPARTYROOT) && is_null(OC::$THIRDPARTYWEBROOT)) {
+		if (empty(OC::$THIRDPARTYROOT) && empty(OC::$THIRDPARTYWEBROOT)) {
 			if (file_exists(OC::$SERVERROOT . '/3rdparty')) {
 				OC::$THIRDPARTYROOT = OC::$SERVERROOT;
 				OC::$THIRDPARTYWEBROOT = OC::$WEBROOT;
@@ -144,7 +145,7 @@ class OC {
 				OC::$THIRDPARTYROOT = rtrim(dirname(OC::$SERVERROOT), '/');
 			}
 		}
-		if (is_null(OC::$THIRDPARTYROOT) || !file_exists(OC::$THIRDPARTYROOT)) {
+		if (empty(OC::$THIRDPARTYROOT) || !file_exists(OC::$THIRDPARTYROOT)) {
 			echo('3rdparty directory not found! Please put the ownCloud 3rdparty'
 				. ' folder in the ownCloud folder or the folder above.'
 				. ' You can also configure the location in the config.php file.');
@@ -192,7 +193,7 @@ class OC {
 	}
 
 	public static function checkConfig() {
-		$l = OC_L10N::get('lib');
+		$l = \OC::$server->getL10N('lib');
 		if (file_exists(self::$configDir . "/config.php")
 			and !is_writable(self::$configDir . "/config.php")
 		) {
@@ -279,7 +280,7 @@ class OC {
 	 * check if the instance needs to preform an upgrade
 	 *
 	 * @return bool
-	 * @deprecated use \OCP\Util::needUpgrade instead
+	 * @deprecated use \OCP\Util::needUpgrade() instead
 	 */
 	public static function needUpgrade() {
 		return \OCP\Util::needUpgrade();
@@ -344,6 +345,7 @@ class OC {
 		OC_Util::addScript("oc-requesttoken");
 		OC_Util::addScript("apps");
 		OC_Util::addScript("snap");
+		OC_Util::addScript("moment");
 
 		// avatars
 		if (\OC_Config::getValue('enable_avatars', true) === true) {
@@ -374,19 +376,20 @@ class OC {
 		$cookie_path = OC::$WEBROOT ? : '/';
 		ini_set('session.cookie_path', $cookie_path);
 
-		//set the session object to a dummy session so code relying on the session existing still works
-		self::$session = new \OC\Session\Memory('');
-
 		// Let the session name be changed in the initSession Hook
 		$sessionName = OC_Util::getInstanceId();
 
 		try {
 			// Allow session apps to create a custom session object
 			$useCustomSession = false;
-			OC_Hook::emit('OC', 'initSession', array('session' => &self::$session, 'sessionName' => &$sessionName, 'useCustomSession' => &$useCustomSession));
-			if(!$useCustomSession) {
+			$session = self::$server->getSession();
+			OC_Hook::emit('OC', 'initSession', array('session' => &$session, 'sessionName' => &$sessionName, 'useCustomSession' => &$useCustomSession));
+			if($useCustomSession) {
+				// use the session reference as the new Session
+				self::$server->setSession($session);
+			} else {
 				// set the session name to the instance id - which is unique
-				self::$session = new \OC\Session\Internal($sessionName);
+				self::$server->setSession(new \OC\Session\Internal($sessionName));
 			}
 			// if session cant be started break with http 500 error
 		} catch (Exception $e) {
@@ -397,15 +400,19 @@ class OC {
 
 		$sessionLifeTime = self::getSessionLifeTime();
 		// regenerate session id periodically to avoid session fixation
-		if (!self::$session->exists('SID_CREATED')) {
-			self::$session->set('SID_CREATED', time());
-		} else if (time() - self::$session->get('SID_CREATED') > $sessionLifeTime / 2) {
+		/**
+		 * @var \OCP\ISession $session
+		 */
+		$session = self::$server->getSession();
+		if (!$session->exists('SID_CREATED')) {
+			$session->set('SID_CREATED', time());
+		} else if (time() - $session->get('SID_CREATED') > $sessionLifeTime / 2) {
 			session_regenerate_id(true);
-			self::$session->set('SID_CREATED', time());
+			$session->set('SID_CREATED', time());
 		}
 
 		// session timeout
-		if (self::$session->exists('LAST_ACTIVITY') && (time() - self::$session->get('LAST_ACTIVITY') > $sessionLifeTime)) {
+		if ($session->exists('LAST_ACTIVITY') && (time() - $session->get('LAST_ACTIVITY') > $sessionLifeTime)) {
 			if (isset($_COOKIE[session_name()])) {
 				setcookie(session_name(), '', time() - 42000, $cookie_path);
 			}
@@ -414,7 +421,7 @@ class OC {
 			session_start();
 		}
 
-		self::$session->set('LAST_ACTIVITY', time());
+		$session->set('LAST_ACTIVITY', time());
 	}
 
 	/**
@@ -445,9 +452,6 @@ class OC {
 		self::$loader->registerPrefix('Patchwork', '3rdparty');
 		self::$loader->registerPrefix('Pimple', '3rdparty/Pimple');
 		spl_autoload_register(array(self::$loader, 'load'));
-
-		// make a dummy session available as early as possible since error pages need it
-		self::$session = new \OC\Session\Memory('');
 
 		// set some stuff
 		//ob_start();
@@ -489,13 +493,6 @@ class OC {
 		$vendorAutoLoad = OC::$THIRDPARTYROOT . '/3rdparty/autoload.php';
 		if (file_exists($vendorAutoLoad)) {
 			require_once $vendorAutoLoad;
-		}
-
-		// set debug mode if an xdebug session is active
-		if (!defined('DEBUG') || !DEBUG) {
-			if (isset($_COOKIE['XDEBUG_SESSION'])) {
-				define('DEBUG', true);
-			}
 		}
 
 		if (!defined('PHPUNIT_RUN')) {
@@ -550,7 +547,7 @@ class OC {
 
 		// User and Groups
 		if (!OC_Config::getValue("installed", false)) {
-			self::$session->set('user_id', '');
+			self::$server->getSession()->set('user_id', '');
 		}
 
 		OC_User::useBackend(new OC_User_Database());
@@ -573,6 +570,18 @@ class OC {
 			if (OC_Appconfig::getValue('core', 'backgroundjobs_mode', 'ajax') == 'ajax') {
 				OC_Util::addScript('backgroundjobs');
 			}
+		}
+
+		// Check whether the sample configuration has been copied
+		if(OC_Config::getValue('copied_sample_config', false)) {
+			$l = \OC::$server->getL10N('lib');
+			header('HTTP/1.1 503 Service Temporarily Unavailable');
+			header('Status: 503 Service Temporarily Unavailable');
+			OC_Template::printErrorPage(
+				$l->t('Sample configuration detected'),
+				$l->t('It has been detected that the sample configuration has been copied. This can break your installation and is unsupported. Please read the documentation before performing changes on config.php')
+			);
+			return;
 		}
 	}
 
@@ -663,7 +672,6 @@ class OC {
 	 * Handle the request
 	 */
 	public static function handleRequest() {
-		$l = \OC_L10N::get('lib');
 		// load all the classpaths from the enabled apps so they are available
 		// in the routing files of each app
 		OC::loadAppClassPaths();
@@ -684,10 +692,9 @@ class OC {
 		) {
 			header('HTTP/1.1 400 Bad Request');
 			header('Status: 400 Bad Request');
-			OC_Template::printErrorPage(
-				$l->t('You are accessing the server from an untrusted domain.'),
-				$l->t('Please contact your administrator. If you are an administrator of this instance, configure the "trusted_domain" setting in config/config.php. An example configuration is provided in config/config.sample.php.')
-			);
+			$tmpl = new OCP\Template('core', 'untrustedDomain', 'guest');
+			$tmpl->assign('domain', $_SERVER['SERVER_NAME']);
+			$tmpl->printPage();
 			return;
 		}
 
@@ -699,6 +706,9 @@ class OC {
 
 		if (!OC_User::isLoggedIn()) {
 			// Test it the user is already authenticated using Apaches AuthType Basic... very usable in combination with LDAP
+			if (!OC_Config::getValue('maintenance', false) && !self::checkUpgrade(false)) {
+				OC_App::loadApps(array('authentication'));
+			}
 			OC::tryBasicAuthLogin();
 		}
 
@@ -775,7 +785,7 @@ class OC {
 					if (isset($_COOKIE['oc_ignore_php_auth_user'])) {
 						// Ignore HTTP Authentication for 5 more mintues.
 						setcookie('oc_ignore_php_auth_user', $_SERVER['PHP_AUTH_USER'], time() + 300, OC::$WEBROOT.(empty(OC::$WEBROOT) ? '/' : ''));
-					} elseif ($_SERVER['PHP_AUTH_USER'] === self::$session->get('loginname')) {
+					} elseif ($_SERVER['PHP_AUTH_USER'] === self::$server->getSession()->get('loginname')) {
 						// Ignore HTTP Authentication to allow a different user to log in.
 						setcookie('oc_ignore_php_auth_user', $_SERVER['PHP_AUTH_USER'], 0, OC::$WEBROOT.(empty(OC::$WEBROOT) ? '/' : ''));
 					}
@@ -791,32 +801,6 @@ class OC {
 			// Not handled and not logged in
 			self::handleLogin();
 		}
-	}
-
-	/**
-	 * Load a PHP file belonging to the specified application
-	 * @param array $param The application and file to load
-	 * @return bool Whether the file has been found (will return 404 and false if not)
-	 * @deprecated This function will be removed in ownCloud 8 - use proper routing instead
-	 * @param $param
-	 * @return bool Whether the file has been found (will return 404 and false if not)
-	 */
-	public static function loadAppScriptFile($param) {
-		OC_App::loadApps();
-		$app = $param['app'];
-		$file = $param['file'];
-		$app_path = OC_App::getAppPath($app);
-		$file = $app_path . '/' . $file;
-
-		if (OC_App::isEnabled($app) && $app_path !== false && OC_Helper::issubdirectory($file, $app_path)) {
-			unset($app, $app_path);
-			if (file_exists($file)) {
-				require_once $file;
-				return true;
-			}
-		}
-		header('HTTP/1.0 404 Not Found');
-		return false;
 	}
 
 	protected static function handleAuthHeaders() {
@@ -853,13 +837,6 @@ class OC {
 		} // logon via web form
 		elseif (OC::tryFormLogin()) {
 			$error[] = 'invalidpassword';
-			if ( OC_Config::getValue('log_authfailip', false) ) {
-				OC_Log::write('core', 'Login failed: user \''.$_POST["user"].'\' , wrong password, IP:'.$_SERVER['REMOTE_ADDR'],
-				OC_Log::WARN);
-			} else {
-				OC_Log::write('core', 'Login failed: user \''.$_POST["user"].'\' , wrong password, IP:set log_authfailip=true in conf',
-                                OC_Log::WARN);
-			}
 		}
 
 		OC_Util::displayLoginPage(array_unique($error));
@@ -955,7 +932,7 @@ class OC {
 		if (OC_User::login($_POST["user"], $_POST["password"])) {
 			// setting up the time zone
 			if (isset($_POST['timezone-offset'])) {
-				self::$session->set('timezone', $_POST['timezone-offset']);
+				self::$server->getSession()->set('timezone', $_POST['timezone-offset']);
 			}
 
 			$userid = OC_User::getUser();

@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud\n"
 "Report-Msgid-Bugs-To: translations@owncloud.org\n"
-"POT-Creation-Date: 2014-08-07 01:54-0400\n"
-"PO-Revision-Date: 2014-08-07 05:54+0000\n"
+"POT-Creation-Date: 2014-08-30 01:54-0400\n"
+"PO-Revision-Date: 2014-08-30 05:24+0000\n"
 "Last-Translator: I Robot\n"
 "Language-Team: Japanese (Japan) (http://www.transifex.com/projects/p/owncloud/language/ja_JP/)\n"
 "MIME-Version: 1.0\n"
@@ -23,72 +23,67 @@ msgstr ""
 "Language: ja_JP\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: base.php:200 base.php:207
+#: base.php:201 base.php:208
 msgid "Cannot write into \"config\" directory!"
-msgstr "\"config\" ディレクトリに書き込みができません！"
+msgstr "\"config\"ディレクトリに書き込めません！"
 
-#: base.php:201
+#: base.php:202
 msgid ""
 "This can usually be fixed by giving the webserver write access to the config"
 " directory"
-msgstr "多くの場合、これはWEBサーバーに config ディレクトリへの書き込み権限を付与することで解決が可能です。"
+msgstr "多くの場合、これはWebサーバーにconfigディレクトリへの書き込み権限を与えることで解決できます。"
 
-#: base.php:203
+#: base.php:204
 #, php-format
 msgid "See %s"
 msgstr "%s を閲覧"
 
-#: base.php:208 private/util.php:428
+#: base.php:209 private/util.php:442
 #, php-format
 msgid ""
 "This can usually be fixed by %sgiving the webserver write access to the "
 "config directory%s."
-msgstr "多くの場合、これは %sWEBサーバーに config ディレクトリへの書き込み権限を付与%s することで解決が可能です。"
+msgstr "多くの場合、これは %s Webサーバーにconfigディレクトリ %s への書き込み権限を与えることで解決できます。"
 
-#: base.php:688
-msgid "You are accessing the server from an untrusted domain."
-msgstr "信頼されていないドメインからサーバーにアクセスしています。"
+#: base.php:581
+msgid "Sample configuration detected"
+msgstr ""
 
-#: base.php:689
+#: base.php:582
 msgid ""
-"Please contact your administrator. If you are an administrator of this "
-"instance, configure the \"trusted_domain\" setting in config/config.php. An "
-"example configuration is provided in config/config.sample.php."
-msgstr "管理者に連絡してください。このサーバーの管理者の場合は、\"trusted_domain\" の設定を config/config.php に設定してください。config/config.sample.php にサンプルの設定方法が記載してあります。"
+"It has been detected that the sample configuration has been copied. This can"
+" break your installation and is unsupported. Please read the documentation "
+"before performing changes on config.php"
+msgstr ""
 
-#: private/app.php:366
+#: private/app.php:374
 msgid "Help"
 msgstr "ヘルプ"
 
-#: private/app.php:379
+#: private/app.php:387
 msgid "Personal"
 msgstr "個人"
 
-#: private/app.php:390
+#: private/app.php:398
 msgid "Settings"
 msgstr "設定"
 
-#: private/app.php:402
+#: private/app.php:410
 msgid "Users"
 msgstr "ユーザー"
 
-#: private/app.php:415
+#: private/app.php:423
 msgid "Admin"
 msgstr "管理"
 
-#: private/app.php:985
-#, php-format
-msgid "Failed to upgrade \"%s\"."
-msgstr "\"%s\" へのアップグレードに失敗しました。"
-
-#: private/app.php:1142
+#: private/app.php:1118
 #, php-format
 msgid ""
 "App \\\"%s\\\" can't be installed because it is not compatible with this "
 "version of ownCloud."
-msgstr "アプリ \\\"%s\\\" をインストールできません。現在の owncloud のバージョンと互換性がありません。"
+msgstr "アプリ \\\"%s\\\" をインストールできません。現在のownCloudのバージョンと互換性がありません。"
 
-#: private/app.php:1154
+#: private/app.php:1130
 msgid "No app name specified"
 msgstr "アプリ名が未指定"
 
@@ -102,7 +97,7 @@ msgstr "無効な画像"
 
 #: private/defaults.php:42
 msgid "web services under your control"
-msgstr "管理下のウェブサービス"
+msgstr "あなたの管理下のウェブサービス"
 
 #: private/installer.php:77
 msgid "App directory already exists"
@@ -176,12 +171,12 @@ msgstr "トークンが無効になりました。ページを再読込してく
 msgid "Unknown user"
 msgstr "不明なユーザー"
 
-#: private/setup/abstractdatabase.php:26
+#: private/setup/abstractdatabase.php:26 private/setup/oci.php:26
 #, php-format
 msgid "%s enter the database username."
 msgstr "%s のデータベースのユーザー名を入力してください。"
 
-#: private/setup/abstractdatabase.php:29
+#: private/setup/abstractdatabase.php:29 private/setup/oci.php:29
 #, php-format
 msgid "%s enter the database name."
 msgstr "%s のデータベース名を入力してください。"
@@ -194,10 +189,10 @@ msgstr "%s ではデータベース名にドットを利用できないかもし
 #: private/setup/mssql.php:20
 #, php-format
 msgid "MS SQL username and/or password not valid: %s"
-msgstr "MS SQL サーバーのユーザー名/パスワードが正しくありません: %s"
+msgstr "MS SQL Serverのユーザー名/パスワードが正しくありません: %s"
 
 #: private/setup/mssql.php:21 private/setup/mysql.php:13
-#: private/setup/oci.php:114 private/setup/postgresql.php:31
+#: private/setup/oci.php:128 private/setup/postgresql.php:31
 #: private/setup/postgresql.php:84
 msgid "You need to enter either an existing account or the administrator."
 msgstr "既存のアカウントもしくは管理者のどちらかを入力する必要があります。"
@@ -206,23 +201,23 @@ msgstr "既存のアカウントもしくは管理者のどちらかを入力す
 msgid "MySQL/MariaDB username and/or password not valid"
 msgstr "MySQL/MariaDB のユーザー名及び/またはパスワードが無効"
 
-#: private/setup/mysql.php:67 private/setup/oci.php:54
-#: private/setup/oci.php:121 private/setup/oci.php:144
-#: private/setup/oci.php:151 private/setup/oci.php:162
-#: private/setup/oci.php:169 private/setup/oci.php:178
-#: private/setup/oci.php:186 private/setup/oci.php:195
-#: private/setup/oci.php:201 private/setup/postgresql.php:103
+#: private/setup/mysql.php:67 private/setup/oci.php:68
+#: private/setup/oci.php:135 private/setup/oci.php:158
+#: private/setup/oci.php:165 private/setup/oci.php:176
+#: private/setup/oci.php:183 private/setup/oci.php:192
+#: private/setup/oci.php:200 private/setup/oci.php:209
+#: private/setup/oci.php:215 private/setup/postgresql.php:103
 #: private/setup/postgresql.php:112 private/setup/postgresql.php:129
 #: private/setup/postgresql.php:139 private/setup/postgresql.php:148
 #, php-format
 msgid "DB Error: \"%s\""
 msgstr "DBエラー: \"%s\""
 
-#: private/setup/mysql.php:68 private/setup/oci.php:55
-#: private/setup/oci.php:122 private/setup/oci.php:145
-#: private/setup/oci.php:152 private/setup/oci.php:163
-#: private/setup/oci.php:179 private/setup/oci.php:187
-#: private/setup/oci.php:196 private/setup/postgresql.php:104
+#: private/setup/mysql.php:68 private/setup/oci.php:69
+#: private/setup/oci.php:136 private/setup/oci.php:159
+#: private/setup/oci.php:166 private/setup/oci.php:177
+#: private/setup/oci.php:193 private/setup/oci.php:201
+#: private/setup/oci.php:210 private/setup/postgresql.php:104
 #: private/setup/postgresql.php:113 private/setup/postgresql.php:130
 #: private/setup/postgresql.php:140 private/setup/postgresql.php:149
 #, php-format
@@ -247,15 +242,15 @@ msgstr "MySQL/MariaDB のユーザー '%s'@'%%' はすでに存在します"
 msgid "Drop this user from MySQL/MariaDB."
 msgstr "MySQL/MariaDB からこのユーザーを削除。"
 
-#: private/setup/oci.php:34
+#: private/setup/oci.php:48
 msgid "Oracle connection could not be established"
 msgstr "Oracleへの接続が確立できませんでした。"
 
-#: private/setup/oci.php:41 private/setup/oci.php:113
+#: private/setup/oci.php:55 private/setup/oci.php:127
 msgid "Oracle username and/or password not valid"
 msgstr "Oracleのユーザー名もしくはパスワードは有効ではありません"
 
-#: private/setup/oci.php:170 private/setup/oci.php:202
+#: private/setup/oci.php:184 private/setup/oci.php:216
 #, php-format
 msgid "Offending command was: \"%s\", name: %s, password: %s"
 msgstr "違反コマンド: \"%s\"、名前: %s、パスワード: %s"
@@ -284,7 +279,7 @@ msgid "Please double check the <a href='%s'>installation guides</a>."
 msgstr "<a href='%s'>インストールガイド</a>をよく確認してください。"
 
 #: private/share/mailnotifications.php:91
-#: private/share/mailnotifications.php:137
+#: private/share/mailnotifications.php:142
 #, php-format
 msgid "%s shared »%s« with you"
 msgstr "%sが あなたと »%s«を共有しました"
@@ -347,68 +342,68 @@ msgstr "%s の共有に失敗しました。リンクでの共有は許可され
 msgid "Share type %s is not valid for %s"
 msgstr "%s の共有方法は、%s には適用できません。"
 
-#: private/share/share.php:861
+#: private/share/share.php:863
 #, php-format
 msgid ""
 "Setting permissions for %s failed, because the permissions exceed "
 "permissions granted to %s"
 msgstr "%s の権限設定に失敗しました。%s に許可されている権限を越えています。"
 
-#: private/share/share.php:922
+#: private/share/share.php:924
 #, php-format
 msgid "Setting permissions for %s failed, because the item was not found"
 msgstr "%s の権限設定に失敗しました。アイテムが存在しません。"
 
-#: private/share/share.php:960
+#: private/share/share.php:962
 #, php-format
 msgid ""
 "Cannot set expiration date. Shares cannot expire later than %s after they "
 "have been shared"
-msgstr ""
+msgstr "有効期限を設定できません。共有開始から %s 以降に有効期限を設定することはできません。"
 
-#: private/share/share.php:968
+#: private/share/share.php:970
 msgid "Cannot set expiration date. Expiration date is in the past"
 msgstr "有効期限を設定できません。有効期限が過去を示しています。"
 
-#: private/share/share.php:1093
+#: private/share/share.php:1095
 #, php-format
 msgid "Sharing backend %s must implement the interface OCP\\Share_Backend"
 msgstr "%s のバックエンドの共有には、OCP\\Share_Backend　インターフェースを実装しなければなりません。"
 
-#: private/share/share.php:1100
+#: private/share/share.php:1102
 #, php-format
 msgid "Sharing backend %s not found"
 msgstr "共有バックエンド %s が見つかりません"
 
-#: private/share/share.php:1106
+#: private/share/share.php:1108
 #, php-format
 msgid "Sharing backend for %s not found"
 msgstr "%s のための共有バックエンドが見つかりません"
 
-#: private/share/share.php:1524
+#: private/share/share.php:1526
 #, php-format
 msgid "Sharing %s failed, because the user %s is the original sharer"
 msgstr "%s の共有に失敗しました。ユーザー %s が元々の共有者であるからです。"
 
-#: private/share/share.php:1533
+#: private/share/share.php:1535
 #, php-format
 msgid ""
 "Sharing %s failed, because the permissions exceed permissions granted to %s"
 msgstr "%s の共有に失敗しました。%s に付与されている許可を超えているからです。"
 
-#: private/share/share.php:1549
+#: private/share/share.php:1551
 #, php-format
 msgid "Sharing %s failed, because resharing is not allowed"
 msgstr "%s の共有に失敗しました。再共有が許されていないからです。"
 
-#: private/share/share.php:1561
+#: private/share/share.php:1563
 #, php-format
 msgid ""
 "Sharing %s failed, because the sharing backend for %s could not find its "
 "source"
 msgstr "%s の共有に失敗しました。%s のバックエンド共有に必要なソースが見つかりませんでした。"
 
-#: private/share/share.php:1575
+#: private/share/share.php:1577
 #, php-format
 msgid ""
 "Sharing %s failed, because the file could not be found in the file cache"
@@ -463,165 +458,165 @@ msgstr "1年前"
 msgid "years ago"
 msgstr "年前"
 
-#: private/user/manager.php:239
+#: private/user/manager.php:244
 msgid ""
 "Only the following characters are allowed in a username: \"a-z\", \"A-Z\", "
 "\"0-9\", and \"_.@-\""
 msgstr "ユーザー名で利用できる文字列は、次のものです： \"a-z\", \"A-Z\", \"0-9\", and \"_.@-\""
 
-#: private/user/manager.php:244
+#: private/user/manager.php:249
 msgid "A valid username must be provided"
 msgstr "有効なユーザー名を指定する必要があります"
 
-#: private/user/manager.php:248
+#: private/user/manager.php:253
 msgid "A valid password must be provided"
 msgstr "有効なパスワードを指定する必要があります"
 
-#: private/user/manager.php:253
+#: private/user/manager.php:258
 msgid "The username is already being used"
 msgstr "ユーザー名はすでに使われています"
 
-#: private/util.php:413
+#: private/util.php:427
 msgid "No database drivers (sqlite, mysql, or postgresql) installed."
 msgstr "データベースドライバー (sqlite, mysql, postgresql) がインストールされていません。"
 
-#: private/util.php:420
+#: private/util.php:434
 #, php-format
 msgid ""
 "Permissions can usually be fixed by %sgiving the webserver write access to "
 "the root directory%s."
-msgstr "多くの場合、パーミッションは %sWEBサーバーにルートディレクトリへの書き込み権限を付与%s することで解決が可能です。"
+msgstr "多くの場合、パーミッションは %s Webサーバーにルートディレクトリ %s への書き込み権限を与えることで解決できます。"
 
-#: private/util.php:427
+#: private/util.php:441
 msgid "Cannot write into \"config\" directory"
 msgstr "\"config\" ディレクトリに書き込みができません"
 
-#: private/util.php:440
+#: private/util.php:455
 msgid "Cannot write into \"apps\" directory"
 msgstr "\"apps\" ディレクトリに書き込みができません"
-
-#: private/util.php:441
-#, php-format
-msgid ""
-"This can usually be fixed by %sgiving the webserver write access to the apps"
-" directory%s or disabling the appstore in the config file."
-msgstr "多くの場合、これは %sWEBサーバーに apps ディレクトリへの書き込み権限を付与%s するか、設定ファイルでアプリストアを無効化することで解決が可能です。"
-
-#: private/util.php:455
-#, php-format
-msgid "Cannot create \"data\" directory (%s)"
-msgstr "\"data\" ディレクトリ (%s) を作成できません"
 
 #: private/util.php:456
 #, php-format
 msgid ""
+"This can usually be fixed by %sgiving the webserver write access to the apps"
+" directory%s or disabling the appstore in the config file."
+msgstr "多くの場合、これは %s Webサーバーにappsディレクトリ %s への書き込み権限を与えるか、設定ファイルでアプリストアを無効化することで解決できます。"
+
+#: private/util.php:470
+#, php-format
+msgid "Cannot create \"data\" directory (%s)"
+msgstr "\"data\" ディレクトリ (%s) を作成できません"
+
+#: private/util.php:471
+#, php-format
+msgid ""
 "This can usually be fixed by <a href=\"%s\" target=\"_blank\">giving the "
 "webserver write access to the root directory</a>."
-msgstr "多くの場合、これは<a href=\"%s\" target=\"_blank\">WEBサーバーにルートディレクトリへの書き込み権限を付与</a>することで解決が可能です。"
+msgstr "多くの場合、これは<a href=\"%s\" target=\"_blank\">Webサーバーにルートディレクトリへの書き込み権限を与える</a>ことで解決できます。"
 
-#: private/util.php:472
+#: private/util.php:487
 #, php-format
 msgid "Setting locale to %s failed"
 msgstr "ロケールを %s に設定できませんでした"
 
-#: private/util.php:475
+#: private/util.php:490
 msgid ""
-"Please install one of theses locales on your system and restart your "
+"Please install one of these locales on your system and restart your "
 "webserver."
-msgstr "これらのロケールのいずれかをシステムにインストールし、WEBサーバーを再起動してください。"
+msgstr "これらのロケールのうちいずれかをシステムにインストールし、Webサーバーを再起動してください。"
 
-#: private/util.php:479
+#: private/util.php:494
 msgid "Please ask your server administrator to install the module."
 msgstr "サーバー管理者にモジュールのインストールを依頼してください。"
 
-#: private/util.php:483 private/util.php:490 private/util.php:497
-#: private/util.php:511 private/util.php:518 private/util.php:525
-#: private/util.php:532 private/util.php:539 private/util.php:546
-#: private/util.php:561
+#: private/util.php:498 private/util.php:505 private/util.php:512
+#: private/util.php:526 private/util.php:533 private/util.php:540
+#: private/util.php:547 private/util.php:554 private/util.php:561
+#: private/util.php:576
 #, php-format
 msgid "PHP module %s not installed."
 msgstr "PHP のモジュール %s がインストールされていません。"
 
-#: private/util.php:553
+#: private/util.php:568
 #, php-format
 msgid "PHP %s or higher is required."
 msgstr "PHP %s 以上が必要です。"
 
-#: private/util.php:554
+#: private/util.php:569
 msgid ""
 "Please ask your server administrator to update PHP to the latest version. "
 "Your PHP version is no longer supported by ownCloud and the PHP community."
-msgstr "PHPを最新バージョンに更新するようサーバー管理者に依頼してください。現在のPHPのバージョンは、ownCloud および PHP コミュニティでサポートされていません。"
+msgstr "PHPを最新バージョンに更新するようサーバー管理者に依頼してください。現在のPHPのバージョンは、ownCloudおよびPHPコミュニティでサポートされていません。"
 
-#: private/util.php:571
+#: private/util.php:587
 msgid ""
 "PHP Safe Mode is enabled. ownCloud requires that it is disabled to work "
 "properly."
-msgstr "PHPセーフモードは有効です。ownCloud を適切に動作させるには無効化する必要があります。"
+msgstr "PHPセーフモードは有効です。ownCloudを適切に動作させるには無効化する必要があります。"
 
-#: private/util.php:572
+#: private/util.php:588
 msgid ""
 "PHP Safe Mode is a deprecated and mostly useless setting that should be "
 "disabled. Please ask your server administrator to disable it in php.ini or "
 "in your webserver config."
-msgstr "PHPセーフモードは多くの場合において役に立たない設定のため、無効化すべきです。サーバー管理者に php.ini もしくはWEBサーバー設定で無効化するよう依頼してください。"
+msgstr "PHPセーフモードは推奨されておらず、ほとんど役に立たない設定のため、無効化すべきです。サーバー管理者に、php.iniもしくはWebサーバー設定で無効化するよう依頼してください。"
 
-#: private/util.php:579
+#: private/util.php:595
 msgid ""
 "Magic Quotes is enabled. ownCloud requires that it is disabled to work "
 "properly."
-msgstr "マジッククォートは有効です。ownCloud を適切に動作させるには無効化する必要があります。"
+msgstr "マジッククォートは有効です。ownCloudを適切に動作させるには無効にする必要があります。"
 
-#: private/util.php:580
+#: private/util.php:596
 msgid ""
 "Magic Quotes is a deprecated and mostly useless setting that should be "
 "disabled. Please ask your server administrator to disable it in php.ini or "
 "in your webserver config."
-msgstr "マジッククォートは多くの場合において役に立たない設定のため、無効化すべきです。サーバー管理者に php.ini もしくはWEBサーバー設定で無効化するよう依頼してください。"
+msgstr "マジッククォートは推奨されておらず、ほとんど役に立たない設定のため、無効化すべきです。サーバー管理者に、php.iniもしくはWebサーバー設定で無効化するよう依頼してください。"
 
-#: private/util.php:594
+#: private/util.php:610
 msgid "PHP modules have been installed, but they are still listed as missing?"
 msgstr "PHP モジュールはインストールされていますが、まだ一覧に表示されていますか？"
 
-#: private/util.php:595
+#: private/util.php:611
 msgid "Please ask your server administrator to restart the web server."
 msgstr "サーバー管理者にWEBサーバーを再起動するよう依頼してください。"
 
-#: private/util.php:624
+#: private/util.php:641
 msgid "PostgreSQL >= 9 required"
 msgstr "PostgreSQL >= 9 が必要です"
 
-#: private/util.php:625
+#: private/util.php:642
 msgid "Please upgrade your database version"
 msgstr "新しいバージョンのデータベースにアップグレードしてください"
 
-#: private/util.php:632
+#: private/util.php:649
 msgid "Error occurred while checking PostgreSQL version"
 msgstr "PostgreSQL のバージョンチェック中にエラーが発生しました"
 
-#: private/util.php:633
+#: private/util.php:650
 msgid ""
 "Please make sure you have PostgreSQL >= 9 or check the logs for more "
 "information about the error"
 msgstr "PostgreSQL >= 9 がインストールされているかどうか確認してください。もしくは、ログからエラーに関する詳細な情報を確認してください。"
 
-#: private/util.php:695
+#: private/util.php:715
 msgid ""
 "Please change the permissions to 0770 so that the directory cannot be listed"
 " by other users."
 msgstr "ディレクトリが他のユーザーから見えないように、パーミッションを 0770 に変更してください。"
 
-#: private/util.php:704
+#: private/util.php:724
 #, php-format
 msgid "Data directory (%s) is readable by other users"
 msgstr "データディレクトリ (%s) は他のユーザーも閲覧することができます"
 
-#: private/util.php:725
+#: private/util.php:745
 #, php-format
 msgid "Data directory (%s) is invalid"
 msgstr "データディレクトリ (%s) は無効です"
 
-#: private/util.php:726
+#: private/util.php:746
 msgid ""
 "Please check that the data directory contains a file \".ocdata\" in its "
 "root."

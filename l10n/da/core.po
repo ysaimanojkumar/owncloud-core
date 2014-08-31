@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud\n"
 "Report-Msgid-Bugs-To: translations@owncloud.org\n"
-"POT-Creation-Date: 2014-08-10 01:54-0400\n"
-"PO-Revision-Date: 2014-08-10 05:54+0000\n"
+"POT-Creation-Date: 2014-08-31 01:54-0400\n"
+"PO-Revision-Date: 2014-08-30 16:22+0000\n"
 "Last-Translator: I Robot\n"
 "Language-Team: Danish (http://www.transifex.com/projects/p/owncloud/language/da/)\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Language: da\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ajax/share.php:116 ajax/share.php:158
+#: ajax/share.php:117 ajax/share.php:159
 #, php-format
 msgid "Couldn't send mail to following users: %s "
 msgstr "Kunne ikke sende mail til følgende brugere: %s"
@@ -50,7 +50,16 @@ msgstr "Opdaterede database"
 msgid "Checked database schema update"
 msgstr "Tjekket database schema opdatering"
 
-#: ajax/update.php:27
+#: ajax/update.php:22
+msgid "Checked database schema update for apps"
+msgstr "Tjekkede databaseskemaets opdatering for apps"
+
+#: ajax/update.php:25
+#, php-format
+msgid "Updated \"%s\" to %s"
+msgstr "Opdaterede \"%s\" til %s"
+
+#: ajax/update.php:33
 #, php-format
 msgid "Disabled incompatible apps: %s"
 msgstr "Deaktiverer inkombatible apps: %s"
@@ -151,77 +160,29 @@ msgstr "November"
 msgid "December"
 msgstr "December"
 
-#: js/js.js:501
+#: js/js.js:497
 msgid "Settings"
 msgstr "Indstillinger"
 
-#: js/js.js:590
+#: js/js.js:586
 msgid "File"
 msgstr "Fil"
 
-#: js/js.js:591
+#: js/js.js:587
 msgid "Folder"
 msgstr "Mappe"
 
-#: js/js.js:592
+#: js/js.js:588
 msgid "Image"
 msgstr "Billede"
 
-#: js/js.js:593
+#: js/js.js:589
 msgid "Audio"
 msgstr "Lyd"
 
-#: js/js.js:607
+#: js/js.js:603
 msgid "Saving..."
 msgstr "Gemmer..."
-
-#: js/js.js:1278
-msgid "seconds ago"
-msgstr "sekunder siden"
-
-#: js/js.js:1279
-msgid "%n minute ago"
-msgid_plural "%n minutes ago"
-msgstr[0] "%n minut siden"
-msgstr[1] "%n minutter siden"
-
-#: js/js.js:1280
-msgid "%n hour ago"
-msgid_plural "%n hours ago"
-msgstr[0] "%n time siden"
-msgstr[1] "%n timer siden"
-
-#: js/js.js:1281
-msgid "today"
-msgstr "i dag"
-
-#: js/js.js:1282
-msgid "yesterday"
-msgstr "i går"
-
-#: js/js.js:1283
-msgid "%n day ago"
-msgid_plural "%n days ago"
-msgstr[0] "%n dag siden"
-msgstr[1] "%n dage siden"
-
-#: js/js.js:1284
-msgid "last month"
-msgstr "sidste måned"
-
-#: js/js.js:1285
-msgid "%n month ago"
-msgid_plural "%n months ago"
-msgstr[0] "%n måned siden"
-msgstr[1] "%n måneder siden"
-
-#: js/js.js:1286
-msgid "last year"
-msgstr "sidste år"
-
-#: js/js.js:1287
-msgid "years ago"
-msgstr "år siden"
 
 #: js/lostpassword.js:3 lostpassword/controller/lostcontroller.php:198
 msgid "Couldn't send reset email. Please contact your administrator."
@@ -358,12 +319,12 @@ msgstr "Delt med {recipients}"
 msgid "Share"
 msgstr "Del"
 
-#: js/share.js:326 js/share.js:340 js/share.js:347 js/share.js:1007
+#: js/share.js:326 js/share.js:340 js/share.js:347 js/share.js:1002
 #: templates/installation.php:10
 msgid "Error"
 msgstr "Fejl"
 
-#: js/share.js:328 js/share.js:1070
+#: js/share.js:328 js/share.js:1065
 msgid "Error while sharing"
 msgstr "Fejl under deling"
 
@@ -424,79 +385,71 @@ msgstr "Vælg udløbsdato"
 msgid "Expiration date"
 msgstr "Udløbsdato"
 
-#: js/share.js:455
-msgid "Share via email:"
-msgstr "Del via email:"
-
-#: js/share.js:458
-msgid "No people found"
-msgstr "Ingen personer fundet"
-
-#: js/share.js:507 js/share.js:575
+#: js/share.js:496 js/share.js:564
 msgid "group"
 msgstr "gruppe"
 
-#: js/share.js:540
+#: js/share.js:529
 msgid "Resharing is not allowed"
 msgstr "Videredeling ikke tilladt"
 
-#: js/share.js:591
+#: js/share.js:580
 msgid "Shared in {item} with {user}"
 msgstr "Delt i {item} med {user}"
 
-#: js/share.js:613
+#: js/share.js:602
 msgid "Unshare"
 msgstr "Fjern deling"
 
-#: js/share.js:621
+#: js/share.js:610
 msgid "notify by email"
 msgstr "Giv besked med mail"
 
-#: js/share.js:624
+#: js/share.js:613
 msgid "can share"
 msgstr "kan dele"
 
-#: js/share.js:627
+#: js/share.js:616
 msgid "can edit"
 msgstr "kan redigere"
 
-#: js/share.js:629
+#: js/share.js:618
 msgid "access control"
 msgstr "Adgangskontrol"
 
-#: js/share.js:632
+#: js/share.js:621
 msgid "create"
 msgstr "opret"
 
-#: js/share.js:635
+#: js/share.js:624
 msgid "update"
 msgstr "opdater"
 
-#: js/share.js:638
+#: js/share.js:627
 msgid "delete"
 msgstr "slet"
 
-#: js/share.js:988
+#: js/share.js:983
 msgid "Password protected"
 msgstr "Beskyttet med adgangskode"
 
-#: js/share.js:1007
+#: js/share.js:1002
 msgid "Error unsetting expiration date"
 msgstr "Fejl ved fjernelse af udløbsdato"
 
-#: js/share.js:1028
+#: js/share.js:1023
 msgid "Error setting expiration date"
 msgstr "Fejl under sætning af udløbsdato"
 
-#: js/share.js:1057
+#: js/share.js:1052
 msgid "Sending ..."
 msgstr "Sender ..."
 
-#: js/share.js:1068
+#: js/share.js:1063
 msgid "Email sent"
 msgstr "E-mail afsendt"
 
-#: js/share.js:1092
+#: js/share.js:1087
 msgid "Warning"
 msgstr "Advarsel"
 
@@ -684,7 +637,8 @@ msgstr "Hej med dig\n\nDette blot for at lade dig vide, at %s har delt %s med di
 msgid "The share will expire on %s."
 msgstr "Delingen vil udløbe om %s."
 
-#: templates/altmail.php:7 templates/mail.php:20
+#. TRANSLATORS term at the end of a mail
+#: templates/altmail.php:8 templates/mail.php:21
 msgid "Cheers!"
 msgstr "Hej!"
 
@@ -852,6 +806,28 @@ msgstr "Kontakt systemadministratoren, hvis denne meddelelse fortsætter eller o
 msgid "Thank you for your patience."
 msgstr "Tak for din tålmodighed."
 
+#: templates/untrustedDomain.php:5
+msgid "You are accessing the server from an untrusted domain."
+msgstr "Du tilgår serveren fra et utroværdigt domæne"
+
+#: templates/untrustedDomain.php:8
+msgid ""
+"Please contact your administrator. If you are an administrator of this "
+"instance, configure the \"trusted_domain\" setting in config/config.php. An "
+"example configuration is provided in config/config.sample.php."
+msgstr "Kontakt venligst din administrator. Hvis du er administrator, konfigurer \"trusted_domain\" indstillingen i config/config.php. Et eksempel kan ses i config/config.sample.php."
+
+#: templates/untrustedDomain.php:10
+msgid ""
+"Depending on your configuration, as an administrator you might also be able "
+"to use the button below to trust this domain."
+msgstr "Afhænger af din konfiguration, da du som administrator eventuelt også er i stand til at gøre brug af knappen nedenfor til at tildele tillid til dette domæne."
+
+#: templates/untrustedDomain.php:14
+#, php-format
+msgid "Add \"%s\" as trusted domain"
+msgstr "Tilføj \"%s\" som et troværdigt domæne"
+
 #: templates/update.admin.php:3
 #, php-format
 msgid "%s will be updated to version %s."
@@ -875,6 +851,12 @@ msgstr "Venligst sikrer dig en backup af databasen, config-mappen og data-mappen
 #: templates/update.admin.php:23
 msgid "Start update"
 msgstr "Begynd opdatering"
+
+#: templates/update.admin.php:25
+msgid ""
+"To avoid timeouts with larger installations, you can instead run the "
+"following command from your installation directory:"
+msgstr "For at undgå tidsudløb med større installationer, så kan du i stedet køre følgende kommando fra din installationsmappe:"
 
 #: templates/update.user.php:3
 msgid ""

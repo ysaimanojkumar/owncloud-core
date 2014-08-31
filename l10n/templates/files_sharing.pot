@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud Core 6.0.0\n"
 "Report-Msgid-Bugs-To: translations@owncloud.org\n"
-"POT-Creation-Date: 2014-08-11 01:54-0400\n"
+"POT-Creation-Date: 2014-08-31 01:54-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,19 +21,23 @@ msgstr ""
 msgid "Server to server sharing is not enabled on this server"
 msgstr ""
 
-#: ajax/external.php:47
+#: ajax/external.php:38
+msgid "Invalid or untrusted SSL certificate"
+msgstr ""
+
+#: ajax/external.php:52
 msgid "Couldn't add remote share"
 msgstr ""
 
-#: appinfo/app.php:33 js/app.js:34
+#: appinfo/app.php:36 js/app.js:34
 msgid "Shared with you"
 msgstr ""
 
-#: appinfo/app.php:45 js/app.js:53
+#: appinfo/app.php:48 js/app.js:53
 msgid "Shared with others"
 msgstr ""
 
-#: appinfo/app.php:54 js/app.js:72
+#: appinfo/app.php:57 js/app.js:72
 msgid "Shared by link"
 msgstr ""
 
@@ -77,7 +81,7 @@ msgstr ""
 msgid "Invalid ownCloud url"
 msgstr ""
 
-#: js/sharedfilelist.js:126
+#: js/sharedfilelist.js:128
 msgid "Shared by"
 msgstr ""
 

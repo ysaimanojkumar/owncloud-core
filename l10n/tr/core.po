@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud\n"
 "Report-Msgid-Bugs-To: translations@owncloud.org\n"
-"POT-Creation-Date: 2014-08-10 01:54-0400\n"
-"PO-Revision-Date: 2014-08-10 05:54+0000\n"
+"POT-Creation-Date: 2014-08-31 01:54-0400\n"
+"PO-Revision-Date: 2014-08-30 16:22+0000\n"
 "Last-Translator: I Robot\n"
 "Language-Team: Turkish (http://www.transifex.com/projects/p/owncloud/language/tr/)\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ajax/share.php:116 ajax/share.php:158
+#: ajax/share.php:117 ajax/share.php:159
 #, php-format
 msgid "Couldn't send mail to following users: %s "
 msgstr "Şu kullanıcılara posta gönderilemedi: %s"
@@ -42,7 +42,16 @@ msgstr "Veritabanı güncellendi"
 msgid "Checked database schema update"
 msgstr "Veritabanı şema güncellemesi denetlendi"
 
-#: ajax/update.php:27
+#: ajax/update.php:22
+msgid "Checked database schema update for apps"
+msgstr "Uygulamalar için veritabanı şema güncellemesi denetlendi"
+
+#: ajax/update.php:25
+#, php-format
+msgid "Updated \"%s\" to %s"
+msgstr "\"%s\", %s sürümüne güncellendi"
+
+#: ajax/update.php:33
 #, php-format
 msgid "Disabled incompatible apps: %s"
 msgstr "Uyumsuz uygulamalar devre dışı bırakıldı: %s"
@@ -143,77 +152,29 @@ msgstr "Kasım"
 msgid "December"
 msgstr "Aralık"
 
-#: js/js.js:501
+#: js/js.js:497
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: js/js.js:590
+#: js/js.js:586
 msgid "File"
 msgstr "Dosya"
 
-#: js/js.js:591
+#: js/js.js:587
 msgid "Folder"
 msgstr "Klasör"
 
-#: js/js.js:592
+#: js/js.js:588
 msgid "Image"
 msgstr "Resim"
 
-#: js/js.js:593
+#: js/js.js:589
 msgid "Audio"
 msgstr "Ses"
 
-#: js/js.js:607
+#: js/js.js:603
 msgid "Saving..."
 msgstr "Kaydediliyor..."
-
-#: js/js.js:1278
-msgid "seconds ago"
-msgstr "saniyeler önce"
-
-#: js/js.js:1279
-msgid "%n minute ago"
-msgid_plural "%n minutes ago"
-msgstr[0] "%n dakika önce"
-msgstr[1] "%n dakika önce"
-
-#: js/js.js:1280
-msgid "%n hour ago"
-msgid_plural "%n hours ago"
-msgstr[0] "%n saat önce"
-msgstr[1] "%n saat önce"
-
-#: js/js.js:1281
-msgid "today"
-msgstr "bugün"
-
-#: js/js.js:1282
-msgid "yesterday"
-msgstr "dün"
-
-#: js/js.js:1283
-msgid "%n day ago"
-msgid_plural "%n days ago"
-msgstr[0] "%n gün önce"
-msgstr[1] "%n gün önce"
-
-#: js/js.js:1284
-msgid "last month"
-msgstr "geçen ay"
-
-#: js/js.js:1285
-msgid "%n month ago"
-msgid_plural "%n months ago"
-msgstr[0] "%n ay önce"
-msgstr[1] "%n ay önce"
-
-#: js/js.js:1286
-msgid "last year"
-msgstr "geçen yıl"
-
-#: js/js.js:1287
-msgid "years ago"
-msgstr "yıllar önce"
 
 #: js/lostpassword.js:3 lostpassword/controller/lostcontroller.php:198
 msgid "Couldn't send reset email. Please contact your administrator."
@@ -350,12 +311,12 @@ msgstr "{recipients} ile paylaşılmış"
 msgid "Share"
 msgstr "Paylaş"
 
-#: js/share.js:326 js/share.js:340 js/share.js:347 js/share.js:1007
+#: js/share.js:326 js/share.js:340 js/share.js:347 js/share.js:1002
 #: templates/installation.php:10
 msgid "Error"
 msgstr "Hata"
 
-#: js/share.js:328 js/share.js:1070
+#: js/share.js:328 js/share.js:1065
 msgid "Error while sharing"
 msgstr "Paylaşım sırasında hata"
 
@@ -416,79 +377,71 @@ msgstr "Son kullanma tarihini ayarla"
 msgid "Expiration date"
 msgstr "Son kullanım tarihi"
 
-#: js/share.js:455
-msgid "Share via email:"
-msgstr "E-posta ile paylaş:"
-
-#: js/share.js:458
-msgid "No people found"
-msgstr "Kişi bulunamadı"
-
-#: js/share.js:507 js/share.js:575
+#: js/share.js:496 js/share.js:564
 msgid "group"
 msgstr "grup"
 
-#: js/share.js:540
+#: js/share.js:529
 msgid "Resharing is not allowed"
 msgstr "Tekrar paylaşmaya izin verilmiyor"
 
-#: js/share.js:591
+#: js/share.js:580
 msgid "Shared in {item} with {user}"
 msgstr "{item} içinde {user} ile paylaşılanlar"
 
-#: js/share.js:613
+#: js/share.js:602
 msgid "Unshare"
 msgstr "Paylaşmayı Kaldır"
 
-#: js/share.js:621
+#: js/share.js:610
 msgid "notify by email"
 msgstr "e-posta ile bildir"
 
-#: js/share.js:624
+#: js/share.js:613
 msgid "can share"
 msgstr "paylaşabilir"
 
-#: js/share.js:627
+#: js/share.js:616
 msgid "can edit"
 msgstr "düzenleyebilir"
 
-#: js/share.js:629
+#: js/share.js:618
 msgid "access control"
 msgstr "erişim kontrolü"
 
-#: js/share.js:632
+#: js/share.js:621
 msgid "create"
 msgstr "oluştur"
 
-#: js/share.js:635
+#: js/share.js:624
 msgid "update"
 msgstr "güncelle"
 
-#: js/share.js:638
+#: js/share.js:627
 msgid "delete"
 msgstr "sil"
 
-#: js/share.js:988
+#: js/share.js:983
 msgid "Password protected"
 msgstr "Parola korumalı"
 
-#: js/share.js:1007
+#: js/share.js:1002
 msgid "Error unsetting expiration date"
 msgstr "Son kullanma tarihi kaldırma hatası"
 
-#: js/share.js:1028
+#: js/share.js:1023
 msgid "Error setting expiration date"
 msgstr "Son kullanma tarihi ayarlama hatası"
 
-#: js/share.js:1057
+#: js/share.js:1052
 msgid "Sending ..."
 msgstr "Gönderiliyor..."
 
-#: js/share.js:1068
+#: js/share.js:1063
 msgid "Email sent"
 msgstr "E-posta gönderildi"
 
-#: js/share.js:1092
+#: js/share.js:1087
 msgid "Warning"
 msgstr "Uyarı"
 
@@ -676,7 +629,8 @@ msgstr "Merhaba,\n\nSadece %s sizinle %s paylaşımını yaptığını bildiriyo
 msgid "The share will expire on %s."
 msgstr "Bu paylaşım %s tarihinde sona erecek."
 
-#: templates/altmail.php:7 templates/mail.php:20
+#. TRANSLATORS term at the end of a mail
+#: templates/altmail.php:8 templates/mail.php:21
 msgid "Cheers!"
 msgstr "Hoşça kalın!"
 
@@ -844,6 +798,28 @@ msgstr "Eğer bu ileti görünmeye devam ederse veya beklenmedik şekilde ortaya
 msgid "Thank you for your patience."
 msgstr "Sabrınız için teşekkür ederiz."
 
+#: templates/untrustedDomain.php:5
+msgid "You are accessing the server from an untrusted domain."
+msgstr "Sunucuya güvenilmeyen bir alan adından ulaşıyorsunuz."
+
+#: templates/untrustedDomain.php:8
+msgid ""
+"Please contact your administrator. If you are an administrator of this "
+"instance, configure the \"trusted_domain\" setting in config/config.php. An "
+"example configuration is provided in config/config.sample.php."
+msgstr "Lütfen yöneticiniz ile iletişime geçin. Eğer bu örneğin bir yöneticisi iseniz, config/config.php dosyası içerisindeki \"trusted_domain\" ayarını yapılandırın. Bu yapılandırmanın bir örneği config/config.sample.php dosyasında verilmiştir."
+
+#: templates/untrustedDomain.php:10
+msgid ""
+"Depending on your configuration, as an administrator you might also be able "
+"to use the button below to trust this domain."
+msgstr "Yapılandırmanıza bağlı olarak, bir yönetici olarak bu alan adına güvenmek için aşağıdaki düğmeyi de kullanabilirsiniz."
+
+#: templates/untrustedDomain.php:14
+#, php-format
+msgid "Add \"%s\" as trusted domain"
+msgstr "\"%s\" alan adını güvenilir olarak ekle"
+
 #: templates/update.admin.php:3
 #, php-format
 msgid "%s will be updated to version %s."
@@ -867,6 +843,12 @@ msgstr "Devam etmeden önce lütfen veritabanının, yapılandırma ve veri klas
 #: templates/update.admin.php:23
 msgid "Start update"
 msgstr "Güncellemeyi başlat"
+
+#: templates/update.admin.php:25
+msgid ""
+"To avoid timeouts with larger installations, you can instead run the "
+"following command from your installation directory:"
+msgstr "Daha büyük kurulumlarda zaman aşımlarının önüne geçmek için, kurulum dizininizden aşağıdaki komutu da çalıştırabilirsiniz:"
 
 #: templates/update.user.php:3
 msgid ""

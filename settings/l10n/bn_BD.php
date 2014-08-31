@@ -1,5 +1,6 @@
 <?php
 $TRANSLATIONS = array(
+"Saved" => "সংরক্ষণ করা হলো",
 "Email sent" => "ই-মেইল পাঠানো হয়েছে",
 "Encryption" => "সংকেতায়ন",
 "Unable to load list from App Store" => "অ্যাপস্টোর থেকে তালিকা লোড করতে সক্ষম নয়",
@@ -40,11 +41,13 @@ $TRANSLATIONS = array(
 "Select an App" => "অ্যাপ নির্বাচন করুন",
 "See application page at apps.owncloud.com" => "apps.owncloud.com এ অ্যাপ্লিকেসন পৃষ্ঠা দেখুন",
 "<span class=\"licence\"></span>-licensed by <span class=\"author\"></span>" => "<span class=\"licence\"></span>-লাইসেন্সধারী <span class=\"author\"></span>",
+"All" => "সবাই",
 "Administrator Documentation" => "প্রশাসক সহায়িকা",
 "Online Documentation" => "অনলাইন সহায়িকা",
 "Forum" => "ফোরাম",
 "Bugtracker" => "বাগট্র্যাকার",
 "Commercial Support" => "বাণিজ্যিক সাপোর্ট",
+"Get the apps to sync your files" => "আপনার ফাইলসমূহ সিংক করতে অ্যাপস নিন",
 "Show First Run Wizard again" => "প্রথমবার চালানোর যাদুকর পূনরায় প্রদর্শন কর",
 "You have used <strong>%s</strong> of the available <strong>%s</strong>" => "আপনি ব্যবহার করছেন  <strong>%s</strong>, সুলভ  <strong>%s</strong> এর মধ্যে।",
 "Password" => "কূটশব্দ",
@@ -60,6 +63,7 @@ $TRANSLATIONS = array(
 "Help translate" => "অনুবাদ করতে সহায়তা করুন",
 "Login Name" => "প্রবেশ",
 "Create" => "তৈরী কর",
+"Group" => "গোষ্ঠীসমূহ",
 "Unlimited" => "অসীম",
 "Other" => "অন্যান্য",
 "Username" => "ব্যবহারকারী",

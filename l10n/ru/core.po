@@ -15,6 +15,7 @@
 # jekader <jekader@gmail.com>, 2013-2014
 # Kalinkin Alex <insider.junk@gmail.com>, 2013
 # Pavel P. Zabortsev <ppz2001@mail.ru>, 2014
+# sad2shade <sad.2.shade@gmail.com>, 2014
 # Simon Tushev, 2013
 # Fukurokudzu <sergei.fukurokudzu@gmail.com>, 2014
 # Serge Shpikin <rkfg@rkfg.me>, 2013
@@ -32,8 +33,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud\n"
 "Report-Msgid-Bugs-To: translations@owncloud.org\n"
-"POT-Creation-Date: 2014-08-10 01:54-0400\n"
-"PO-Revision-Date: 2014-08-10 05:54+0000\n"
+"POT-Creation-Date: 2014-08-31 01:54-0400\n"
+"PO-Revision-Date: 2014-08-30 16:22+0000\n"
 "Last-Translator: I Robot\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/owncloud/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -42,7 +43,7 @@ msgstr ""
 "Language: ru\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ajax/share.php:116 ajax/share.php:158
+#: ajax/share.php:117 ajax/share.php:159
 #, php-format
 msgid "Couldn't send mail to following users: %s "
 msgstr "Невозможно отправить письмо следующим пользователям: %s"
@@ -63,7 +64,16 @@ msgstr "База данных обновлена"
 msgid "Checked database schema update"
 msgstr "Проверено обновление схемы БД"
 
-#: ajax/update.php:27
+#: ajax/update.php:22
+msgid "Checked database schema update for apps"
+msgstr "Проверено обновление схемы БД для приложений"
+
+#: ajax/update.php:25
+#, php-format
+msgid "Updated \"%s\" to %s"
+msgstr "Обновлено \"%s\" до %s"
+
+#: ajax/update.php:33
 #, php-format
 msgid "Disabled incompatible apps: %s"
 msgstr "Отключенные несовместимые приложения: %s"
@@ -164,81 +174,29 @@ msgstr "Ноябрь"
 msgid "December"
 msgstr "Декабрь"
 
-#: js/js.js:501
+#: js/js.js:497
 msgid "Settings"
 msgstr "Настройки"
 
-#: js/js.js:590
+#: js/js.js:586
 msgid "File"
 msgstr "Файл"
 
-#: js/js.js:591
+#: js/js.js:587
 msgid "Folder"
 msgstr "Каталог"
 
-#: js/js.js:592
+#: js/js.js:588
 msgid "Image"
 msgstr "Изображение"
 
-#: js/js.js:593
+#: js/js.js:589
 msgid "Audio"
 msgstr "Аудио"
 
-#: js/js.js:607
+#: js/js.js:603
 msgid "Saving..."
 msgstr "Сохранение..."
-
-#: js/js.js:1278
-msgid "seconds ago"
-msgstr "только что"
-
-#: js/js.js:1279
-msgid "%n minute ago"
-msgid_plural "%n minutes ago"
-msgstr[0] "%n минуту назад"
-msgstr[1] "%n минуты назад"
-msgstr[2] "%n минут назад"
-
-#: js/js.js:1280
-msgid "%n hour ago"
-msgid_plural "%n hours ago"
-msgstr[0] "%n час назад"
-msgstr[1] "%n часа назад"
-msgstr[2] "%n часов назад"
-
-#: js/js.js:1281
-msgid "today"
-msgstr "сегодня"
-
-#: js/js.js:1282
-msgid "yesterday"
-msgstr "вчера"
-
-#: js/js.js:1283
-msgid "%n day ago"
-msgid_plural "%n days ago"
-msgstr[0] "%n день назад"
-msgstr[1] "%n дня назад"
-msgstr[2] "%n дней назад"
-
-#: js/js.js:1284
-msgid "last month"
-msgstr "месяц назад"
-
-#: js/js.js:1285
-msgid "%n month ago"
-msgid_plural "%n months ago"
-msgstr[0] "%n месяц назад"
-msgstr[1] "%n месяца назад"
-msgstr[2] "%n месяцев назад"
-
-#: js/js.js:1286
-msgid "last year"
-msgstr "год назад"
-
-#: js/js.js:1287
-msgid "years ago"
-msgstr "несколько лет назад"
 
 #: js/lostpassword.js:3 lostpassword/controller/lostcontroller.php:198
 msgid "Couldn't send reset email. Please contact your administrator."
@@ -376,12 +334,12 @@ msgstr "Доступ открыт {recipients}"
 msgid "Share"
 msgstr "Открыть доступ"
 
-#: js/share.js:326 js/share.js:340 js/share.js:347 js/share.js:1007
+#: js/share.js:326 js/share.js:340 js/share.js:347 js/share.js:1002
 #: templates/installation.php:10
 msgid "Error"
 msgstr "Ошибка"
 
-#: js/share.js:328 js/share.js:1070
+#: js/share.js:328 js/share.js:1065
 msgid "Error while sharing"
 msgstr "Ошибка при открытии доступа"
 
@@ -442,79 +400,71 @@ msgstr "Установить срок доступа"
 msgid "Expiration date"
 msgstr "Дата окончания"
 
-#: js/share.js:455
-msgid "Share via email:"
-msgstr "Поделится через электронную почту:"
-
-#: js/share.js:458
-msgid "No people found"
-msgstr "Ни один человек не найден"
-
-#: js/share.js:507 js/share.js:575
+#: js/share.js:496 js/share.js:564
 msgid "group"
 msgstr "группа"
 
-#: js/share.js:540
+#: js/share.js:529
 msgid "Resharing is not allowed"
 msgstr "Общий доступ не разрешен"
 
-#: js/share.js:591
+#: js/share.js:580
 msgid "Shared in {item} with {user}"
 msgstr "Общий доступ к {item} с {user}"
 
-#: js/share.js:613
+#: js/share.js:602
 msgid "Unshare"
 msgstr "Закрыть общий доступ"
 
-#: js/share.js:621
+#: js/share.js:610
 msgid "notify by email"
 msgstr "уведомить по почте"
 
-#: js/share.js:624
+#: js/share.js:613
 msgid "can share"
 msgstr "можно дать доступ"
 
-#: js/share.js:627
+#: js/share.js:616
 msgid "can edit"
 msgstr "может редактировать"
 
-#: js/share.js:629
+#: js/share.js:618
 msgid "access control"
 msgstr "контроль доступа"
 
-#: js/share.js:632
+#: js/share.js:621
 msgid "create"
 msgstr "создать"
 
-#: js/share.js:635
+#: js/share.js:624
 msgid "update"
 msgstr "обновить"
 
-#: js/share.js:638
+#: js/share.js:627
 msgid "delete"
 msgstr "удалить"
 
-#: js/share.js:988
+#: js/share.js:983
 msgid "Password protected"
 msgstr "Защищено паролем"
 
-#: js/share.js:1007
+#: js/share.js:1002
 msgid "Error unsetting expiration date"
 msgstr "Ошибка при отмене срока доступа"
 
-#: js/share.js:1028
+#: js/share.js:1023
 msgid "Error setting expiration date"
 msgstr "Ошибка при установке срока доступа"
 
-#: js/share.js:1057
+#: js/share.js:1052
 msgid "Sending ..."
 msgstr "Отправляется ..."
 
-#: js/share.js:1068
+#: js/share.js:1063
 msgid "Email sent"
 msgstr "Письмо отправлено"
 
-#: js/share.js:1092
+#: js/share.js:1087
 msgid "Warning"
 msgstr "Предупреждение"
 
@@ -702,7 +652,8 @@ msgstr "Здравствуйте,\n\n%s предоставил Вам досту
 msgid "The share will expire on %s."
 msgstr "Доступ будет закрыт %s"
 
-#: templates/altmail.php:7 templates/mail.php:20
+#. TRANSLATORS term at the end of a mail
+#: templates/altmail.php:8 templates/mail.php:21
 msgid "Cheers!"
 msgstr "Удачи!"
 
@@ -870,6 +821,28 @@ msgstr "Обратитесь к вашему системному админис
 msgid "Thank you for your patience."
 msgstr "Спасибо за терпение."
 
+#: templates/untrustedDomain.php:5
+msgid "You are accessing the server from an untrusted domain."
+msgstr "Вы пытаетесь получить доступ к серверу с неподтверждённого домена."
+
+#: templates/untrustedDomain.php:8
+msgid ""
+"Please contact your administrator. If you are an administrator of this "
+"instance, configure the \"trusted_domain\" setting in config/config.php. An "
+"example configuration is provided in config/config.sample.php."
+msgstr "Пожалуйста, свяжитесь с администратором. Если вы администратор этого хранилища, сконфигурируйте \"trusted_domain\" в config/config.php. Пример настройки можно найти в /config/config.sample.php."
+
+#: templates/untrustedDomain.php:10
+msgid ""
+"Depending on your configuration, as an administrator you might also be able "
+"to use the button below to trust this domain."
+msgstr ""
+
+#: templates/untrustedDomain.php:14
+#, php-format
+msgid "Add \"%s\" as trusted domain"
+msgstr ""
+
 #: templates/update.admin.php:3
 #, php-format
 msgid "%s will be updated to version %s."
@@ -893,6 +866,12 @@ msgstr "Пожалуйста, перед тем, как продолжить, у
 #: templates/update.admin.php:23
 msgid "Start update"
 msgstr "Запустить обновление"
+
+#: templates/update.admin.php:25
+msgid ""
+"To avoid timeouts with larger installations, you can instead run the "
+"following command from your installation directory:"
+msgstr ""
 
 #: templates/update.user.php:3
 msgid ""

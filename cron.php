@@ -56,10 +56,10 @@ try {
 	// load all apps to get all api routes properly setup
 	OC_App::loadApps();
 
-	\OC::$session->close();
+	\OC::$server->getSession()->close();
 
 	// initialize a dummy memory session
-	\OC::$session = new \OC\Session\Memory('');
+	\OC::$server->setSession(new \OC\Session\Memory(''));
 
 	$logger = \OC_Log::$object;
 
@@ -100,7 +100,7 @@ try {
 		if (file_exists(TemporaryCronClass::$lockfile)) {
 			TemporaryCronClass::$keeplock = true;
 			TemporaryCronClass::$sent = true;
-			echo "Another instance of cron.php is still running!";
+			echo "Another instance of cron.php is still running!" . PHP_EOL;
 			exit(1);
 		}
 
@@ -122,8 +122,10 @@ try {
 			// Work and success :-)
 			$jobList = \OC::$server->getJobList();
 			$job = $jobList->getNext();
-			$job->execute($jobList, $logger);
-			$jobList->setLastJob($job);
+			if ($job != null) {
+				$job->execute($jobList, $logger);
+				$jobList->setLastJob($job);
+			}
 			OC_JSON::success();
 		}
 	}

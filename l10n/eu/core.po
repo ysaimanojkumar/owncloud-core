@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud\n"
 "Report-Msgid-Bugs-To: translations@owncloud.org\n"
-"POT-Creation-Date: 2014-08-10 01:54-0400\n"
-"PO-Revision-Date: 2014-08-10 05:54+0000\n"
+"POT-Creation-Date: 2014-08-31 01:54-0400\n"
+"PO-Revision-Date: 2014-08-30 16:22+0000\n"
 "Last-Translator: I Robot\n"
 "Language-Team: Basque (http://www.transifex.com/projects/p/owncloud/language/eu/)\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Language: eu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ajax/share.php:116 ajax/share.php:158
+#: ajax/share.php:117 ajax/share.php:159
 #, php-format
 msgid "Couldn't send mail to following users: %s "
 msgstr "Ezin izan da posta bidali hurrengo erabiltzaileei: %s"
@@ -40,9 +40,18 @@ msgstr "Datu basea eguneratu da"
 
 #: ajax/update.php:19
 msgid "Checked database schema update"
-msgstr "Egiaztatutako datu-basearen eskemaren eguneraketa"
+msgstr "Egiaztatuta datu-basearen zerbitzariaren eguneraketa"
 
-#: ajax/update.php:27
+#: ajax/update.php:22
+msgid "Checked database schema update for apps"
+msgstr "Egiaztatuta aplikazioen datu-basearen zerbitzariaren eguneraketa"
+
+#: ajax/update.php:25
+#, php-format
+msgid "Updated \"%s\" to %s"
+msgstr "\"%s\" %s-ra eguneratua"
+
+#: ajax/update.php:33
 #, php-format
 msgid "Disabled incompatible apps: %s"
 msgstr "Bateragarriak ez diren desgaitutako aplikazioak: %s"
@@ -143,77 +152,29 @@ msgstr "Azaroa"
 msgid "December"
 msgstr "Abendua"
 
-#: js/js.js:501
+#: js/js.js:497
 msgid "Settings"
 msgstr "Ezarpenak"
 
-#: js/js.js:590
+#: js/js.js:586
 msgid "File"
 msgstr "Fitxategia"
 
-#: js/js.js:591
+#: js/js.js:587
 msgid "Folder"
 msgstr "Karpeta"
 
-#: js/js.js:592
+#: js/js.js:588
 msgid "Image"
 msgstr "Irudia"
 
-#: js/js.js:593
+#: js/js.js:589
 msgid "Audio"
 msgstr "Audio"
 
-#: js/js.js:607
+#: js/js.js:603
 msgid "Saving..."
 msgstr "Gordetzen..."
-
-#: js/js.js:1278
-msgid "seconds ago"
-msgstr "segundu"
-
-#: js/js.js:1279
-msgid "%n minute ago"
-msgid_plural "%n minutes ago"
-msgstr[0] "orain dela minutu %n"
-msgstr[1] "orain dela %n minutu"
-
-#: js/js.js:1280
-msgid "%n hour ago"
-msgid_plural "%n hours ago"
-msgstr[0] "orain dela ordu %n"
-msgstr[1] "orain dela %n ordu"
-
-#: js/js.js:1281
-msgid "today"
-msgstr "gaur"
-
-#: js/js.js:1282
-msgid "yesterday"
-msgstr "atzo"
-
-#: js/js.js:1283
-msgid "%n day ago"
-msgid_plural "%n days ago"
-msgstr[0] "orain dela egun %n"
-msgstr[1] "orain dela %n egun"
-
-#: js/js.js:1284
-msgid "last month"
-msgstr "joan den hilabetean"
-
-#: js/js.js:1285
-msgid "%n month ago"
-msgid_plural "%n months ago"
-msgstr[0] "orain dela hilabete %n"
-msgstr[1] "orain dela %n hilabete"
-
-#: js/js.js:1286
-msgid "last year"
-msgstr "joan den urtean"
-
-#: js/js.js:1287
-msgid "years ago"
-msgstr "urte"
 
 #: js/lostpassword.js:3 lostpassword/controller/lostcontroller.php:198
 msgid "Couldn't send reset email. Please contact your administrator."
@@ -350,12 +311,12 @@ msgstr "{recipients}-rekin partekatua."
 msgid "Share"
 msgstr "Elkarbanatu"
 
-#: js/share.js:326 js/share.js:340 js/share.js:347 js/share.js:1007
+#: js/share.js:326 js/share.js:340 js/share.js:347 js/share.js:1002
 #: templates/installation.php:10
 msgid "Error"
 msgstr "Errorea"
 
-#: js/share.js:328 js/share.js:1070
+#: js/share.js:328 js/share.js:1065
 msgid "Error while sharing"
 msgstr "Errore bat egon da elkarbanatzean"
 
@@ -416,79 +377,71 @@ msgstr "Ezarri muga data"
 msgid "Expiration date"
 msgstr "Muga data"
 
-#: js/share.js:455
-msgid "Share via email:"
-msgstr "Elkarbanatu eposta bidez:"
-
-#: js/share.js:458
-msgid "No people found"
-msgstr "Ez da inor aurkitu"
-
-#: js/share.js:507 js/share.js:575
+#: js/share.js:496 js/share.js:564
 msgid "group"
 msgstr "taldea"
 
-#: js/share.js:540
+#: js/share.js:529
 msgid "Resharing is not allowed"
 msgstr "Berriz elkarbanatzea ez dago baimendua"
 
-#: js/share.js:591
+#: js/share.js:580
 msgid "Shared in {item} with {user}"
 msgstr "{user}ekin {item}-n elkarbanatuta"
 
-#: js/share.js:613
+#: js/share.js:602
 msgid "Unshare"
 msgstr "Ez elkarbanatu"
 
-#: js/share.js:621
+#: js/share.js:610
 msgid "notify by email"
 msgstr "jakinarazi eposta bidez"
 
-#: js/share.js:624
+#: js/share.js:613
 msgid "can share"
 msgstr "elkarbana dezake"
 
-#: js/share.js:627
+#: js/share.js:616
 msgid "can edit"
 msgstr "editatu dezake"
 
-#: js/share.js:629
+#: js/share.js:618
 msgid "access control"
 msgstr "sarrera kontrola"
 
-#: js/share.js:632
+#: js/share.js:621
 msgid "create"
 msgstr "sortu"
 
-#: js/share.js:635
+#: js/share.js:624
 msgid "update"
 msgstr "eguneratu"
 
-#: js/share.js:638
+#: js/share.js:627
 msgid "delete"
 msgstr "ezabatu"
 
-#: js/share.js:988
+#: js/share.js:983
 msgid "Password protected"
 msgstr "Pasahitzarekin babestuta"
 
-#: js/share.js:1007
+#: js/share.js:1002
 msgid "Error unsetting expiration date"
 msgstr "Errorea izan da muga data kentzean"
 
-#: js/share.js:1028
+#: js/share.js:1023
 msgid "Error setting expiration date"
 msgstr "Errore bat egon da muga data ezartzean"
 
-#: js/share.js:1057
+#: js/share.js:1052
 msgid "Sending ..."
 msgstr "Bidaltzen ..."
 
-#: js/share.js:1068
+#: js/share.js:1063
 msgid "Email sent"
 msgstr "Eposta bidalia"
 
-#: js/share.js:1092
+#: js/share.js:1087
 msgid "Warning"
 msgstr "Abisua"
 
@@ -676,7 +629,8 @@ msgstr "Kaixo\n\n%s-ek %s zurekin partekatu duela jakin dezazun.\nIkusi ezazu: %
 msgid "The share will expire on %s."
 msgstr "Elkarbanaketa %s-n iraungiko da."
 
-#: templates/altmail.php:7 templates/mail.php:20
+#. TRANSLATORS term at the end of a mail
+#: templates/altmail.php:8 templates/mail.php:21
 msgid "Cheers!"
 msgstr "Ongi izan!"
 
@@ -844,6 +798,28 @@ msgstr "Jarri harremanetan zure sistema administratzailearekin mezu hau irauten 
 msgid "Thank you for your patience."
 msgstr "Milesker zure patzientziagatik."
 
+#: templates/untrustedDomain.php:5
+msgid "You are accessing the server from an untrusted domain."
+msgstr "Zerbitzaria domeinu ez fidagarri batetik eskuratzen ari zara."
+
+#: templates/untrustedDomain.php:8
+msgid ""
+"Please contact your administrator. If you are an administrator of this "
+"instance, configure the \"trusted_domain\" setting in config/config.php. An "
+"example configuration is provided in config/config.sample.php."
+msgstr "Mesedez harremanetan jarri kudeatzailearekin. Zu kudeatzailea bazara, konfiguratu \"trusted_domain\" ezarpena config/config.php fitxategian. Adibidezko konfigurazko bat  config/config.sample.php fitxategian dago."
+
+#: templates/untrustedDomain.php:10
+msgid ""
+"Depending on your configuration, as an administrator you might also be able "
+"to use the button below to trust this domain."
+msgstr "Zure ezarpenen gorabehera, administratzaile bezala posible duzu ere azpiko botoia erabiltzea fidatzeko domeinu horrekin."
+
+#: templates/untrustedDomain.php:14
+#, php-format
+msgid "Add \"%s\" as trusted domain"
+msgstr "Gehitu \"%s\" domeinu fidagarri gisa"
+
 #: templates/update.admin.php:3
 #, php-format
 msgid "%s will be updated to version %s."
@@ -867,6 +843,12 @@ msgstr "Ekin aurretik egiazta ezazu datu basearen, ezarpenen karpetaren eta datu
 #: templates/update.admin.php:23
 msgid "Start update"
 msgstr "Hasi eguneraketa"
+
+#: templates/update.admin.php:25
+msgid ""
+"To avoid timeouts with larger installations, you can instead run the "
+"following command from your installation directory:"
+msgstr "Instalazio handien itxarote-denbora saihesteko, ondoko komandoa exekuta dezakezu instalazio direktoriotik:"
 
 #: templates/update.user.php:3
 msgid ""

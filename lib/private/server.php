@@ -6,10 +6,12 @@ use OC\AppFramework\Http\Request;
 use OC\AppFramework\Db\Db;
 use OC\AppFramework\Utility\SimpleContainer;
 use OC\Cache\UserCache;
+use OC\Security\CertificateManager;
 use OC\DB\ConnectionWrapper;
 use OC\Files\Node\Root;
 use OC\Files\View;
 use OCP\IServerContainer;
+use OCP\ISession;
 
 /**
  * Class Server
@@ -31,8 +33,8 @@ class Server extends SimpleContainer implements IServerContainer {
 				$urlParams = array();
 			}
 
-			if (\OC::$session->exists('requesttoken')) {
-				$requestToken = \OC::$session->get('requesttoken');
+			if (\OC::$server->getSession()->exists('requesttoken')) {
+				$requestToken = \OC::$server->getSession()->get('requesttoken');
 			} else {
 				$requestToken = false;
 			}
@@ -100,7 +102,7 @@ class Server extends SimpleContainer implements IServerContainer {
 			 * @var \OC\User\Manager $manager
 			 */
 			$manager = $c->query('UserManager');
-			$userSession = new \OC\User\Session($manager, \OC::$session);
+			$userSession = new \OC\User\Session($manager, new \OC\Session\Memory(''));
 			$userSession->listen('\OC\User', 'preCreateUser', function ($uid, $password) {
 				\OC_Hook::emit('OC_User', 'pre_createUser', array('run' => true, 'uid' => $uid, 'password' => $password));
 			});
@@ -262,14 +264,18 @@ class Server extends SimpleContainer implements IServerContainer {
 	/**
 	 * Returns a view to ownCloud's files folder
 	 *
+	 * @param string $userId user ID
 	 * @return \OCP\Files\Folder
 	 */
-	function getUserFolder() {
-		$user = $this->getUserSession()->getUser();
-		if (!$user) {
-			return null;
+	function getUserFolder($userId = null) {
+		if($userId === null) {
+			$user = $this->getUserSession()->getUser();
+			if (!$user) {
+				return null;
+			}
+			$userId = $user->getUID();
 		}
-		$dir = '/' . $user->getUID();
+		$dir = '/' . $userId;
 		$root = $this->getRootFolder();
 		$folder = null;
 
@@ -328,6 +334,20 @@ class Server extends SimpleContainer implements IServerContainer {
 	}
 
 	/**
+	 * @return \OCP\ISession
+	 */
+	function getSession() {
+		return $this->query('UserSession')->getSession();
+	}
+
+	/**
+	 * @param \OCP\ISession $session
+	 */
+	function setSession(\OCP\ISession $session) {
+		return $this->query('UserSession')->setSession($session);
+	}
+
+	/**
 	 * @return \OC\NavigationManager
 	 */
 	function getNavigationManager() {
@@ -354,10 +374,11 @@ class Server extends SimpleContainer implements IServerContainer {
 	 * get an L10N instance
 	 *
 	 * @param string $app appid
+	 * @param string $lang
 	 * @return \OC_L10N
 	 */
-	function getL10N($app) {
-		return $this->query('L10NFactory')->get($app);
+	function getL10N($app, $lang = null) {
+		return $this->query('L10NFactory')->get($app, $lang);
 	}
 
 	/**
@@ -390,15 +411,6 @@ class Server extends SimpleContainer implements IServerContainer {
 	 */
 	function getMemCacheFactory() {
 		return $this->query('MemCacheFactory');
-	}
-
-	/**
-	 * Returns the current session
-	 *
-	 * @return \OCP\ISession
-	 */
-	function getSession() {
-		return \OC::$session;
 	}
 
 	/**
@@ -462,5 +474,22 @@ class Server extends SimpleContainer implements IServerContainer {
 	 */
 	function getDb() {
 		return $this->query('Db');
+	}
+
+	/**
+	 * Get the certificate manager for the user
+	 *
+	 * @param \OCP\IUser $user (optional) if not specified the current loggedin user is used
+	 * @return \OCP\ICertificateManager
+	 */
+	function getCertificateManager($user = null) {
+		if (is_null($user)) {
+			$userSession = $this->getUserSession();
+			$user = $userSession->getUser();
+			if (is_null($user)) {
+				return null;
+			}
+		}
+		return new CertificateManager($user);
 	}
 }

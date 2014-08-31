@@ -479,7 +479,7 @@ class Share extends \OC\Share\Constants {
 	public static function shareItem($itemType, $itemSource, $shareType, $shareWith, $permissions, $itemSourceName = null, \DateTime $expirationDate = null) {
 		$uidOwner = \OC_User::getUser();
 		$shareWithinGroupOnly = self::shareWithGroupMembersOnly();
-		$l = \OC_L10N::get('lib');
+		$l = \OC::$server->getL10N('lib');
 
 		if (is_null($itemSourceName)) {
 			$itemSourceName = $itemSource;
@@ -719,23 +719,24 @@ class Share extends \OC\Share\Constants {
 	/**
 	 * Unshare an item shared with the current user
 	 * @param string $itemType
-	 * @param string $itemTarget
+	 * @param string $itemOrigin Item target or source
+	 * @param boolean $originIsSource true if $itemOrigin is the source, false if $itemOrigin is the target (optional)
 	 * @return boolean true on success or false on failure
 	 *
 	 * Unsharing from self is not allowed for items inside collections
 	 */
-	public static function unshareFromSelf($itemType, $itemTarget) {
-
+	public static function unshareFromSelf($itemType, $itemOrigin, $originIsSource = false) {
+		$originType = ($originIsSource) ? 'source' : 'target';
 		$uid = \OCP\User::getUser();
 
 		if ($itemType === 'file' || $itemType === 'folder') {
-			$statement = 'SELECT * FROM `*PREFIX*share` WHERE `item_type` = ? and `file_target` = ?';
+			$statement = 'SELECT * FROM `*PREFIX*share` WHERE `item_type` = ? and `file_' . $originType . '` = ?';
 		} else {
-			$statement = 'SELECT * FROM `*PREFIX*share` WHERE `item_type` = ? and `item_target` = ?';
+			$statement = 'SELECT * FROM `*PREFIX*share` WHERE `item_type` = ? and `item_' . $originType . '` = ?';
 		}
 
 		$query = \OCP\DB::prepare($statement);
-		$result = $query->execute(array($itemType, $itemTarget));
+		$result = $query->execute(array($itemType, $itemOrigin));
 
 		$shares = $result->fetchAll();
 
@@ -820,17 +821,18 @@ class Share extends \OC\Share\Constants {
 	 * @param string $itemType
 	 * @param string $itemSource
 	 * @param int $shareType SHARE_TYPE_USER, SHARE_TYPE_GROUP, or SHARE_TYPE_LINK
+	 * @param string $recipient with whom was the file shared
 	 * @param boolean $status
 	 */
-	public static function setSendMailStatus($itemType, $itemSource, $shareType, $status) {
+	public static function setSendMailStatus($itemType, $itemSource, $shareType, $recipient, $status) {
 		$status = $status ? 1 : 0;
 
 		$query = \OC_DB::prepare(
 				'UPDATE `*PREFIX*share`
 					SET `mail_send` = ?
-					WHERE `item_type` = ? AND `item_source` = ? AND `share_type` = ?');
+					WHERE `item_type` = ? AND `item_source` = ? AND `share_type` = ? AND `share_with` = ?');
 
-		$result = $query->execute(array($status, $itemType, $itemSource, $shareType));
+		$result = $query->execute(array($status, $itemType, $itemSource, $shareType, $recipient));
 
 		if($result === false) {
 			\OC_Log::write('OCP\Share', 'Couldn\'t set send mail status', \OC_Log::ERROR);
@@ -847,7 +849,7 @@ class Share extends \OC\Share\Constants {
 	 * @return boolean true on success or false on failure
 	 */
 	public static function setPermissions($itemType, $itemSource, $shareType, $shareWith, $permissions) {
-		$l = \OC_L10N::get('lib');
+		$l = \OC::$server->getL10N('lib');
 		if ($item = self::getItems($itemType, $itemSource, $shareType, $shareWith,
 			\OC_User::getUser(), self::FORMAT_NONE, null, 1, false)) {
 			// Check if this item is a reshare and verify that the permissions
@@ -936,7 +938,7 @@ class Share extends \OC\Share\Constants {
 	 * @throws \Exception
 	 */
 	private static function validateExpireDate($expireDate, $shareTime, $itemType, $itemSource) {
-		$l = \OC_L10N::get('lib');
+		$l = \OC::$server->getL10N('lib');
 		$date = new \DateTime($expireDate);
 		$today = new \DateTime('now');
 
@@ -1081,7 +1083,7 @@ class Share extends \OC\Share\Constants {
 	 * @return \OCP\Share_Backend
 	 */
 	public static function getBackend($itemType) {
-		$l = \OC_L10N::get('lib');
+		$l = \OC::$server->getL10N('lib');
 		if (isset(self::$backends[$itemType])) {
 			return self::$backends[$itemType];
 		} else if (isset(self::$backendTypes[$itemType]['class'])) {
@@ -1514,7 +1516,7 @@ class Share extends \OC\Share\Constants {
 	private static function put($itemType, $itemSource, $shareType, $shareWith, $uidOwner,
 		$permissions, $parentFolder = null, $token = null, $itemSourceName = null, \DateTime $expirationDate = null) {
 		$backend = self::getBackend($itemType);
-		$l = \OC_L10N::get('lib');
+		$l = \OC::$server->getL10N('lib');
 		// Check if this is a reshare
 		if ($checkReshare = self::getItemSharedWithBySource($itemType, $itemSource, self::FORMAT_NONE, null, true)) {
 
@@ -1853,8 +1855,8 @@ class Share extends \OC\Share\Constants {
 			return true;
 		}
 
-		if ( \OC::$session->exists('public_link_authenticated')
-			&& \OC::$session->get('public_link_authenticated') === $linkItem['id'] ) {
+		if ( \OC::$server->getSession()->exists('public_link_authenticated')
+			&& \OC::$server->getSession()->get('public_link_authenticated') === $linkItem['id'] ) {
 			return true;
 		}
 

@@ -164,6 +164,11 @@ class Manager extends PublicEmitter implements IUserManager {
 				}
 			}
 		}
+
+		$remoteAddr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+		$forwardedFor = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : '';
+
+		\OC::$server->getLogger()->warning('Login failed: \''. $loginname .'\' (Remote IP: \''. $remoteAddr .'\', X-Forwarded-For: \''. $forwardedFor .'\')', array('app' => 'core'));
 		return false;
 	}
 
@@ -232,7 +237,7 @@ class Manager extends PublicEmitter implements IUserManager {
 	 * @return bool|\OC\User\User the created user of false
 	 */
 	public function createUser($uid, $password) {
-		$l = \OC_L10N::get('lib');
+		$l = \OC::$server->getL10N('lib');
 		// Check the name for bad characters
 		// Allowed are: "a-z", "A-Z", "0-9" and "_.@-"
 		if (preg_match('/[^a-zA-Z0-9 _\.@\-]/', $uid)) {

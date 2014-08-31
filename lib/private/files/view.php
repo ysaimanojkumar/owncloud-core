@@ -670,6 +670,12 @@ class View {
 			$source = fopen($tmpFile, 'r');
 			if ($source) {
 				$this->file_put_contents($path, $source);
+				// $this->file_put_contents() might have already closed
+				// the resource, so we check it, before trying to close it
+				// to avoid messages in the error log.
+				if (is_resource($source)) {
+					fclose($source);
+				}
 				unlink($tmpFile);
 				return true;
 			} else {
@@ -1182,6 +1188,7 @@ class View {
 	 * @return string|null
 	 */
 	public function getPath($id) {
+		$id = (int) $id;
 		$manager = Filesystem::getMountManager();
 		$mounts = $manager->findIn($this->fakeRoot);
 		$mounts[] = $manager->find($this->fakeRoot);

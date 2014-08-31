@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud\n"
 "Report-Msgid-Bugs-To: translations@owncloud.org\n"
-"POT-Creation-Date: 2014-08-10 01:54-0400\n"
-"PO-Revision-Date: 2014-08-10 05:54+0000\n"
+"POT-Creation-Date: 2014-08-31 01:54-0400\n"
+"PO-Revision-Date: 2014-08-30 16:22+0000\n"
 "Last-Translator: I Robot\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/owncloud/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Language: pl\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ajax/share.php:116 ajax/share.php:158
+#: ajax/share.php:117 ajax/share.php:159
 #, php-format
 msgid "Couldn't send mail to following users: %s "
 msgstr "Nie można było wysłać wiadomości do następujących użytkowników: %s"
@@ -43,7 +43,16 @@ msgstr "Zaktualizuj bazę"
 msgid "Checked database schema update"
 msgstr "Sprawdzono aktualizację schematu bazy danych"
 
-#: ajax/update.php:27
+#: ajax/update.php:22
+msgid "Checked database schema update for apps"
+msgstr "Sprawdzono aktualizację schematu bazy danych dla aplikacji"
+
+#: ajax/update.php:25
+#, php-format
+msgid "Updated \"%s\" to %s"
+msgstr "Zaktualizowano \"%s\" do %s"
+
+#: ajax/update.php:33
 #, php-format
 msgid "Disabled incompatible apps: %s"
 msgstr "Wyłączone niekompatybilne aplikacja: %s"
@@ -144,81 +153,29 @@ msgstr "Listopad"
 msgid "December"
 msgstr "Grudzień"
 
-#: js/js.js:501
+#: js/js.js:497
 msgid "Settings"
 msgstr "Ustawienia"
 
-#: js/js.js:590
+#: js/js.js:586
 msgid "File"
 msgstr "Plik"
 
-#: js/js.js:591
+#: js/js.js:587
 msgid "Folder"
 msgstr "Folder"
 
-#: js/js.js:592
+#: js/js.js:588
 msgid "Image"
 msgstr "Obraz"
 
-#: js/js.js:593
+#: js/js.js:589
 msgid "Audio"
 msgstr "Dźwięk"
 
-#: js/js.js:607
+#: js/js.js:603
 msgid "Saving..."
 msgstr "Zapisywanie..."
-
-#: js/js.js:1278
-msgid "seconds ago"
-msgstr "sekund temu"
-
-#: js/js.js:1279
-msgid "%n minute ago"
-msgid_plural "%n minutes ago"
-msgstr[0] "%n minute temu"
-msgstr[1] "%n minut temu"
-msgstr[2] "%n minut temu"
-
-#: js/js.js:1280
-msgid "%n hour ago"
-msgid_plural "%n hours ago"
-msgstr[0] "%n godzine temu"
-msgstr[1] "%n godzin temu"
-msgstr[2] "%n godzin temu"
-
-#: js/js.js:1281
-msgid "today"
-msgstr "dziś"
-
-#: js/js.js:1282
-msgid "yesterday"
-msgstr "wczoraj"
-
-#: js/js.js:1283
-msgid "%n day ago"
-msgid_plural "%n days ago"
-msgstr[0] "%n dzień temu"
-msgstr[1] "%n dni temu"
-msgstr[2] "%n dni temu"
-
-#: js/js.js:1284
-msgid "last month"
-msgstr "w zeszłym miesiącu"
-
-#: js/js.js:1285
-msgid "%n month ago"
-msgid_plural "%n months ago"
-msgstr[0] "%n miesiąc temu"
-msgstr[1] "%n miesięcy temu"
-msgstr[2] "%n miesięcy temu"
-
-#: js/js.js:1286
-msgid "last year"
-msgstr "w zeszłym roku"
-
-#: js/js.js:1287
-msgid "years ago"
-msgstr "lat temu"
 
 #: js/lostpassword.js:3 lostpassword/controller/lostcontroller.php:198
 msgid "Couldn't send reset email. Please contact your administrator."
@@ -356,12 +313,12 @@ msgstr "Współdzielony z {recipients}"
 msgid "Share"
 msgstr "Udostępnij"
 
-#: js/share.js:326 js/share.js:340 js/share.js:347 js/share.js:1007
+#: js/share.js:326 js/share.js:340 js/share.js:347 js/share.js:1002
 #: templates/installation.php:10
 msgid "Error"
 msgstr "Błąd"
 
-#: js/share.js:328 js/share.js:1070
+#: js/share.js:328 js/share.js:1065
 msgid "Error while sharing"
 msgstr "Błąd podczas współdzielenia"
 
@@ -422,79 +379,71 @@ msgstr "Ustaw datę wygaśnięcia"
 msgid "Expiration date"
 msgstr "Data wygaśnięcia"
 
-#: js/share.js:455
-msgid "Share via email:"
-msgstr "Współdziel poprzez e-mail:"
-
-#: js/share.js:458
-msgid "No people found"
-msgstr "Nie znaleziono ludzi"
-
-#: js/share.js:507 js/share.js:575
+#: js/share.js:496 js/share.js:564
 msgid "group"
 msgstr "grupa"
 
-#: js/share.js:540
+#: js/share.js:529
 msgid "Resharing is not allowed"
 msgstr "Współdzielenie nie jest możliwe"
 
-#: js/share.js:591
+#: js/share.js:580
 msgid "Shared in {item} with {user}"
 msgstr "Współdzielone w {item} z {user}"
 
-#: js/share.js:613
+#: js/share.js:602
 msgid "Unshare"
 msgstr "Zatrzymaj współdzielenie"
 
-#: js/share.js:621
+#: js/share.js:610
 msgid "notify by email"
 msgstr "powiadom przez emaila"
 
-#: js/share.js:624
+#: js/share.js:613
 msgid "can share"
 msgstr "może współdzielić"
 
-#: js/share.js:627
+#: js/share.js:616
 msgid "can edit"
 msgstr "może edytować"
 
-#: js/share.js:629
+#: js/share.js:618
 msgid "access control"
 msgstr "kontrola dostępu"
 
-#: js/share.js:632
+#: js/share.js:621
 msgid "create"
 msgstr "utwórz"
 
-#: js/share.js:635
+#: js/share.js:624
 msgid "update"
 msgstr "uaktualnij"
 
-#: js/share.js:638
+#: js/share.js:627
 msgid "delete"
 msgstr "usuń"
 
-#: js/share.js:988
+#: js/share.js:983
 msgid "Password protected"
 msgstr "Zabezpieczone hasłem"
 
-#: js/share.js:1007
+#: js/share.js:1002
 msgid "Error unsetting expiration date"
 msgstr "Błąd podczas usuwania daty wygaśnięcia"
 
-#: js/share.js:1028
+#: js/share.js:1023
 msgid "Error setting expiration date"
 msgstr "Błąd podczas ustawiania daty wygaśnięcia"
 
-#: js/share.js:1057
+#: js/share.js:1052
 msgid "Sending ..."
 msgstr "Wysyłanie..."
 
-#: js/share.js:1068
+#: js/share.js:1063
 msgid "Email sent"
 msgstr "E-mail wysłany"
 
-#: js/share.js:1092
+#: js/share.js:1087
 msgid "Warning"
 msgstr "Ostrzeżenie"
 
@@ -682,7 +631,8 @@ msgstr "Witaj,\n\ntylko informuję, że %s współdzieli z Tobą %s.\nZobacz tut
 msgid "The share will expire on %s."
 msgstr "Ten zasób wygaśnie %s"
 
-#: templates/altmail.php:7 templates/mail.php:20
+#. TRANSLATORS term at the end of a mail
+#: templates/altmail.php:8 templates/mail.php:21
 msgid "Cheers!"
 msgstr "Pozdrawiam!"
 
@@ -850,6 +800,28 @@ msgstr "Skontaktuj się z administratorem, jeśli ten komunikat pojawił się n
 msgid "Thank you for your patience."
 msgstr "Dziękuję za cierpliwość."
 
+#: templates/untrustedDomain.php:5
+msgid "You are accessing the server from an untrusted domain."
+msgstr "Dostajesz się do serwera z niezaufanej domeny."
+
+#: templates/untrustedDomain.php:8
+msgid ""
+"Please contact your administrator. If you are an administrator of this "
+"instance, configure the \"trusted_domain\" setting in config/config.php. An "
+"example configuration is provided in config/config.sample.php."
+msgstr "Proszę skontaktuj się z administratorem. Jeśli jesteś administratorem tej instancji, skonfiguruj parametr \"trusted_domain\" w pliku config/config.php. Przykładowa konfiguracja jest dostępna w pliku config/config.sample.php."
+
+#: templates/untrustedDomain.php:10
+msgid ""
+"Depending on your configuration, as an administrator you might also be able "
+"to use the button below to trust this domain."
+msgstr "W zależności od konfiguracji, jako administrator możesz także użyć poniższego przycisku aby zaufać tej domenie."
+
+#: templates/untrustedDomain.php:14
+#, php-format
+msgid "Add \"%s\" as trusted domain"
+msgstr "Dodaj \"%s\" jako domenę zaufaną"
+
 #: templates/update.admin.php:3
 #, php-format
 msgid "%s will be updated to version %s."
@@ -873,6 +845,12 @@ msgstr "Proszę się upewnić, że baza danych, folder konfiguracji oraz folder 
 #: templates/update.admin.php:23
 msgid "Start update"
 msgstr "Rozpocznij aktualizację"
+
+#: templates/update.admin.php:25
+msgid ""
+"To avoid timeouts with larger installations, you can instead run the "
+"following command from your installation directory:"
+msgstr "Aby uniknąć timeout-ów przy większych instalacjach, możesz zamiast tego uruchomić następującą komendę w katalogu Twojej instalacji:"
 
 #: templates/update.user.php:3
 msgid ""
