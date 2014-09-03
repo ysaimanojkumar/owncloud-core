@@ -52,13 +52,7 @@ if(count($configPrefixes) > 0) {
 }
 
 OCP\Backgroundjob::registerJob('OCA\user_ldap\lib\Jobs');
-$args = array(
-	'userBackend' => $userBackend,
-	'ocConfig'    => \OC::$server->getConfig(),
-	'db'          => \OC::$server->getDatabaseConnection(),
-	'helper'      => new OCA\user_ldap\lib\Helper()
-);
-OCP\Backgroundjob::registerJob('OCA\user_ldap\lib\CleanUp', $args);
+OCP\Backgroundjob::registerJob('OCA\user_ldap\lib\CleanUp');
 
 if(OCP\App::isEnabled('user_webdavauth')) {
 	OCP\Util::writeLog('user_ldap',

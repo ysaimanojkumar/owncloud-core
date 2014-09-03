@@ -8,6 +8,8 @@
 
 namespace OCA\user_ldap\lib;
 
+use \OCA\user_ldap\User_Proxy;
+
 /**
  * Class CleanUp
  *
@@ -50,10 +52,37 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 	 * @param array $arguments
 	 */
 	public function setArguments($arguments) {
-		$this->userBackend = $arguments['userBackend'];
-		$this->ocConfig    = $arguments['ocConfig'];
-		$this->db          = $arguments['db'];
-		$this->ldapHelper  = $arguments['helper'];
+		//Dependency Injection is not possible, because the constructor will
+		//only get values that are serialized to JSON. I.e. whatever we would
+		//pass in app.php we do add here, except something else is passed e.g.
+		//in tests.
+
+		if(isset($arguments['helper'])) {
+			$this->ldapHelper = $arguments['helper'];
+		} else {
+			$this->ldapHelper = new Helper();
+		}
+
+		if(isset($arguments['userBackend'])) {
+			$this->userBackend = $arguments['userBackend'];
+		} else {
+			$this->userBackend =  new User_Proxy(
+				$this->ldapHelper->getServerConfigurationPrefixes(true),
+				new LDAP()
+			);
+		}
+
+		if(isset($arguments['ocConfig'])) {
+			$this->ocConfig = $arguments['ocConfig'];
+		} else {
+			$this->ocConfig = \OC::$server->getConfig();
+		}
+
+		if(isset($arguments['db'])) {
+			$this->db = $arguments['db'];
+		} else {
+			$this->db = \OC::$server->getDatabaseConnection();
+		}
 	}
 
 	/**
@@ -170,7 +199,8 @@ class CleanUp extends \OC\BackgroundJob\TimedJob {
 			$offset
 		);
 
-		return $query->execute()->fetchAll();
+		$query->execute();
+		return $query->fetchAll();
 	}
 
 	/**
