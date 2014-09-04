@@ -79,11 +79,20 @@ class OfflineUser {
 		$this->fetchDetails();
 	}
 
+	/**
+	 * exports the user details in an assoc array
+	 * @return array
+	 */
 	public function export() {
 		$data = array();
-		$data['dn'] = $this->getDN();
 		$data['ocName'] = $this->getOCName();
+		$data['dn'] = $this->getDN();
 		$data['uid'] = $this->getUID();
+		$data['displayName'] = $this->getDisplayName();
+		$data['homePath'] = $this->getHomePath();
+		$data['lastLogin'] = $this->getLastLogin();
+		$data['email'] = $this->getEmail();
+		$data['hasActiveShares'] = $this->getHasActiveShares();
 
 		return $data;
 	}
@@ -145,6 +154,14 @@ class OfflineUser {
 	}
 
 	/**
+	 * getter for having active shares
+	 * @return bool
+	 */
+	public function getHasActiveShares() {
+		return $this->hasActiveShares;
+	}
+
+	/**
 	 * reads the user details
 	 */
 	protected function fetchDetails() {
@@ -159,7 +176,7 @@ class OfflineUser {
 			$this->$property = $this->preferences->getValue($this->ocName, $app, $property, '');
 		}
 
-		$dn = $this->access->username2dn($this->ocName);
+		$dn = $this->access->ocname2dn($this->ocName, true);
 		$this->dn = ($dn !== false) ? $dn : '';
 
 		$this->determineShares();
@@ -176,7 +193,7 @@ class OfflineUser {
 			FROM `*PREFIX*share`
 			WHERE `uid_owner` = ?
 		', 1);
-		$query->execute(array($this->getOCName()));
+		$query->execute(array($this->ocName));
 		$sResult = $query->fetchColumn(0);
 		if(intval($sResult) === 1) {
 			$this->hasActiveShares = true;
@@ -188,7 +205,7 @@ class OfflineUser {
 			FROM `*PREFIX*share_external`
 			WHERE `owner` = ?
 		', 1);
-		$query->execute(array($this->getOCName()));
+		$query->execute(array($this->ocName));
 		$sResult = $query->fetchColumn(0);
 		if(intval($sResult) === 1) {
 			$this->hasActiveShares = true;
