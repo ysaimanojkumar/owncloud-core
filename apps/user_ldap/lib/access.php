@@ -272,7 +272,7 @@ class Access extends LDAPUtility implements user\IUserTools {
 	 * @param boolean $isUser is it a user? otherwise group
 	 * @return string with the LDAP DN on success, otherwise false
 	 */
-	private function ocname2dn($name, $isUser) {
+	public function ocname2dn($name, $isUser) {
 		$table = $this->getMapTable($isUser);
 
 		$query = \OCP\DB::prepare('
