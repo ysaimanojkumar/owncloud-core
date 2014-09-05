@@ -816,6 +816,10 @@ var LdapWizard = {
 	}
 };
 
+if (!OCA.UserLdap) {
+	OCA.UserLdap = {};
+}
+
 $(document).ready(function() {
 	$('#ldapAdvancedAccordion').accordion({ heightStyle: 'content', animate: 'easeInOutCirc'});
 	$('#ldapSettings').tabs({ beforeActivate: LdapWizard.onTabChange });
@@ -931,4 +935,8 @@ $(document).ready(function() {
 			LdapConfiguration.refreshConfig();
 		}
 	});
+
+	var deletedUsers = new OCA.UserLdap.DeletedUsers($('#ldapDeletedUsers'));
+	deletedUsers.init();
+	deletedUsers.update();
 });

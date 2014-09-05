@@ -23,10 +23,16 @@
  *
  */
 
+use \OCA\user_ldap\lib\Access;
+use \OCA\user_ldap\lib\LDAP;
+use \OCA\UserLdap\GarbageCollector;
+use \OCA\user_ldap\lib\Connection;
+
 OC_Util::checkAdminUser();
 
 OCP\Util::addScript('user_ldap', 'ldapFilter');
 OCP\Util::addScript('user_ldap', 'settings');
+OCP\Util::addScript('user_ldap', 'deletedUsers');
 OCP\Util::addScript('core', 'jquery.multiselect');
 OCP\Util::addStyle('user_ldap', 'settings');
 OCP\Util::addStyle('core', 'jquery.multiselect');
@@ -66,8 +72,12 @@ for($i = 0; $i < count($wizTabs); $i++) {
 	$toc['#ldapWizard'.($i+1)] = $wizTabs[$i]['cap'];
 }
 
+$tab = new OCP\Template('user_ldap', 'part.maintenance');
+$maintenanceHtml = $tab->fetchPage();
+
 $tmpl->assign('tabs', $wizardHtml);
 $tmpl->assign('toc', $toc);
+$tmpl->assign('maintenance', $maintenanceHtml);
 $tmpl->assign('settingControls', $sControls);
 
 // assign default values
@@ -76,5 +86,20 @@ $defaults = $config->getDefaults();
 foreach($defaults as $key => $default) {
 	$tmpl->assign($key.'_default', $default);
 }
+
+$db = \OC::$server->getDatabaseConnection();
+$pref = new \OC\Preferences(\OC_DB::getConnection());
+$ldap = new LDAP();
+$dummyConnection = new Connection($ldap, '', null);
+$userManager = new OCA\user_ldap\lib\user\Manager(
+	\OC::$server->getConfig(),
+	new \OCA\user_ldap\lib\FilesystemHelper(),
+	new \OCA\user_ldap\lib\LogWrapper(),
+	\OC::$server->getAvatarManager(),
+	new \OCP\Image()
+);
+$access = new Access($dummyConnection, $ldap, $userManager);
+$gc = new GarbageCollector($pref, $db, $access);
+$tmpl->assign('hasDeletedUsers', $gc->hasDeletedUsers());
 
 return $tmpl->fetchPage();
