@@ -143,6 +143,7 @@ class Scanner extends BasicEmitter {
 						$etag = $cacheData['etag'];
 					}
 					$fileId = $cacheData['fileid'];
+					$data['fileid'] = $fileId;
 					// only reuse data if the file hasn't explicitly changed
 					if (isset($data['storage_mtime']) && isset($cacheData['storage_mtime']) && $data['storage_mtime'] === $cacheData['storage_mtime']) {
 						$data['mtime'] = $cacheData['mtime'];
@@ -243,13 +244,11 @@ class Scanner extends BasicEmitter {
 		return $data;
 	}
 
-	protected function getExistingChildren($path) {
+	protected function getExistingChildren($folderId) {
 		$existingChildren = array();
-		if ($this->cache->inCache($path)) {
-			$children = $this->cache->getFolderContents($path);
-			foreach ($children as $child) {
-				$existingChildren[] = $child['name'];
-			}
+		$children = $this->cache->getFolderContentsById($folderId);
+		foreach ($children as $child) {
+			$existingChildren[$child['name']] = $child;
 		}
 		return $existingChildren;
 	}
@@ -260,22 +259,22 @@ class Scanner extends BasicEmitter {
 	 * @param string $path
 	 * @param bool $recursive
 	 * @param int $reuse
+	 * @param array $folderData
 	 * @return int the size of the scanned folder or -1 if the size is unknown at this stage
 	 */
-	public function scanChildren($path, $recursive = self::SCAN_RECURSIVE, $reuse = -1) {
+	public function scanChildren($path, $recursive = self::SCAN_RECURSIVE, $reuse = -1, $folderData = null) {
 		if ($reuse === -1) {
 			$reuse = ($recursive === self::SCAN_SHALLOW) ? self::REUSE_ETAG | self::REUSE_SIZE : 0;
 		}
 		$this->emit('\OC\Files\Cache\Scanner', 'scanFolder', array($path, $this->storageId));
 		$size = 0;
 		$childQueue = array();
-		$existingChildren = array();
-		if ($folderId = $this->cache->getId($path)) {
-			$children = $this->cache->getFolderContentsById($folderId);
-			foreach ($children as $child) {
-				$existingChildren[$child['name']] = $child;
-			}
+		if (is_array($folderData) and isset($folderData['fileid'])) {
+			$folderId = $folderData['fileid'];
+		} else {
+			$folderId = $this->cache->getId($path);
 		}
+		$existingChildren = $this->getExistingChildren($folderId);
 		$newChildren = array();
 		if ($this->storage->is_dir($path) && ($dh = $this->storage->opendir($path))) {
 			$exceptionOccurred = false;
@@ -292,7 +291,7 @@ class Scanner extends BasicEmitter {
 							$data = $this->scanFile($child, $reuse, $folderId, $existingData);
 							if ($data) {
 								if ($data['mimetype'] === 'httpd/unix-directory' and $recursive === self::SCAN_RECURSIVE) {
-									$childQueue[] = $child;
+									$childQueue[$child] = $data;
 								} else if ($data['size'] === -1) {
 									$size = -1;
 								} else if ($size !== -1) {
@@ -325,15 +324,17 @@ class Scanner extends BasicEmitter {
 				$this->cache->loadMimetypes();
 			}
 
-			foreach ($childQueue as $child) {
-				$childSize = $this->scanChildren($child, self::SCAN_RECURSIVE, $reuse);
+			foreach ($childQueue as $child => $childData) {
+				$childSize = $this->scanChildren($child, self::SCAN_RECURSIVE, $reuse, $childData);
 				if ($childSize === -1) {
 					$size = -1;
 				} else if ($size !== -1) {
 					$size += $childSize;
 				}
 			}
-			$this->updateCache($path, array('size' => $size), $folderId);
+			if (!is_array($folderData) or !isset($folderData['size']) or $folderData['size'] !== $size) {
+				$this->updateCache($path, array('size' => $size), $folderId);
+			}
 		}
 		$this->emit('\OC\Files\Cache\Scanner', 'postScanFolder', array($path, $this->storageId));
 		return $size;
