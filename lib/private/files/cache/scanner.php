@@ -104,9 +104,10 @@ class Scanner extends BasicEmitter {
 	 *
 	 * @param string $file
 	 * @param int $reuseExisting
+	 * @param int $parentId
 	 * @return array an array of metadata of the scanned file
 	 */
-	public function scanFile($file, $reuseExisting = 0) {
+	public function scanFile($file, $reuseExisting = 0, $parentId = -1) {
 		if (!self::isPartialFile($file)
 			and !Filesystem::isFileBlacklisted($file)
 		) {
@@ -118,7 +119,9 @@ class Scanner extends BasicEmitter {
 				if ($parent === '.' or $parent === '/') {
 					$parent = '';
 				}
-				$parentId = $this->cache->getId($parent);
+				if($parentId === -1) {
+					$parentId = $this->cache->getId($parent);
+				}
 
 				// scan the parent if it's not in the cache (id -1) and the current file is not the root folder
 				if ($file and $parentId === -1) {
@@ -136,6 +139,7 @@ class Scanner extends BasicEmitter {
 					} else {
 						$etag = $cacheData['etag'];
 					}
+					$fileId = $cacheData['fileid'];
 					// only reuse data if the file hasn't explicitly changed
 					if (isset($data['storage_mtime']) && isset($cacheData['storage_mtime']) && $data['storage_mtime'] === $cacheData['storage_mtime']) {
 						$data['mtime'] = $cacheData['mtime'];
@@ -157,9 +161,10 @@ class Scanner extends BasicEmitter {
 					}
 				} else {
 					$newData = $data;
+					$fileId = -1;
 				}
 				if (!empty($newData)) {
-					$data['fileid'] = $this->addToCache($file, $newData);
+					$data['fileid'] = $this->addToCache($file, $newData, $fileId);
 					$this->emit('\OC\Files\Cache\Scanner', 'postScanFile', array($file, $this->storageId));
 					\OC_Hook::emit('\OC\Files\Cache\Scanner', 'post_scan_file', array('path' => $file, 'storage' => $this->storageId));
 				}
@@ -182,13 +187,19 @@ class Scanner extends BasicEmitter {
 	/**
 	 * @param string $path
 	 * @param array $data
+	 * @param int $fileId
 	 * @return int the id of the added file
 	 */
-	protected function addToCache($path, $data) {
+	protected function addToCache($path, $data, $fileId = -1) {
 		\OC_Hook::emit('Scanner', 'addToCache', array('file' => $path, 'data' => $data));
 		$this->emit('\OC\Files\Cache\Scanner', 'addToCache', array($path, $this->storageId, $data));
 		if ($this->cacheActive) {
-			return $this->cache->put($path, $data);
+			if ($fileId !== -1) {
+				$this->cache->update($fileId, $data);
+				return $fileId;
+			} else {
+				return $this->cache->put($path, $data);
+			}
 		} else {
 			return -1;
 		}
@@ -197,12 +208,17 @@ class Scanner extends BasicEmitter {
 	/**
 	 * @param string $path
 	 * @param array $data
+	 * @param int $fileId
 	 */
-	protected function updateCache($path, $data) {
+	protected function updateCache($path, $data, $fileId = -1) {
 		\OC_Hook::emit('Scanner', 'addToCache', array('file' => $path, 'data' => $data));
 		$this->emit('\OC\Files\Cache\Scanner', 'updateCache', array($path, $this->storageId, $data));
 		if ($this->cacheActive) {
-			$this->cache->put($path, $data);
+			if ($fileId !== -1) {
+				$this->cache->update($fileId, $data);
+			} else {
+				$this->cache->put($path, $data);
+			}
 		}
 	}
 
@@ -250,7 +266,13 @@ class Scanner extends BasicEmitter {
 		$this->emit('\OC\Files\Cache\Scanner', 'scanFolder', array($path, $this->storageId));
 		$size = 0;
 		$childQueue = array();
-		$existingChildren = $this->getExistingChildren($path);
+		$existingChildren = array();
+		if ($folderId = $this->cache->getId($path)) {
+			$children = $this->cache->getFolderContentsById($folderId);
+			foreach ($children as $child) {
+				$existingChildren[] = $child['name'];
+			}
+		}
 		$newChildren = array();
 		if ($this->storage->is_dir($path) && ($dh = $this->storage->opendir($path))) {
 			$exceptionOccurred = false;
@@ -263,7 +285,7 @@ class Scanner extends BasicEmitter {
 					if (!Filesystem::isIgnoredDir($file)) {
 						$newChildren[] = $file;
 						try {
-							$data = $this->scanFile($child, $reuse);
+							$data = $this->scanFile($child, $reuse, $folderId);
 							if ($data) {
 								if ($data['mimetype'] === 'httpd/unix-directory' and $recursive === self::SCAN_RECURSIVE) {
 									$childQueue[] = $child;
@@ -307,7 +329,7 @@ class Scanner extends BasicEmitter {
 					$size += $childSize;
 				}
 			}
-			$this->updateCache($path, array('size' => $size));
+			$this->updateCache($path, array('size' => $size), $folderId);
 		}
 		$this->emit('\OC\Files\Cache\Scanner', 'postScanFolder', array($path, $this->storageId));
 		return $size;
