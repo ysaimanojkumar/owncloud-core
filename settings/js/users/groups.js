@@ -12,14 +12,18 @@ GroupList = {
 	activeGID: '',
 	everyoneGID: '_everyone',
 
-	addGroup: function (gid, usercount) {
-		var $li = $userGroupList.find('.isgroup:last-child').clone();
+	addGroup: function (gid, usercount, isAdmin) {
+		var $li = $userGroupList.find('.isgroup.template').clone();
+		$li.removeClass('template hidden');
 		$li
 			.data('gid', gid)
 			.find('.groupname').text(gid);
 		GroupList.setUserCount($li, usercount);
 
 		$li.appendTo($userGroupList);
+		if (isAdmin) {
+			$li.find('.action.delete').remove();
+		}
 
 		GroupList.sortGroups();
 
@@ -96,7 +100,7 @@ GroupList = {
 				else {
 					if (result.data.groupname) {
 						var addedGroup = result.data.groupname;
-						UserList.availableGroups = $.unique($.merge(UserList.availableGroups, [addedGroup]));
+						UserList.availableGroups = $.unique($.merge(UserList.availableGroups || [], [addedGroup]));
 						GroupList.addGroup(result.data.groupname);
 
 						$('.groupsselect, .subadminsselect')
@@ -114,6 +118,10 @@ GroupList = {
 			return;
 		}
 		GroupList.updating = true;
+
+		$userGroupList.addClass('hidden');
+		$userGroupList.before('<div class="loading" style="height:50px; margin-top: 20px"></div>');
+
 		$.get(
 			OC.generateUrl('/settings/ajax/grouplist'),
 			{
@@ -121,16 +129,19 @@ GroupList = {
 				filterGroups: filter.filterGroups ? 1 : 0
 			},
 			function (result) {
+				$userGroupList.removeClass('hidden');
+				$userGroupList.parent().find('.loading').remove();
 
 				var lis = [];
 				if (result.status === 'success') {
-					$.each(result.data, function (i, subset) {
+					$.each(result.data, function (subsetName, subset) {
+						var isAdmin = (subsetName === 'adminGroups');
 						$.each(subset, function (index, group) {
 							if (GroupList.getGroupLI(group.name).length > 0) {
 								GroupList.setUserCount(GroupList.getGroupLI(group.name).first(), group.usercount);
 							}
 							else {
-								var $li = GroupList.addGroup(group.name, group.usercount);
+								var $li = GroupList.addGroup(group.name, group.usercount, isAdmin);
 
 								$li.addClass('appear transparent');
 								lis.push($li);
@@ -300,4 +311,5 @@ $(document).ready( function () {
 	$userGroupList.on('click', '.isgroup', function () {
 		GroupList.showGroup(GroupList.getElementGID(this));
 	});
+	GroupList.update();
 });

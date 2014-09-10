@@ -256,3 +256,7 @@ doesnotexist:-o-prefocus, .strengthify-wrapper {
 	border: 0;
 	overflow: auto;
 }
+
+#usergrouplist {
+	padding-bottom: 40px;
+}
