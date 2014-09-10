@@ -46,22 +46,16 @@ var UserList = {
 
 		// make them look like the multiselect buttons
 		// until they get time to really get initialized
-		groupsSelect = $('<select multiple="multiple" class="groupsselect multiselect button" data-placehoder="Groups" title="' + t('settings', 'Groups') + '"></select>')
+		groupsSelect = $('<input type="hidden" class="groupsselect">')
 			.data('username', username)
 			.data('user-groups', groups);
 		if ($tr.find('td.subadmins').length > 0) {
-			subAdminSelect = $('<select multiple="multiple" class="subadminsselect multiselect button" data-placehoder="subadmins" title="' + t('settings', 'Group Admin') + '">')
+			subAdminSelect = $('<input type="hidden" class="subadminsselect">')
 				.data('username', username)
 				.data('user-groups', groups)
 				.data('subadmin', subadmin);
 			$tr.find('td.subadmins').empty();
 		}
-		$.each(this.availableGroups, function (i, group) {
-			groupsSelect.append($('<option value="' + escapeHTML(group) + '">' + escapeHTML(group) + '</option>'));
-			if (typeof subAdminSelect !== 'undefined' && group !== 'admin') {
-				subAdminSelect.append($('<option value="' + escapeHTML(group) + '">' + escapeHTML(group) + '</option>'));
-			}
-		});
 		$tr.find('td.groups').empty().append(groupsSelect);
 		subAdminsEl = $tr.find('td.subadmins');
 		if (subAdminsEl.length > 0) {
@@ -125,9 +119,9 @@ var UserList = {
 		// defer init so the user first sees the list appear more quickly
 		window.setTimeout(function(){
 			$quotaSelect.singleSelect();
-			UserList.applyGroupSelect(groupsSelect);
+			UserList.applyGroupSelect(groupsSelect, groups);
 			if (subAdminSelect) {
-				UserList.applySubadminSelect(subAdminSelect);
+				UserList.applySubadminSelect(subAdminSelect, subadmin);
 			}
 		}, 0);
 		return $tr;
@@ -362,7 +356,7 @@ var UserList = {
 			});
 	},
 
-	applyGroupSelect: function (element) {
+	applyGroupSelect: function (element, selectedGroups) {
 		var checked = [];
 		var $element = $(element);
 		var user = UserList.getUID($element);
@@ -420,13 +414,6 @@ var UserList = {
 			};
 		}
 		var addGroup = function (select, group) {
-			$('select[multiple]').each(function (index, element) {
-				$element = $(element);
-				if ($element.find('option').filterAttr('value', group).length === 0 &&
-					select.data('msid') !== $element.data('msid')) {
-					$element.append('<option value="' + escapeHTML(group) + '">' + escapeHTML(group) + '</option>');
-				}
-			});
 			GroupList.addGroup(escapeHTML(group));
 		};
 		var label;
@@ -436,6 +423,7 @@ var UserList = {
 		else {
 			label = null;
 		}
+		/*
 		$element.multiSelect({
 			createCallback: addGroup,
 			createText: label,
@@ -445,9 +433,26 @@ var UserList = {
 			onuncheck: checkHandler,
 			minWidth: 100
 		});
+		*/
+		if (user) {
+			$element.change(function(ev) {
+				if (ev.added) {
+					checkHandler(ev.added.id);
+				} else if (ev.removed) {
+					checkHandler(ev.removed.id);
+				}
+			});
+		}
+		OC.Settings.setupGroupsSelect($element, {
+			width: 100,
+			placeholder: t('settings', 'Groups')
+		});
+		if (selectedGroups) {
+			$element.select2('val', selectedGroups);
+		}
 	},
 
-	applySubadminSelect: function (element) {
+	applySubadminSelect: function (element, selectedGroups) {
 		var checked = [];
 		var $element = $(element);
 		var user = UserList.getUID($element);
@@ -475,21 +480,20 @@ var UserList = {
 			);
 		};
 
-		var addSubAdmin = function (group) {
-			$('select[multiple]').each(function (index, element) {
-				if ($(element).find('option').filterAttr('value', group).length === 0) {
-					$(element).append('<option value="' + escapeHTML(group) + '">' + escapeHTML(group) + '</option>');
-				}
-			});
-		};
-		$element.multiSelect({
-			createCallback: addSubAdmin,
-			createText: null,
-			checked: checked,
-			oncheck: checkHandler,
-			onuncheck: checkHandler,
-			minWidth: 100
+		$element.change(function(ev) {
+			if (ev.added) {
+				checkHandler(ev.added.id);
+			} else if (ev.removed) {
+				checkHandler(ev.removed.id);
+			}
 		});
+		OC.Settings.setupGroupsSelect($element, {
+			width: 100,
+			placeholder: t('settings', 'Group Admin')
+		});
+		if (selectedGroups) {
+			$element.select2('val', selectedGroups);
+		}
 	},
 
 	_onScroll: function() {
@@ -660,6 +664,9 @@ $(document).ready(function () {
 			return false;
 		}
 		var groups = $('#newusergroups').val();
+		if (groups && groups !== '') {
+			groups = groups.split('|');
+		}
 		$('#newuser').get(0).reset();
 		$.post(
 			OC.filePath('settings', 'ajax', 'createuser.php'),

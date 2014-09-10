@@ -8,14 +8,17 @@
 OC_Util::checkSubAdminUser();
 
 // We have some javascript foo!
-OC_Util::addScript('settings', 'users/deleteHandler');
-OC_Util::addScript('settings', 'users/filter');
-OC_Util::addScript( 'settings', 'users/users' );
-OC_Util::addScript( 'settings', 'users/groups' );
-OC_Util::addScript( 'core', 'multiselect' );
-OC_Util::addScript( 'core', 'singleselect' );
-OC_Util::addScript('core', 'jquery.inview');
-OC_Util::addStyle( 'settings', 'settings' );
+OCP\Util::addScript('settings', 'users/deleteHandler');
+OCP\Util::addScript('settings', 'users/filter');
+OCP\Util::addScript( 'settings', 'users/users' );
+OCP\Util::addScript( 'settings', 'users/groups' );
+OCP\Util::addScript( 'core', 'multiselect' );
+OCP\Util::addScript( 'core', 'singleselect' );
+OCP\Util::addScript('core', 'jquery.inview');
+OCP\Util::addScript('core', 'select2/select2');
+OCP\Util::addStyle('core', 'select2/select2');
+OCP\Util::addScript( 'settings', 'settings' );
+OCP\Util::addStyle( 'settings', 'settings' );
 OC_App::setActiveNavigationEntry( 'core_users' );
 
 $users = array();

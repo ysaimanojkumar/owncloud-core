@@ -34,31 +34,19 @@
 				alt="<?php p($l->t("set new password"))?>" title="<?php p($l->t("set new password"))?>"/>
 			</td>
 			<td class="groups">
-				<select
+				<input
+					type="hidden"
 					class="groupsselect"
 					data-username="<?php p($user['name']) ;?>"
-					data-user-groups="<?php p(json_encode($user['groups'])) ;?>"
-					data-placeholder="groups" title="<?php p($l->t('Groups'))?>"
-					multiple="multiple">
-						<?php foreach($_["adminGroup"] as $adminGroup): ?>
-						<option value="<?php p($adminGroup['name']);?>"><?php p($adminGroup['name']); ?></option>
-						<?php endforeach; ?>
-						<?php foreach($_["groups"] as $group): ?>
-						<option value="<?php p($group['name']);?>"><?php p($group['name']);?></option>
-						<?php endforeach;?>
-				</select>
+					value="<?php p(implode('|', $user['groups'])) ;?>">
 			</td>
 			<?php if(is_array($_['subadmins']) || $_['subadmins']): ?>
 				<td class="subadmins">
-					<select
+					<input
+						type="hidden"
 						class="subadminsselect"
 						data-username="<?php p($user['name']) ;?>"
-						data-subadmin="<?php p(json_encode($user['subadmin']));?>"
-						data-placeholder="subadmins" title="<?php p($l->t('Group Admin'))?>"
-						multiple="multiple">
-						<?php foreach($_["subadmingroups"] as $group): ?>
-							<option value="<?php p($group);?>"><?php p($group);?></option>
-						<?php endforeach;?>
+						value="<?php p(implode('|', $user['subadmin']));?>"
 					</select>
 				</td>
 			<?php endif;?>
