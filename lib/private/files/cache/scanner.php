@@ -105,9 +105,10 @@ class Scanner extends BasicEmitter {
 	 * @param string $file
 	 * @param int $reuseExisting
 	 * @param int $parentId
+	 * @param array |null $cacheData
 	 * @return array an array of metadata of the scanned file
 	 */
-	public function scanFile($file, $reuseExisting = 0, $parentId = -1) {
+	public function scanFile($file, $reuseExisting = 0, $parentId = -1, $cacheData = null) {
 		if (!self::isPartialFile($file)
 			and !Filesystem::isFileBlacklisted($file)
 		) {
@@ -119,7 +120,7 @@ class Scanner extends BasicEmitter {
 				if ($parent === '.' or $parent === '/') {
 					$parent = '';
 				}
-				if($parentId === -1) {
+				if ($parentId === -1) {
 					$parentId = $this->cache->getId($parent);
 				}
 
@@ -131,7 +132,9 @@ class Scanner extends BasicEmitter {
 				if ($parent) {
 					$data['parent'] = $parentId;
 				}
-				$cacheData = $this->cache->get($file);
+				if (is_null($cacheData)) {
+					$cacheData = $this->cache->get($file);
+				}
 				if ($cacheData and $reuseExisting) {
 					// prevent empty etag
 					if (empty($cacheData['etag'])) {
@@ -270,7 +273,7 @@ class Scanner extends BasicEmitter {
 		if ($folderId = $this->cache->getId($path)) {
 			$children = $this->cache->getFolderContentsById($folderId);
 			foreach ($children as $child) {
-				$existingChildren[] = $child['name'];
+				$existingChildren[$child['name']] = $child;
 			}
 		}
 		$newChildren = array();
@@ -285,7 +288,8 @@ class Scanner extends BasicEmitter {
 					if (!Filesystem::isIgnoredDir($file)) {
 						$newChildren[] = $file;
 						try {
-							$data = $this->scanFile($child, $reuse, $folderId);
+							$existingData = isset($existingChildren[$file]) ? $existingChildren[$file] : null;
+							$data = $this->scanFile($child, $reuse, $folderId, $existingData);
 							if ($data) {
 								if ($data['mimetype'] === 'httpd/unix-directory' and $recursive === self::SCAN_RECURSIVE) {
 									$childQueue[] = $child;
@@ -305,7 +309,7 @@ class Scanner extends BasicEmitter {
 					}
 				}
 			}
-			$removedChildren = \array_diff($existingChildren, $newChildren);
+			$removedChildren = \array_diff(array_keys($existingChildren), $newChildren);
 			foreach ($removedChildren as $childName) {
 				$child = ($path) ? $path . '/' . $childName : $childName;
 				$this->removeFromCache($child);
