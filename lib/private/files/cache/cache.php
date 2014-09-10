@@ -196,6 +196,7 @@ class Cache {
 				$file['permissions'] = (int)$file['permissions'];
 				$file['mtime'] = (int)$file['mtime'];
 				$file['storage_mtime'] = (int)$file['storage_mtime'];
+				$file['size'] = (int)$file['size'];
 			}
 			return $files;
 		} else {
