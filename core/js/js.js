@@ -722,6 +722,9 @@ OC.Notification={
 	}
 };
 
+// Hide Notification message on click
+$(document).on('click', OC.Notification.hide)
+
 /**
  * @todo Write documentation
  */
