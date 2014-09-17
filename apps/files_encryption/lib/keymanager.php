@@ -541,7 +541,7 @@ class Keymanager {
 					} else {
 						$realFile = $realFileDir . self::getFilenameFromShareKey($file);
 						foreach ($userIds as $userId) {
-							if (preg_match("/(.*)." . $userId . ".shareKey/", $file)) {
+							if (preg_match("/(.*)\." . preg_quote($userId) . "\.shareKey/", $file)) {
 								if ($userId === $owner &&
 										$view->file_exists($realFile)) {
 									\OCP\Util::writeLog('files_encryption', 'original file still exists, keep owners share key!', \OCP\Util::ERROR);

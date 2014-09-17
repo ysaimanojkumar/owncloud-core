@@ -443,7 +443,8 @@ class Helper {
 		if (is_resource($dirContent)) {
 			while (($file = readdir($dirContent)) !== false) {
 				if (!\OC\Files\Filesystem::isIgnoredDir($file)) {
-					if (preg_match("/" . $pathinfo['filename'] . ".(.*).shareKey/", $file)) {
+					$pattern = "/" . preg_quote($pathinfo['basename']) . "\.(.*)\.shareKey$/";
+					if (preg_match($pattern, $file)) {
 						$result[] = $pathinfo['dirname'] . '/' . $file;
 					}
 				}
