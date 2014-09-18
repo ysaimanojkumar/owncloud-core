@@ -127,7 +127,7 @@ class Test_Encryption_Helper extends \PHPUnit_Framework_TestCase {
 		\Test_Encryption_Util::setupHooks();
 		\Test_Encryption_Util::loginHelper($userName, true);
 		$testDir = 'testFindShareKeys' . uniqid() . '/';
-		$baseDir = '/files/' . $testDir;
+		$baseDir = $userName . '/files/' . $testDir;
 		$fileList = array(
 			't est.txt',
 			't est_.txt',
@@ -142,16 +142,16 @@ class Test_Encryption_Helper extends \PHPUnit_Framework_TestCase {
 			'.t est.txt'
 		);
 
-		$view = new \OC\Files\View('/' . $userName);
-		$view->mkdir($baseDir);
+		$rootView = new \OC\Files\View('/');
+		$rootView->mkdir($baseDir);
 		foreach ($fileList as $fileName) {
-			$view->file_put_contents($baseDir . $fileName, 'dummy');
+			$rootView->file_put_contents($baseDir . $fileName, 'dummy');
 		}
 
-		$shareKeysDir = '/files_encryption/share-keys/' . $testDir;
+		$shareKeysDir = $userName . '/files_encryption/share-keys/' . $testDir;
 		foreach ($fileList as $fileName) {
 			// make sure that every file only gets its correct respective keys
-			$result = Encryption\Helper::findShareKeys($shareKeysDir . $fileName, $view);
+			$result = Encryption\Helper::findShareKeys($shareKeysDir . $fileName, $rootView);
 			$this->assertEquals(
 				array($shareKeysDir . $fileName . '.' . $userName . '.shareKey'),
 				$result
@@ -159,7 +159,7 @@ class Test_Encryption_Helper extends \PHPUnit_Framework_TestCase {
 		}
 
 		// clean up
-		$view->unlink($baseDir);
+		$rootView->unlink($baseDir);
 		\Test_Encryption_Util::logoutHelper();
 		\OC_User::deleteUser($userName);
 	}

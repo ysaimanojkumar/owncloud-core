@@ -431,25 +431,37 @@ class Helper {
 
 	/**
 	 * find all share keys for a given file
-	 * @param string $path to the file
-	 * @param \OC\Files\View $view view, relative to data/
-	 * @return array list of files, path relative to data/
+	 * @param string $path to the file name relative to the user's data dir
+	 * for example "user1/files_encryption/share-keys/subdir/filename.txt"
+	 * @param \OC\Files\View $rootView root view, relative to data/
+	 * @return array list of files, path relative to data/$user
 	 */
-	public static function findShareKeys($path, $view) {
+	public static function findShareKeys($path, $rootView) {
 		$result = array();
-		$pathinfo = pathinfo($path);
-		$dirContent = $view->opendir($pathinfo['dirname']);
 
-		if (is_resource($dirContent)) {
-			while (($file = readdir($dirContent)) !== false) {
-				if (!\OC\Files\Filesystem::isIgnoredDir($file)) {
-					$pattern = "/" . preg_quote($pathinfo['basename']) . "\.(.*)\.shareKey$/";
-					if (preg_match($pattern, $file)) {
-						$result[] = $pathinfo['dirname'] . '/' . $file;
-					}
-				}
+		$user = \OCP\User::getUser();
+		$util = new Util($rootView, $user);
+		// get current sharing state
+		$sharingEnabled = \OCP\Share::isEnabled();
+
+		// get users sharing this file
+		$usersSharing = $util->getSharingUsersArray($sharingEnabled, $path);
+
+		$pathinfo = pathinfo($path);
+
+		$baseDir = $pathinfo['dirname'] . '/';
+		$fileName = $pathinfo['basename'];
+		foreach ($usersSharing as $user) {
+			$keyName = $fileName . '.' . $user . '.shareKey';
+			if ($rootView->file_exists($baseDir . $keyName)) {
+				$result[] = $baseDir . $keyName;
+			} else {
+				\OC_Log::write(
+					'Encryption library',
+					'No share key found for user "' . $user . '" for file "' . $pathOld . '"',
+					\OC_Log::WARN
+				);
 			}
-			closedir($dirContent);
 		}
 
 		return $result;
