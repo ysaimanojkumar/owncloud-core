@@ -459,13 +459,17 @@ class Keymanager {
 			\OCP\Util::writeLog('files_encryption', 'delAllShareKeys: delete share keys: ' . $baseDir . $filePath, \OCP\Util::DEBUG);
 			$result = $view->unlink($baseDir . $filePath);
 		} else {
-			$parentDir = dirname($baseDir . $filePath);
-			$filename = pathinfo($filePath, PATHINFO_BASENAME);
-			foreach($view->getDirectoryContent($parentDir) as $content) {
-				$path = $content['path'];
-				if (self::getFilenameFromShareKey($content['name'])  === $filename) {
-					\OCP\Util::writeLog('files_encryption', 'dellAllShareKeys: delete share keys: ' . '/' . $userId . '/' . $path, \OCP\Util::DEBUG);
-					$result &= $view->unlink('/' . $userId . '/' . $path);
+			$sharingEnabled = \OCP\Share::isEnabled();
+			$users = $util->getSharingUsersArray($sharingEnabled, $filePath);
+			foreach($users as $user) {
+				$keyName = $baseDir . $filePath . '.' . $user . '.shareKey';
+				if ($view->file_exists($keyName)) {
+					\OCP\Util::writeLog(
+						'files_encryption',
+						'dellAllShareKeys: delete share keys: "' . $keyName . '"',
+						\OCP\Util::DEBUG
+					);
+					$result &= $view->unlink($keyName);
 				}
 			}
 		}
@@ -539,8 +543,8 @@ class Keymanager {
 					if ($view->is_dir($dir . '/' . $file)) {
 						self::recursiveDelShareKeys($dir . '/' . $file, $userIds, $owner, $view);
 					} else {
-						$realFile = $realFileDir . self::getFilenameFromShareKey($file);
 						foreach ($userIds as $userId) {
+							$realFile = $realFileDir . self::getFilenameFromShareKey($file, $userId);
 							if (preg_match("/(.*)\." . preg_quote($userId) . "\.shareKey/", $file)) {
 								if ($userId === $owner &&
 										$view->file_exists($realFile)) {
@@ -591,16 +595,32 @@ class Keymanager {
 	/**
 	 * extract filename from share key name
 	 * @param string $shareKey (filename.userid.sharekey)
+	 * @param string $userId
 	 * @return string|false filename or false
 	 */
-	protected static function getFilenameFromShareKey($shareKey) {
+	protected static function getFilenameFromShareKey($shareKey, $userId) {
 		$parts = explode('.', $shareKey);
 
-		$filename = false;
-		if(count($parts) > 2) {
-			$filename = implode('.', array_slice($parts, 0, count($parts)-2));
+		if(count($parts) < 2) {
+			return false;
 		}
 
-		return $filename;
+		// check extension
+		if (array_pop($parts) !== 'shareKey') {
+			return false;
+		}
+
+		// try and find the user name (it might contain dots)
+		$userInName = array_pop($parts);
+		while ($userId !== $userInName && count($parts) > 0) {
+			$userInName = array_pop($parts) . '.' . $userInName;
+		}
+
+		if (count($parts) === 0) {
+			// user name was not found
+			return false;
+		}
+
+		return implode('.', $parts);
 	}
 }

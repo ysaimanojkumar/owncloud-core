@@ -36,8 +36,8 @@ use OCA\Encryption;
  */
 class Test_Encryption_Hooks extends \PHPUnit_Framework_TestCase {
 
-	const TEST_ENCRYPTION_HOOKS_USER1 = "test-encryption-hooks-user1";
-	const TEST_ENCRYPTION_HOOKS_USER2 = "test-encryption-hooks-user2";
+	const TEST_ENCRYPTION_HOOKS_USER1 = "test-encryption-hooks-user1.dot";
+	const TEST_ENCRYPTION_HOOKS_USER2 = "test-encryption-hooks-user2.dot";
 
 	/**
 	 * @var \OC\Files\View
