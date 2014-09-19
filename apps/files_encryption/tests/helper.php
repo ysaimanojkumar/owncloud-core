@@ -151,7 +151,7 @@ class Test_Encryption_Helper extends \PHPUnit_Framework_TestCase {
 		$shareKeysDir = $userName . '/files_encryption/share-keys/' . $testDir;
 		foreach ($fileList as $fileName) {
 			// make sure that every file only gets its correct respective keys
-			$result = Encryption\Helper::findShareKeys($shareKeysDir . $fileName, $rootView);
+			$result = Encryption\Helper::findShareKeys($baseDir . $fileName, $shareKeysDir . $fileName, $rootView);
 			$this->assertEquals(
 				array($shareKeysDir . $fileName . '.' . $userName . '.shareKey'),
 				$result

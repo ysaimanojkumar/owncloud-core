@@ -431,12 +431,15 @@ class Helper {
 
 	/**
 	 * find all share keys for a given file
-	 * @param string $path to the file name relative to the user's data dir
+	 *
+	 * @param string $filePath path to the file name relative to the user's files dir
+	 * for example "subdir/filename.txt"
+	 * @param string $shareKeyPath share key prefix path relative to the user's data dir
 	 * for example "user1/files_encryption/share-keys/subdir/filename.txt"
 	 * @param \OC\Files\View $rootView root view, relative to data/
-	 * @return array list of files, path relative to data/$user
+	 * @return array list of share key files, path relative to data/$user
 	 */
-	public static function findShareKeys($path, $rootView) {
+	public static function findShareKeys($filePath, $shareKeyPath, $rootView) {
 		$result = array();
 
 		$user = \OCP\User::getUser();
@@ -445,9 +448,9 @@ class Helper {
 		$sharingEnabled = \OCP\Share::isEnabled();
 
 		// get users sharing this file
-		$usersSharing = $util->getSharingUsersArray($sharingEnabled, $path);
+		$usersSharing = $util->getSharingUsersArray($sharingEnabled, $filePath);
 
-		$pathinfo = pathinfo($path);
+		$pathinfo = pathinfo($shareKeyPath);
 
 		$baseDir = $pathinfo['dirname'] . '/';
 		$fileName = $pathinfo['basename'];
