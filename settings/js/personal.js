@@ -167,10 +167,8 @@ $(document).ready(function () {
 					$('#pass1').val('');
 					$('#pass2').val('');
 					// Hide a possible errormsg and show successmsg
-					$('#passwordchanged').removeClass("hidden");
-					$('#passwordchanged').addClass("inlineblock");
-					$('#passworderror').removeClass("inlineblock");
-					$('#passworderror').addClass("hidden");
+					$('#passwordchanged').removeClass('hidden').addClass('inlineblock');
+					$('#passworderror').removeClass('inlineblock').addClass('hidden');
 				} else {
 					if (typeof(data.data) !== "undefined") {
 						$('#passworderror').html(data.data.message);
@@ -178,19 +176,15 @@ $(document).ready(function () {
 						$('#passworderror').html(t('Unable to change password'));
 					}
 					// Hide a possible successmsg and show errormsg
-					$('#passwordchanged').removeClass("inlineblock");
-					$('#passwordchanged').addClass("hidden");
-					$('#passworderror').removeClass("hidden");
-					$('#passworderror').addClass("inlineblock");
+					$('#passwordchanged').removeClass('inlineblock').addClass('hidden');
+					$('#passworderror').removeClass('hidden').addClass('inlineblock');
 				}
 			});
 			return false;
 		} else {
 			// Hide a possible successmsg and show errormsg
-			$('#passwordchanged').removeClass("inlineblock");
-			$('#passwordchanged').addClass("hidden");
-			$('#passworderror').removeClass("hidden");
-			$('#passworderror').addClass("inlineblock");
+			$('#passwordchanged').removeClass('inlineblock').addClass('hidden');
+			$('#passworderror').removeClass('hidden').addClass('inlineblock');
 			return false;
 		}
 

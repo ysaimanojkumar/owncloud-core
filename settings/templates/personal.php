@@ -52,8 +52,11 @@ if($_['passwordChangeSupported']) {
 ?>
 <form id="passwordform" class="section">
 	<h2 class="inlineblock"><?php p($l->t('Password'));?></h2>
-	<div class="hidden" id="passwordchanged"><?php echo $l->t('Your password was changed');?></div>
-	<div class="hidden" id="passworderror"><?php echo $l->t('Unable to change your password');?></div>
+	<div class="hidden" id="passwordchanged"><?php
+		// TRANSLATORS appended to "Password" to show a "Password changed" text
+		p($l->t('changed'));
+	?></div>
+	<div class="hidden" id="passworderror"><?php p($l->t('Unable to change your password'));?></div>
 	<br>
 	<input type="password" id="pass1" name="oldpassword"
 		placeholder="<?php echo $l->t('Current password');?>"
