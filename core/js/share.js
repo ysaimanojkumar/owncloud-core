@@ -270,22 +270,44 @@ OC.Share={
 		}
 		img.attr('src', image);
 	},
-	loadItem:function(itemType, itemSource) {
+	/**
+	 * Load the share items of the given type.
+	 *
+	 * @param {string} itemType item type
+	 * @param {int} itemSource item source id
+	 * @param {Function} [callback] callback to call after the
+	 * call finished (will trigger an async call instead of sync)
+	 */
+	loadItem:function(itemType, itemSource, callback) {
 		var data = '';
 		var checkReshare = true;
+		var checkShares;
 		if (typeof OC.Share.statuses[itemSource] === 'undefined') {
 			// NOTE: Check does not always work and misses some shares, fix later
-			var checkShares = true;
+			checkShares = true;
 		} else {
-			var checkShares = true;
+			checkShares = true;
 		}
-		$.ajax({type: 'GET', url: OC.filePath('core', 'ajax', 'share.php'), data: { fetch: 'getItem', itemType: itemType, itemSource: itemSource, checkReshare: checkReshare, checkShares: checkShares }, async: false, success: function(result) {
-			if (result && result.status === 'success') {
-				data = result.data;
-			} else {
-				data = false;
+		$.ajax({
+			type: 'GET',
+			url: OC.filePath('core', 'ajax', 'share.php'),
+			data: {
+				fetch: 'getItem',
+				itemType: itemType,
+				itemSource: itemSource,
+				checkReshare: checkReshare,
+				checkShares: checkShares
+			},
+			async: callback ? true : false,
+			success: function(result) {
+				if (result && result.status === 'success') {
+					data = result.data;
+				} else {
+					data = false;
+				}
+				callback(data);
 			}
-		}});
+		});
 
 		return data;
 	},
@@ -304,7 +326,7 @@ OC.Share={
 			);
 		}
 
-		$.post(OC.filePath('core', 'ajax', 'share.php'),
+		return $.post(OC.filePath('core', 'ajax', 'share.php'),
 			{
 				action: 'share',
 				itemType: itemType,
@@ -331,7 +353,7 @@ OC.Share={
 		);
 	},
 	unshare:function(itemType, itemSource, shareType, shareWith, callback) {
-		$.post(OC.filePath('core', 'ajax', 'share.php'), { action: 'unshare', itemType: itemType, itemSource: itemSource, shareType: shareType, shareWith: shareWith }, function(result) {
+		return $.post(OC.filePath('core', 'ajax', 'share.php'), { action: 'unshare', itemType: itemType, itemSource: itemSource, shareType: shareType, shareWith: shareWith }, function(result) {
 			if (result && result.status === 'success') {
 				if (callback) {
 					callback();
@@ -349,9 +371,21 @@ OC.Share={
 		});
 	},
 	showDropDown:function(itemType, itemSource, appendTo, link, possiblePermissions, filename) {
-		var data = OC.Share.loadItem(itemType, itemSource);
-		var dropDownEl;
-		var html = '<div id="dropdown" class="drop" data-item-type="'+itemType+'" data-item-source="'+itemSource+'">';
+		var $dropDown = $('<div id="dropdown" class="drop" data-item-type="'+itemType+'" data-item-source="'+itemSource+'"><div class="loading" style="height: 30px"></div></div>');
+		$dropDown.attr('data-item-source-name', filename);
+		$dropDown.appendTo(appendTo);
+		$dropDown.show('blind', function() {
+			OC.Share.droppedDown = true;
+		});
+		
+		OC.Share.loadItem(itemType, itemSource, function(data) {
+			$dropDown.find('.loading').addClass('hidden');
+			OC.Share.doShowDropDown(itemType, itemSource, appendTo, link, possiblePermissions, filename, data, $dropDown);
+		});
+	},
+	
+	doShowDropDown:function(itemType, itemSource, appendTo, link, possiblePermissions, filename, data, dropDownEl) {
+		var html = '';
 		if (data !== false && data.reshare !== false && data.reshare.uid_owner !== undefined) {
 			if (data.reshare.share_type == OC.Share.SHARE_TYPE_GROUP) {
 				html += '<span class="reshare">'+t('core', 'Shared with you and the group {group} by {owner}', {group: escapeHTML(data.reshare.share_with), owner: escapeHTML(data.reshare.displayname_owner)})+'</span>';
@@ -417,8 +451,7 @@ OC.Share={
 			html += '<input id="expirationDate" type="text" placeholder="'+t('core', 'Expiration date')+'" style="display:none; width:90%;" />';
 			html += '<em id="defaultExpireMessage">'+defaultExpireMessage+'</em>';
 			html += '</div>';
-			dropDownEl = $(html);
-			dropDownEl = dropDownEl.appendTo(appendTo);
+			dropDownEl = dropDownEl.append(html);
 			// Reset item shares
 			OC.Share.itemShares = [];
 			OC.Share.currentShares = {};
@@ -449,46 +482,46 @@ OC.Share={
 							response();
 						}
 					});
-			},
-			focus: function(event, focused) {
-				event.preventDefault();
-			},
-			select: function(event, selected) {
-				event.stopPropagation();
-				var itemType = $('#dropdown').data('item-type');
-				var itemSource = $('#dropdown').data('item-source');
-				var itemSourceName = $('#dropdown').data('item-source-name');
-				var expirationDate = '';
-				if ( $('#expirationCheckbox').is(':checked') === true ) {
-					expirationDate = $( "#expirationDate" ).val();
-				}
-				var shareType = selected.item.value.shareType;
-				var shareWith = selected.item.value.shareWith;
-				$(this).val(shareWith);
-				// Default permissions are Edit (CRUD) and Share
-				// Check if these permissions are possible
-				var permissions = OC.PERMISSION_READ;
-				if (possiblePermissions & OC.PERMISSION_UPDATE) {
-					permissions = permissions | OC.PERMISSION_UPDATE;
-				}
-				if (possiblePermissions & OC.PERMISSION_CREATE) {
-					permissions = permissions | OC.PERMISSION_CREATE;
-				}
-				if (possiblePermissions & OC.PERMISSION_DELETE) {
-					permissions = permissions | OC.PERMISSION_DELETE;
-				}
-				if (oc_appconfig.core.resharingAllowed && (possiblePermissions & OC.PERMISSION_SHARE)) {
-					permissions = permissions | OC.PERMISSION_SHARE;
-				}
+				},
+				focus: function(event, focused) {
+					event.preventDefault();
+				},
+				select: function(event, selected) {
+					event.stopPropagation();
+					var itemType = $('#dropdown').data('item-type');
+					var itemSource = $('#dropdown').data('item-source');
+					var itemSourceName = $('#dropdown').data('item-source-name');
+					var expirationDate = '';
+					if ( $('#expirationCheckbox').is(':checked') === true ) {
+						expirationDate = $( "#expirationDate" ).val();
+					}
+					var shareType = selected.item.value.shareType;
+					var shareWith = selected.item.value.shareWith;
+					$(this).val(shareWith);
+					// Default permissions are Edit (CRUD) and Share
+					// Check if these permissions are possible
+					var permissions = OC.PERMISSION_READ;
+					if (possiblePermissions & OC.PERMISSION_UPDATE) {
+						permissions = permissions | OC.PERMISSION_UPDATE;
+					}
+					if (possiblePermissions & OC.PERMISSION_CREATE) {
+						permissions = permissions | OC.PERMISSION_CREATE;
+					}
+					if (possiblePermissions & OC.PERMISSION_DELETE) {
+						permissions = permissions | OC.PERMISSION_DELETE;
+					}
+					if (oc_appconfig.core.resharingAllowed && (possiblePermissions & OC.PERMISSION_SHARE)) {
+						permissions = permissions | OC.PERMISSION_SHARE;
+					}
 
-				OC.Share.share(itemType, itemSource, shareType, shareWith, permissions, itemSourceName, expirationDate, function() {
-					OC.Share.addShareWith(shareType, shareWith, selected.item.label, permissions, possiblePermissions);
-					$('#shareWith').val('');
-					$('#dropdown').trigger(new $.Event('sharesChanged', {shares: OC.Share.currentShares}));
-					OC.Share.updateIcon(itemType, itemSource);
-				});
-				return false;
-			}
+					OC.Share.share(itemType, itemSource, shareType, shareWith, permissions, itemSourceName, expirationDate, function() {
+						OC.Share.addShareWith(shareType, shareWith, selected.item.label, permissions, possiblePermissions);
+						$('#shareWith').val('');
+						$('#dropdown').trigger(new $.Event('sharesChanged', {shares: OC.Share.currentShares}));
+						OC.Share.updateIcon(itemType, itemSource);
+					});
+					return false;
+				}
 			})
 			// customize internal _renderItem function to display groups and users differently
 			.data("ui-autocomplete")._renderItem = function( ul, item ) {
@@ -527,14 +560,8 @@ OC.Share={
 
 		} else {
 			html += '<input id="shareWith" type="text" placeholder="'+t('core', 'Resharing is not allowed')+'" style="width:90%;" disabled="disabled"/>';
-			html += '</div>';
-			dropDownEl = $(html);
-			dropDownEl.appendTo(appendTo);
+			dropDownEl.append(html);
 		}
-		dropDownEl.attr('data-item-source-name', filename);
-		$('#dropdown').show('blind', function() {
-			OC.Share.droppedDown = true;
-		});
 		if ($('html').hasClass('lte9')){
 			$('#dropdown input[placeholder]').placeholder();
 		}
