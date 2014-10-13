@@ -244,6 +244,12 @@ class Scanner extends BasicEmitter {
 		return $data;
 	}
 
+	/**
+	 * Get the children currently in the cache
+	 *
+	 * @param int $folderId
+	 * @return array[]
+	 */
 	protected function getExistingChildren($folderId) {
 		$existingChildren = array();
 		$children = $this->cache->getFolderContentsById($folderId);
@@ -251,6 +257,26 @@ class Scanner extends BasicEmitter {
 			$existingChildren[$child['name']] = $child;
 		}
 		return $existingChildren;
+	}
+
+	/**
+	 * Get the children from the storage
+	 *
+	 * @param string $folder
+	 * @return string[]
+	 */
+	protected function getNewChildren($folder) {
+		$children = array();
+		if ($this->storage->is_dir($folder) && ($dh = $this->storage->opendir($folder))) {
+			if (is_resource($dh)) {
+				while (($file = readdir($dh)) !== false) {
+					if (!Filesystem::isIgnoredDir($file)) {
+						$children[] = $file;
+					}
+				}
+			}
+		}
+		return $children;
 	}
 
 	/**
@@ -262,7 +288,7 @@ class Scanner extends BasicEmitter {
 	 * @param array $folderData
 	 * @return int the size of the scanned folder or -1 if the size is unknown at this stage
 	 */
-	public function scanChildren($path, $recursive = self::SCAN_RECURSIVE, $reuse = -1, $folderData = null) {
+	protected function scanChildren($path, $recursive = self::SCAN_RECURSIVE, $reuse = -1, $folderData = null) {
 		if ($reuse === -1) {
 			$reuse = ($recursive === self::SCAN_SHALLOW) ? self::REUSE_ETAG | self::REUSE_SIZE : 0;
 		}
@@ -275,66 +301,60 @@ class Scanner extends BasicEmitter {
 			$folderId = $this->cache->getId($path);
 		}
 		$existingChildren = $this->getExistingChildren($folderId);
-		$newChildren = array();
-		if ($this->storage->is_dir($path) && ($dh = $this->storage->opendir($path))) {
-			$exceptionOccurred = false;
-			if ($this->useTransactions) {
-				\OC_DB::beginTransaction();
-			}
-			if (is_resource($dh)) {
-				while (($file = readdir($dh)) !== false) {
-					$child = ($path) ? $path . '/' . $file : $file;
-					if (!Filesystem::isIgnoredDir($file)) {
-						$newChildren[] = $file;
-						try {
-							$existingData = isset($existingChildren[$file]) ? $existingChildren[$file] : null;
-							$data = $this->scanFile($child, $reuse, $folderId, $existingData);
-							if ($data) {
-								if ($data['mimetype'] === 'httpd/unix-directory' and $recursive === self::SCAN_RECURSIVE) {
-									$childQueue[$child] = $data;
-								} else if ($data['size'] === -1) {
-									$size = -1;
-								} else if ($size !== -1) {
-									$size += $data['size'];
-								}
-							}
-						} catch (\Doctrine\DBAL\DBALException $ex) {
-							// might happen if inserting duplicate while a scanning
-							// process is running in parallel
-							// log and ignore
-							\OC_Log::write('core', 'Exception while scanning file "' . $child . '": ' . $ex->getMessage(), \OC_Log::DEBUG);
-							$exceptionOccurred = true;
-						}
+		$newChildren = $this->getNewChildren($path);
+
+		if ($this->useTransactions) {
+			\OC_DB::beginTransaction();
+		}
+		$exceptionOccurred = false;
+		foreach ($newChildren as $file) {
+			$child = ($path) ? $path . '/' . $file : $file;
+			try {
+				$existingData = isset($existingChildren[$file]) ? $existingChildren[$file] : null;
+				$data = $this->scanFile($child, $reuse, $folderId, $existingData);
+				if ($data) {
+					if ($data['mimetype'] === 'httpd/unix-directory' and $recursive === self::SCAN_RECURSIVE) {
+						$childQueue[$child] = $data;
+					} else if ($data['size'] === -1) {
+						$size = -1;
+					} else if ($size !== -1) {
+						$size += $data['size'];
 					}
 				}
+			} catch (\Doctrine\DBAL\DBALException $ex) {
+				// might happen if inserting duplicate while a scanning
+				// process is running in parallel
+				// log and ignore
+				\OC_Log::write('core', 'Exception while scanning file "' . $child . '": ' . $ex->getMessage(), \OC_Log::DEBUG);
+				$exceptionOccurred = true;
 			}
-			$removedChildren = \array_diff(array_keys($existingChildren), $newChildren);
-			foreach ($removedChildren as $childName) {
-				$child = ($path) ? $path . '/' . $childName : $childName;
-				$this->removeFromCache($child);
-			}
-			if ($this->useTransactions) {
-				\OC_DB::commit();
-			}
-			if ($exceptionOccurred) {
-				// It might happen that the parallel scan process has already
-				// inserted mimetypes but those weren't available yet inside the transaction
-				// To make sure to have the updated mime types in such cases,
-				// we reload them here
-				$this->cache->loadMimetypes();
-			}
+		}
+		$removedChildren = \array_diff(array_keys($existingChildren), $newChildren);
+		foreach ($removedChildren as $childName) {
+			$child = ($path) ? $path . '/' . $childName : $childName;
+			$this->removeFromCache($child);
+		}
+		if ($this->useTransactions) {
+			\OC_DB::commit();
+		}
+		if ($exceptionOccurred) {
+			// It might happen that the parallel scan process has already
+			// inserted mimetypes but those weren't available yet inside the transaction
+			// To make sure to have the updated mime types in such cases,
+			// we reload them here
+			$this->cache->loadMimetypes();
+		}
 
-			foreach ($childQueue as $child => $childData) {
-				$childSize = $this->scanChildren($child, self::SCAN_RECURSIVE, $reuse, $childData);
-				if ($childSize === -1) {
-					$size = -1;
-				} else if ($size !== -1) {
-					$size += $childSize;
-				}
+		foreach ($childQueue as $child => $childData) {
+			$childSize = $this->scanChildren($child, self::SCAN_RECURSIVE, $reuse, $childData);
+			if ($childSize === -1) {
+				$size = -1;
+			} else if ($size !== -1) {
+				$size += $childSize;
 			}
-			if (!is_array($folderData) or !isset($folderData['size']) or $folderData['size'] !== $size) {
-				$this->updateCache($path, array('size' => $size), $folderId);
-			}
+		}
+		if (!is_array($folderData) or !isset($folderData['size']) or $folderData['size'] !== $size) {
+			$this->updateCache($path, array('size' => $size), $folderId);
 		}
 		$this->emit('\OC\Files\Cache\Scanner', 'postScanFolder', array($path, $this->storageId));
 		return $size;
