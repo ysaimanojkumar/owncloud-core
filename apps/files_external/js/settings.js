@@ -90,8 +90,9 @@ OC.MountConfig={
 						users.push(applicable);
 					}
 					statusSpan.addClass('loading-small').removeClass('error success');
-					$.ajax({type: 'POST',
-						url: OC.filePath('files_external', 'ajax', 'addMountPoint.php'),
+					$.ajax({
+						type: 'POST',
+						url: OC.generateUrl('apps/files_external/storages'),
 						data: {
 							mountPoint: mountPoint,
 							'class': backendClass,
@@ -102,6 +103,7 @@ OC.MountConfig={
 							oldMountPoint: oldMountPoint
 						},
 						success: function(result) {
+							// TODO: find and store the id
 							$tr.find('.mountPoint input').data('mountpoint', mountPoint);
 							status = updateStatus(statusSpan, result);
 							if (callback) {
@@ -120,16 +122,9 @@ OC.MountConfig={
 				$tr.find('.applicable').data('applicable-users', users);
 				var mountType = 'group';
 				$.each(oldGroups, function(index, applicable) {
-					$.ajax({type: 'POST',
-						url: OC.filePath('files_external', 'ajax', 'removeMountPoint.php'),
-						data: {
-							mountPoint: mountPoint,
-							'class': backendClass,
-							classOptions: classOptions,
-							mountType: mountType,
-							applicable: applicable,
-							isPersonal: isPersonal
-						}
+					$.ajax({
+						type: 'DELETE',
+						url: OC.generateUrl('apps/files_external/storages/{id}', id)
 					});
 				});
 				var mountType = 'user';
@@ -424,7 +419,11 @@ $(document).ready(function() {
 
 	$('#sslCertificate').on('click', 'td.remove>img', function() {
 		var $tr = $(this).closest('tr');
-		$.post(OC.filePath('files_external', 'ajax', 'removeRootCertificate.php'), {cert: $tr.attr('id')});
+		// TODO: add spinner?
+		$.ajax(
+			url: OC.generateUrl('apps/files_external/rootcert/{id}', {id: $tr.attr('id')}),
+			type: 'DELETE'
+		);
 		$tr.remove();
 		return true;
 	});
@@ -445,13 +444,19 @@ $(document).ready(function() {
 					var mountType = 'user';
 					var applicable = value;
 				}
-				$.post(OC.filePath('files_external', 'ajax', 'removeMountPoint.php'), { mountPoint: mountPoint, mountType: mountType, applicable: applicable, isPersonal: isPersonal });
+				$.ajax({
+					type: 'DELETE',
+					url: OC.generateUrl('apps/files_external/storages/{id}', {id: mountPoint})
+				});
 			});
 		} else {
 			var mountType = 'user';
 			var applicable = OC.currentUser;
 			var isPersonal = true;
-			$.post(OC.filePath('files_external', 'ajax', 'removeMountPoint.php'), { mountPoint: mountPoint, mountType: mountType, applicable: applicable, isPersonal: isPersonal });
+			$.ajax({
+				type: 'DELETE',
+				url: OC.generateUrl('apps/files_external/storages/{id}', {id: mountPoint})
+			});
 		}
 		$tr.remove();
 	});

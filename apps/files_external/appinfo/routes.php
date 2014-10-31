@@ -19,28 +19,25 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+namespace OCA\Files_External\AppInfo;
 
 /** @var $this OC\Route\Router */
+$application = new Application();
 
-$this->create('files_external_add_mountpoint', 'ajax/addMountPoint.php')
-	->actionInclude('files_external/ajax/addMountPoint.php');
-$this->create('files_external_remove_mountpoint', 'ajax/removeMountPoint.php')
-	->actionInclude('files_external/ajax/removeMountPoint.php');
+$application->registerRoutes($this, array('routes' => array(
+	array('name' => 'config#addMountPoint', 'url' => '/storages', 'verb' => 'POST'),
+	array('name' => 'config#updateMountPoint', 'url' => '/storages', 'verb' => 'PUT'),
+	array('name' => 'config#removeMountPoint', 'url' => '/storages/{id}', 'verb' => 'DELETE'),
+	array('name' => 'config#addRootCertificate', 'url' => '/rootcerts', 'verb' => 'POST'),
+	array('name' => 'config#removeRootCertificate', 'url' => '/rootcerts/{id}', 'verb' => 'DELETE'),
+	array('name' => 'config#listApplicable', 'url' => '/applicable', 'verb' => 'GET'),
+	// TODO: these routes should be registered by the storage classes themselves
+	array('name' => 'config#dropboxCallback', 'url' => '/callbacks/dropbox/{id}', 'verb' => 'POST'),
+	array('name' => 'config#googleCallback', 'url' => '/callbacks/google/{id}', 'verb' => 'POST'),
+)));
 
-$this->create('files_external_add_root_certificate', 'ajax/addRootCertificate.php')
-	->actionInclude('files_external/ajax/addRootCertificate.php');
-$this->create('files_external_remove_root_certificate', 'ajax/removeRootCertificate.php')
-	->actionInclude('files_external/ajax/removeRootCertificate.php');
-
-$this->create('files_external_dropbox', 'ajax/dropbox.php')
-	->actionInclude('files_external/ajax/dropbox.php');
-$this->create('files_external_google', 'ajax/google.php')
-	->actionInclude('files_external/ajax/google.php');
-
-$this->create('files_external_list_applicable', '/applicable')
-	->actionInclude('files_external/ajax/applicable.php');
-
-OC_API::register('get',
+// TODO: move to app framework
+\OC_API::register('get',
 		'/apps/files_external/api/v1/mounts',
 		array('\OCA\Files\External\Api', 'getUserMounts'),
 		'files_external');

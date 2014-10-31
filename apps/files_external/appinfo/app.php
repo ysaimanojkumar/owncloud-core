@@ -6,26 +6,32 @@
  * later.
  * See the COPYING-README file.
  */
+namespace OCA\Files_External\AppInfo;
+
+
+$app = new Application();
+$c = $app->getContainer();
+
 $l = \OC::$server->getL10N('files_external');
 
-OC::$CLASSPATH['OC\Files\Storage\StreamWrapper'] = 'files_external/lib/streamwrapper.php';
-OC::$CLASSPATH['OC\Files\Storage\FTP'] = 'files_external/lib/ftp.php';
-OC::$CLASSPATH['OC\Files\Storage\OwnCloud'] = 'files_external/lib/owncloud.php';
-OC::$CLASSPATH['OC\Files\Storage\Google'] = 'files_external/lib/google.php';
-OC::$CLASSPATH['OC\Files\Storage\Swift'] = 'files_external/lib/swift.php';
-OC::$CLASSPATH['OC\Files\Storage\SMB'] = 'files_external/lib/smb.php';
-OC::$CLASSPATH['OC\Files\Storage\SMB_OC'] = 'files_external/lib/smb_oc.php';
-OC::$CLASSPATH['OC\Files\Storage\AmazonS3'] = 'files_external/lib/amazons3.php';
-OC::$CLASSPATH['OC\Files\Storage\Dropbox'] = 'files_external/lib/dropbox.php';
-OC::$CLASSPATH['OC\Files\Storage\SFTP'] = 'files_external/lib/sftp.php';
-OC::$CLASSPATH['OC_Mount_Config'] = 'files_external/lib/config.php';
-OC::$CLASSPATH['OCA\Files\External\Api'] = 'files_external/lib/api.php';
+\OC::$CLASSPATH['OC\Files\Storage\StreamWrapper'] = 'files_external/lib/streamwrapper.php';
+\OC::$CLASSPATH['OC\Files\Storage\FTP'] = 'files_external/lib/ftp.php';
+\OC::$CLASSPATH['OC\Files\Storage\OwnCloud'] = 'files_external/lib/owncloud.php';
+\OC::$CLASSPATH['OC\Files\Storage\Google'] = 'files_external/lib/google.php';
+\OC::$CLASSPATH['OC\Files\Storage\Swift'] = 'files_external/lib/swift.php';
+\OC::$CLASSPATH['OC\Files\Storage\SMB'] = 'files_external/lib/smb.php';
+\OC::$CLASSPATH['OC\Files\Storage\SMB_OC'] = 'files_external/lib/smb_oc.php';
+\OC::$CLASSPATH['OC\Files\Storage\AmazonS3'] = 'files_external/lib/amazons3.php';
+\OC::$CLASSPATH['OC\Files\Storage\Dropbox'] = 'files_external/lib/dropbox.php';
+\OC::$CLASSPATH['OC\Files\Storage\SFTP'] = 'files_external/lib/sftp.php';
+\OC::$CLASSPATH['OC_Mount_Config'] = 'files_external/lib/config.php';
+\OC::$CLASSPATH['OCA\Files\External\Api'] = 'files_external/lib/api.php';
 
-OCP\Util::addTranslations('files_external');
+\OCP\Util::addTranslations('files_external');
 
-OCP\App::registerAdmin('files_external', 'settings');
-if (OCP\Config::getAppValue('files_external', 'allow_user_mounting', 'yes') == 'yes') {
-	OCP\App::registerPersonal('files_external', 'personal');
+\OCP\App::registerAdmin('files_external', 'settings');
+if (\OCP\Config::getAppValue('files_external', 'allow_user_mounting', 'yes') == 'yes') {
+	\OCP\App::registerPersonal('files_external', 'personal');
 }
 
 \OCA\Files\App::getNavigationManager()->add(
@@ -39,16 +45,16 @@ if (OCP\Config::getAppValue('files_external', 'allow_user_mounting', 'yes') == '
 );
 
 // connecting hooks
-OCP\Util::connectHook('OC_Filesystem', 'post_initMountPoints', '\OC_Mount_Config', 'initMountPointsHook');
-OCP\Util::connectHook('OC_User', 'post_login', 'OC\Files\Storage\SMB_OC', 'login');
+\OCP\Util::connectHook('OC_Filesystem', 'post_initMountPoints', '\OC_Mount_Config', 'initMountPointsHook');
+\OCP\Util::connectHook('OC_User', 'post_login', 'OC\Files\Storage\SMB_OC', 'login');
 
-OC_Mount_Config::registerBackend('\OC\Files\Storage\Local', array(
+\OC_Mount_Config::registerBackend('\OC\Files\Storage\Local', array(
 	'backend' => (string)$l->t('Local'),
 	'priority' => 150,
 	'configuration' => array(
 		'datadir' => (string)$l->t('Location'))));
 
-OC_Mount_Config::registerBackend('\OC\Files\Storage\AmazonS3', array(
+\OC_Mount_Config::registerBackend('\OC\Files\Storage\AmazonS3', array(
 	'backend' => (string)$l->t('Amazon S3'),
 	'priority' => 100,
 	'configuration' => array(
@@ -57,7 +63,7 @@ OC_Mount_Config::registerBackend('\OC\Files\Storage\AmazonS3', array(
 		'bucket' => (string)$l->t('Bucket')),
 	'has_dependencies' => true));
 
-OC_Mount_Config::registerBackend('\OC\Files\Storage\AmazonS3', array(
+\OC_Mount_Config::registerBackend('\OC\Files\Storage\AmazonS3', array(
 	'backend' => (string)$l->t('Amazon S3 and compliant'),
 	'priority' => 100,
 	'configuration' => array(
@@ -71,7 +77,7 @@ OC_Mount_Config::registerBackend('\OC\Files\Storage\AmazonS3', array(
 		'use_path_style' => '!'.$l->t('Enable Path Style')),
 	'has_dependencies' => true));
 
-OC_Mount_Config::registerBackend('\OC\Files\Storage\Dropbox', array(
+\OC_Mount_Config::registerBackend('\OC\Files\Storage\Dropbox', array(
 	'backend' => 'Dropbox',
 	'priority' => 100,
 	'configuration' => array(
@@ -83,7 +89,7 @@ OC_Mount_Config::registerBackend('\OC\Files\Storage\Dropbox', array(
 	'custom' => 'dropbox',
 	'has_dependencies' => true));
 
-OC_Mount_Config::registerBackend('\OC\Files\Storage\FTP', array(
+\OC_Mount_Config::registerBackend('\OC\Files\Storage\FTP', array(
 	'backend' => 'FTP',
 	'priority' => 100,
 	'configuration' => array(
@@ -94,7 +100,7 @@ OC_Mount_Config::registerBackend('\OC\Files\Storage\FTP', array(
 		'secure' => '!'.$l->t('Secure ftps://')),
 	'has_dependencies' => true));
 
-OC_Mount_Config::registerBackend('\OC\Files\Storage\Google', array(
+\OC_Mount_Config::registerBackend('\OC\Files\Storage\Google', array(
 	'backend' => 'Google Drive',
 	'priority' => 100,
 	'configuration' => array(
@@ -106,7 +112,7 @@ OC_Mount_Config::registerBackend('\OC\Files\Storage\Google', array(
 	'has_dependencies' => true));
 
 
-OC_Mount_Config::registerBackend('\OC\Files\Storage\Swift', array(
+\OC_Mount_Config::registerBackend('\OC\Files\Storage\Swift', array(
 	'backend' => (string)$l->t('OpenStack Object Storage'),
 	'priority' => 100,
 	'configuration' => array(
@@ -123,8 +129,8 @@ OC_Mount_Config::registerBackend('\OC\Files\Storage\Swift', array(
 	'has_dependencies' => true));
 
 
-if (!OC_Util::runningOnWindows()) {
-	OC_Mount_Config::registerBackend('\OC\Files\Storage\SMB', array(
+if (!\OC_Util::runningOnWindows()) {
+	\OC_Mount_Config::registerBackend('\OC\Files\Storage\SMB', array(
 		'backend' => 'SMB / CIFS',
 		'priority' => 100,
 		'configuration' => array(
@@ -135,7 +141,7 @@ if (!OC_Util::runningOnWindows()) {
 			'root' => '&'.$l->t('Root')),
 		'has_dependencies' => true));
 
-	OC_Mount_Config::registerBackend('\OC\Files\Storage\SMB_OC', array(
+	\OC_Mount_Config::registerBackend('\OC\Files\Storage\SMB_OC', array(
 			'backend' => (string)$l->t('SMB / CIFS using OC login'),
 			'priority' => 90,
 			'configuration' => array(
@@ -146,7 +152,7 @@ if (!OC_Util::runningOnWindows()) {
 		'has_dependencies' => true));
 }
 
-OC_Mount_Config::registerBackend('\OC\Files\Storage\DAV', array(
+\OC_Mount_Config::registerBackend('\OC\Files\Storage\DAV', array(
 	'backend' => 'WebDAV',
 	'priority' => 100,
 	'configuration' => array(
@@ -157,7 +163,7 @@ OC_Mount_Config::registerBackend('\OC\Files\Storage\DAV', array(
 		'secure' => '!'.$l->t('Secure https://')),
 	'has_dependencies' => true));
 
-OC_Mount_Config::registerBackend('\OC\Files\Storage\OwnCloud', array(
+\OC_Mount_Config::registerBackend('\OC\Files\Storage\OwnCloud', array(
 	'backend' => 'ownCloud',
 	'priority' => 100,
 	'configuration' => array(
@@ -168,7 +174,7 @@ OC_Mount_Config::registerBackend('\OC\Files\Storage\OwnCloud', array(
 		'secure' => '!'.$l->t('Secure https://'))));
 
 
-OC_Mount_Config::registerBackend('\OC\Files\Storage\SFTP', array(
+\OC_Mount_Config::registerBackend('\OC\Files\Storage\SFTP', array(
 	'backend' => 'SFTP',
 	'priority' => 100,
 	'configuration' => array(
