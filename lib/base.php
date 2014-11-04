@@ -326,9 +326,21 @@ class OC {
 
 	public static function initTemplateEngine() {
 		// Add the stuff we need always
-		// TODO: read from core/js/core.json
-		OC_Util::addVendorScript('jquery/jquery.min');
-		OC_Util::addVendorScript('jquery/jquery-migrate.min');
+
+		// following logic will import all vendor libraries that are
+		// specified in core/js/core.json
+		$fileContent = file_get_contents(OC::$SERVERROOT . '/core/js/core.json');
+		if($fileContent !== false) {
+			$coreDependencies = json_decode($fileContent, true);
+			foreach($coreDependencies['vendor'] as $vendorLibrary) {
+				// remove trailing ".js" as addVendorScript will append it
+				OC_Util::addVendorScript(
+					substr($vendorLibrary, 0, strlen($vendorLibrary) - 3));
+			}
+		} else {
+			throw new \Exception('Cannot read core/js/core.json');
+		}
+
 		OC_Util::addScript("jquery-ui-1.10.0.custom");
 		OC_Util::addScript("jquery-showpassword");
 		OC_Util::addScript("placeholders");
@@ -348,7 +360,6 @@ class OC {
 		OC_Util::addScript("oc-requesttoken");
 		OC_Util::addScript("apps");
 		OC_Util::addScript("snap");
-		OC_Util::addVendorScript('moment/min/moment-with-locales');
 
 		// avatars
 		if (\OC_Config::getValue('enable_avatars', true) === true) {
