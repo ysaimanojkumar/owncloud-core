@@ -20,7 +20,6 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 class OC_Connector_Sabre_File extends OC_Connector_Sabre_Node implements \Sabre\DAV\IFile {
 
 	/**
@@ -50,8 +49,8 @@ class OC_Connector_Sabre_File extends OC_Connector_Sabre_Node implements \Sabre\
 	 * @return string|null
 	 */
 	public function put($data) {
-		if ($this->info && $this->fileView->file_exists($this->path) &&
-			!$this->info->isUpdateable()) {
+		$exists = $this->fileView->file_exists($this->path);
+		if ($this->info && $exists && !$this->info->isUpdateable()) {
 			throw new \Sabre\DAV\Exception\Forbidden();
 		}
 
@@ -73,14 +72,31 @@ class OC_Connector_Sabre_File extends OC_Connector_Sabre_Node implements \Sabre\
 		// mark file as partial while uploading (ignored by the scanner)
 		$partFilePath = $this->path . '.ocTransferId' . rand() . '.part';
 
+		/** @var \OC\Files\Storage\Storage $storage */
+		list($storage, $internalPartPath) = $this->fileView->resolvePath($partFilePath);
+		list(, $internalPath) = $this->fileView->resolvePath($this->path);
 		try {
-			$putOkay = $this->fileView->file_put_contents($partFilePath, $data);
-			if ($putOkay === false) {
+			$target = $storage->fopen($internalPartPath, 'wb');
+			if ($target === false) {
 				\OC_Log::write('webdav', '\OC\Files\Filesystem::file_put_contents() failed', \OC_Log::ERROR);
 				$this->fileView->unlink($partFilePath);
 				// because we have no clue about the cause we can only throw back a 500/Internal Server Error
 				throw new \Sabre\DAV\Exception('Could not write file contents');
 			}
+			$count = stream_copy_to_stream($data, $target);
+			fclose($target);
+
+			// if content length is sent by client:
+			// double check if the file was fully received
+			// compare expected and actual size
+			if (isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['REQUEST_METHOD'] !== 'LOCK') {
+				$expected = $_SERVER['CONTENT_LENGTH'];
+				if ($count != $expected) {
+					$storage->unlink($internalPartPath);
+					throw new \Sabre\DAV\Exception\BadRequest('expected filesize ' . $expected . ' got ' . $count);
+				}
+			}
+
 		} catch (\OCP\Files\NotPermittedException $e) {
 			// a more general case - due to whatever reason the content could not be written
 			throw new \Sabre\DAV\Exception\Forbidden($e->getMessage());
@@ -102,37 +118,41 @@ class OC_Connector_Sabre_File extends OC_Connector_Sabre_Node implements \Sabre\
 			throw new OC_Connector_Sabre_Exception_FileLocked($e->getMessage(), $e->getCode(), $e);
 		}
 
-		// if content length is sent by client:
-		// double check if the file was fully received
-		// compare expected and actual size
-		if (isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['REQUEST_METHOD'] !== 'LOCK') {
-			$expected = $_SERVER['CONTENT_LENGTH'];
-			$actual = $this->fileView->filesize($partFilePath);
-			if ($actual != $expected) {
-				$this->fileView->unlink($partFilePath);
-				throw new \Sabre\DAV\Exception\BadRequest('expected filesize ' . $expected . ' got ' . $actual);
-			}
-		}
-
 		// rename to correct path
 		try {
-			$renameOkay = $this->fileView->rename($partFilePath, $this->path);
-			$fileExists = $this->fileView->file_exists($this->path);
+			$renameOkay = $storage->rename($internalPartPath, $internalPath);
+			$fileExists = $storage->file_exists($internalPath);
 			if ($renameOkay === false || $fileExists === false) {
 				\OC_Log::write('webdav', '\OC\Files\Filesystem::rename() failed', \OC_Log::ERROR);
 				$this->fileView->unlink($partFilePath);
 				throw new \Sabre\DAV\Exception('Could not rename part file to final file');
 			}
-		}
-		catch (\OCP\Files\LockNotAcquiredException $e) {
+		} catch (\OCP\Files\LockNotAcquiredException $e) {
 			// the file is currently being written to by another process
 			throw new OC_Connector_Sabre_Exception_FileLocked($e->getMessage(), $e->getCode(), $e);
 		}
 
+		// since we skipped the view we need to scan and emit the hooks ourselves
+		$storage->getScanner()->scanFile($internalPath);
+
+		$hookPath = \OC\Files\Filesystem::getView()->getRelativePath($this->fileView->getAbsolutePath($this->path));
+		if (!$exists) {
+			\OC_Hook::emit(\OC\Files\Filesystem::CLASSNAME, \OC\Files\Filesystem::signal_post_create, array(
+				\OC\Files\Filesystem::signal_param_path => $hookPath
+			));
+		} else {
+			\OC_Hook::emit(\OC\Files\Filesystem::CLASSNAME, \OC\Files\Filesystem::signal_post_update, array(
+				\OC\Files\Filesystem::signal_param_path => $hookPath
+			));
+		}
+		\OC_Hook::emit(\OC\Files\Filesystem::CLASSNAME, \OC\Files\Filesystem::signal_post_write, array(
+			\OC\Files\Filesystem::signal_param_path => $hookPath
+		));
+
 		// allow sync clients to send the mtime along in a header
 		$mtime = OC_Request::hasModificationTime();
 		if ($mtime !== false) {
-			if($this->fileView->touch($this->path, $mtime)) {
+			if ($this->fileView->touch($this->path, $mtime)) {
 				header('X-OC-MTime: accepted');
 			}
 		}
@@ -204,8 +224,7 @@ class OC_Connector_Sabre_File extends OC_Connector_Sabre_Node implements \Sabre\
 	 * @param resource $data
 	 * @return null|string
 	 */
-	private function createFileChunked($data)
-	{
+	private function createFileChunked($data) {
 		list($path, $name) = \Sabre\DAV\URLUtil::splitPath($this->path);
 
 		$info = OC_FileChunking::decodeName($name);
@@ -216,7 +235,7 @@ class OC_Connector_Sabre_File extends OC_Connector_Sabre_Node implements \Sabre\
 		$bytesWritten = $chunk_handler->store($info['index'], $data);
 
 		//detect aborted upload
-		if (isset ($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'PUT' ) {
+		if (isset ($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'PUT') {
 			if (isset($_SERVER['CONTENT_LENGTH'])) {
 				$expected = $_SERVER['CONTENT_LENGTH'];
 				if ($bytesWritten != $expected) {
@@ -249,7 +268,7 @@ class OC_Connector_Sabre_File extends OC_Connector_Sabre_Node implements \Sabre\
 			// allow sync clients to send the mtime along in a header
 			$mtime = OC_Request::hasModificationTime();
 			if ($mtime !== false) {
-				if($this->fileView->touch($targetPath, $mtime)) {
+				if ($this->fileView->touch($targetPath, $mtime)) {
 					header('X-OC-MTime: accepted');
 				}
 			}
