@@ -29,7 +29,7 @@ use OCA\Files\Share;
  *
  * Base class for sharing tests.
  */
-abstract class TestCase extends \PHPUnit_Framework_TestCase {
+abstract class TestCase extends \Test\TestCase {
 
 	const TEST_FILES_SHARING_API_USER1 = "test-share-user1";
 	const TEST_FILES_SHARING_API_USER2 = "test-share-user2";
@@ -48,6 +48,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
 	public $subfolder;
 
 	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
 
 		// remember files_encryption state
 		self::$stateFilesEncryption = \OC_App::isEnabled('files_encryption');
@@ -75,7 +76,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
 
 	}
 
-	function setUp() {
+	protected function setUp() {
+		parent::setUp();
 
 		$this->assertFalse(\OC_App::isEnabled('files_encryption'));
 
@@ -86,13 +88,14 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
 		$this->view = new \OC\Files\View('/' . self::TEST_FILES_SHARING_API_USER1 . '/files');
 	}
 
-	function tearDown() {
+	protected function tearDown() {
 		$query = \OCP\DB::prepare('DELETE FROM `*PREFIX*share`');
 		$query->execute();
+
+		parent::tearDown();
 	}
 
 	public static function tearDownAfterClass() {
-
 		// cleanup users
 		\OC_User::deleteUser(self::TEST_FILES_SHARING_API_USER1);
 		\OC_User::deleteUser(self::TEST_FILES_SHARING_API_USER2);
@@ -107,6 +110,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
 		} else {
 			\OC_App::disable('files_encryption');
 		}
+
+		parent::tearDownAfterClass();
 	}
 
 	/**

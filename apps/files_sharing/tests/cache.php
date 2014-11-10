@@ -30,7 +30,7 @@ class Test_Files_Sharing_Cache extends TestCase {
 	 */
 	public $user2View;
 
-	function setUp() {
+	protected function setUp() {
 		parent::setUp();
 
 		\OC_User::setDisplayName(self::TEST_FILES_SHARING_API_USER1, 'User One');
@@ -76,7 +76,7 @@ class Test_Files_Sharing_Cache extends TestCase {
 		$this->sharedCache = $this->sharedStorage->getCache();
 	}
 
-	function tearDown() {
+	protected function tearDown() {
 		$this->sharedCache->clear();
 
 		self::loginHelper(self::TEST_FILES_SHARING_API_USER1);

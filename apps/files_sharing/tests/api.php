@@ -32,7 +32,7 @@ class Test_Files_Sharing_Api extends TestCase {
 
 	private static $tempStorage;
 
-	function setUp() {
+	protected function setUp() {
 		parent::setUp();
 
 		$this->folder = self::TEST_FOLDER_NAME;
@@ -50,7 +50,7 @@ class Test_Files_Sharing_Api extends TestCase {
 		$this->view->file_put_contents($this->folder . $this->subfolder . $this->filename, $this->data);
 	}
 
-	function tearDown() {
+	protected function tearDown() {
 		if($this->view instanceof \OC\Files\View) {
 			$this->view->unlink($this->filename);
 			$this->view->deleteAll($this->folder);
