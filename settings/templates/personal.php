@@ -52,8 +52,8 @@ if($_['passwordChangeSupported']) {
 ?>
 <form id="passwordform" class="section">
 	<h2 class="inlineblock"><?php p($l->t('Password'));?></h2>
-	<div class="hidden icon-checkmark" id="passwordchanged"></div>
-	<div class="hidden" id="passworderror"><?php p($l->t('Unable to change your password'));?></div>
+	<div class="hidden icon-checkmark" id="password-changed"></div>
+	<div class="hidden" id="password-error"><?php p($l->t('Unable to change your password'));?></div>
 	<br>
 	<input type="password" id="pass1" name="oldpassword"
 		placeholder="<?php echo $l->t('Current password');?>"
