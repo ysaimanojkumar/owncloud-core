@@ -80,7 +80,7 @@ class NativeStream implements File {
 
 	public function stream_seek($offset, $whence = SEEK_SET) {
 		$this->eof = false;
-		return $this->state->lseek($this->handle, $offset, $whence);
+		return $this->state->lseek($this->handle, $offset, $whence) !== false;
 	}
 
 	public function stream_stat() {
@@ -88,7 +88,7 @@ class NativeStream implements File {
 	}
 
 	public function stream_tell() {
-		return $this->stream_seek(0, SEEK_CUR);
+		return $this->state->lseek($this->handle, 0, SEEK_CUR);
 	}
 
 	public function stream_write($data) {

@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/icewind1991/SMB.git",
-                "reference": "78375780eda7a49ca4d6b5e1262c8e89d567fcdb"
+                "reference": "466ba929a33bc8aa44c4d608c5fe16c4a4fa9aa9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/icewind1991/SMB/zipball/78375780eda7a49ca4d6b5e1262c8e89d567fcdb",
-                "reference": "78375780eda7a49ca4d6b5e1262c8e89d567fcdb",
+                "url": "https://api.github.com/repos/icewind1991/SMB/zipball/466ba929a33bc8aa44c4d608c5fe16c4a4fa9aa9",
+                "reference": "466ba929a33bc8aa44c4d608c5fe16c4a4fa9aa9",
                 "shasum": ""
             },
             "require": {
@@ -45,7 +45,7 @@
                 }
             ],
             "description": "php wrapper for smbclient and libsmbclient-php",
-            "time": "2014-08-27 15:22:51"
+            "time": "2014-10-17 13:53:18"
         },
         {
             "name": "icewind/streams",
