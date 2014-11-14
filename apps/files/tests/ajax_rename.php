@@ -34,8 +34,13 @@ class Test_OC_Files_App_Rename extends \Test\TestCase {
 	 */
 	private $files;
 
+	/** @var \OC\Files\Storage\Storage */
+	private $originalStorage;
+
 	protected function setUp() {
 		parent::setUp();
+
+		$this->originalStorage = \OC\Files\Filesystem::getStorage('/');
 
 		// mock OC_L10n
 		if (!self::$user) {
@@ -65,6 +70,7 @@ class Test_OC_Files_App_Rename extends \Test\TestCase {
 		$result = \OC_User::deleteUser(self::$user);
 		$this->assertTrue($result);
 		\OC\Files\Filesystem::tearDown();
+		\OC\Files\Filesystem::mount($this->originalStorage, array(), '/');
 
 		parent::tearDown();
 	}
