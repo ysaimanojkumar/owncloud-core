@@ -31,6 +31,15 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
+	protected static $rootMountStorageId;
+
+	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
+
+		self::$rootMountStorageId = \OC\Files\Filesystem::getStorage('/')->getId();
+		var_dump(self::$rootMountStorageId);
+	}
+
 	public static function tearDownAfterClass() {
 		if (\OC_Util::runningOnWindows()) {
 			$rootDirectory = \OC::$server->getConfig()->getSystemValue('datadirectory', \OC::$SERVERROOT . '/data-autotest');
@@ -38,6 +47,11 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase {
 			$mapper->removePath($rootDirectory, true, true);
 		}
 
+		var_dump(get_called_class());
+		var_dump(
+			\OC\Files\Filesystem::getStorage('/')->getId(),
+			\OC\Files\Filesystem::getStorage('/')->getId() === self::$rootMountStorageId
+		);
 		parent::tearDownAfterClass();
 	}
 }
