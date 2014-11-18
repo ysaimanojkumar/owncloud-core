@@ -87,6 +87,7 @@
 			// FIXME: MEGAHACK until we find a better solution
 			var tr = OCA.Files.FileList.prototype._createRow.apply(this, arguments);
 			tr.find('td.filesize').remove();
+			tr.find('td.favorite').remove();
 			return tr;
 		},
 

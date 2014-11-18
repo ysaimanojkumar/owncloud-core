@@ -37,6 +37,8 @@ OCP\Util::addscript('files', 'jquery-visibility');
 OCP\Util::addscript('files', 'filesummary');
 OCP\Util::addscript('files', 'breadcrumb');
 OCP\Util::addscript('files', 'filelist');
+OCP\Util::addscript('files', 'favoritesplugin');
+OCP\Util::addscript('files', 'favoritesfilelist');
 
 OCP\App::setActiveNavigationEntry('files_index');
 

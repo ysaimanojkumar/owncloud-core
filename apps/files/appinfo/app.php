@@ -27,3 +27,12 @@ $templateManager->registerTemplate('application/vnd.oasis.opendocument.spreadshe
 		"name" => $l->t('All files')
 	)
 );
+\OCA\Files\App::getNavigationManager()->add(
+	array(
+		"id" => 'favorites',
+		"appname" => 'files',
+		"script" => 'list.php',
+		"order" => 10,
+		"name" => $l->t('Favorites')
+	)
+);

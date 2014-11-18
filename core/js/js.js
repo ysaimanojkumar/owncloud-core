@@ -66,6 +66,7 @@ var OC={
 	PERMISSION_DELETE:8,
 	PERMISSION_SHARE:16,
 	PERMISSION_ALL:31,
+	TAG_FAVORITE: '_$!<Favorite>!$_',
 	/* jshint camelcase: false */
 	webroot:oc_webroot,
 	appswebroots:(typeof oc_appswebroots !== 'undefined') ? oc_appswebroots:false,
