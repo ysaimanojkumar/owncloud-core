@@ -56,8 +56,38 @@
 					return $icon;
 				},
 				actionHandler: function(fileName, context) {
+					var $actionEl = context.$file.find('.action-favorite');
+					var $file = context.$file;
 					var dir = context.dir || context.fileList.getCurrentDirectory();
-					self.tag(dir + '/' + fileName, OC.TAG_FAVORITE);
+					var tags = $file.attr('data-tags');
+					if (_.isUndefined(tags)) {
+						console.warn('File has no data-tags attribue');
+						tags = '';
+						// TODO: return here as safety (empty string is fine)
+					}
+					tags = tags.split('|');
+					tags = _.without(tags, '');
+					var isFavorite = tags.indexOf(OC.TAG_FAVORITE) >= 0;
+					if (isFavorite) {
+						// remove tag from list
+						tags = _.without(tags, OC.TAG_FAVORITE);
+					} else {
+						tags.push(OC.TAG_FAVORITE);
+					}
+					if ($actionEl.hasClass('icon-loading')) {
+						// do nothing
+						return;
+					}
+					$actionEl.addClass('icon-loading');
+					self.applyFileTags(
+						dir + '/' + fileName,
+						tags
+					).then(function() {
+						// TODO: read from result
+						$actionEl.removeClass('icon-loading');
+						$actionEl.html(isFavorite ? '&#x2606;' : '&#x2605;');
+						$file.attr('data-tags', tags.join('|'));
+					});
 				}
 			});
 
@@ -83,28 +113,24 @@
 		},
 
 		/**
-		 * Tag the given file or folder.
+		 * Replaces the given files' tags with the specified ones.
 		 *
 		 * @param {String} fileName path to the file or folder to tag
-		 * @param {String} tagName name of the tag
-		 * @param {boolean} [unTag] true to remove the tag, false to add
+		 * @param {Array.<String>} tagNames array of tag names
 		 */
-		tag: function(fileName, tagName, unTag) {
-			// crude ajax for now
-			var params = {
-				path: fileName
-			};
-			$.ajax({
-				url: OC.linkToOCS('apps/files/api/v1') + 'tags/' +
-					encodeURIComponent(tagName) +
-					OC.buildQueryString(params),
+		applyFileTags: function(fileName, tagNames) {
+			var encodedPath = OC.encodePath(fileName);
+			while (encodedPath[0] === '/') {
+				encodedPath = encodedPath.substr(1);
+			}
+			return $.ajax({
+				url: OC.generateUrl('/apps/files/api/v1/files/') + encodedPath,
 				data: {
-					format: 'json'
+					format: 'json',
+					tags: tagNames
 				},
-				type: unTag ? 'DELETE' : 'POST',
-				beforeSend: function(xhr) {
-					xhr.setRequestHeader('OCS-APIREQUEST', 'true');
-				}
+				dataType: 'json',
+				type: 'POST'
 			});
 		}
 	};

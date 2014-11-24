@@ -213,6 +213,24 @@ var OC={
 	},
 
 	/**
+	 * URI-Encodes a file path but keep the path slashes.
+	 *
+	 * @param path path
+	 * @return encoded path
+	 */
+	encodePath: function(path) {
+		if (!path) {
+			return path;
+		}
+		var parts = path.split('/');
+		var result = [];
+		for (var i = 0; i < parts.length; i++) {
+			result.push(encodeURIComponent(parts[i]));
+		}
+		return result.join('/');
+	},
+
+	/**
 	 * Load a script for the server and load it. If the script is already loaded,
 	 * the event handler will be called directly
 	 * @param {string} app the app id to which the script belongs

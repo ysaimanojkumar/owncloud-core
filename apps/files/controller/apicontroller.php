@@ -49,4 +49,29 @@ class ApiController extends Controller {
 		}
 	}
 
+	/**
+	 * Updates the metadata of the specified file path
+	 *
+	 * @NoAdminRequired
+	 *
+	 * @param string $path path
+	 * @param array  $tags array of tags
+	 */
+	public function updateFileMetadata($path, $tags) {
+		$view = new \OC\Files\View('/'.\OCP\User::getUser().'/files');
+		$fileInfo = $view->getFileInfo($path);
+		if (!$fileInfo) {
+			throw new \OCP\Files\NotFoundException();
+		}
+
+		$fileId = $fileInfo->getId();
+
+		// TODO: support for other tags
+		$tagManager = \OC::$server->getTagManager()->load('files');
+		if (in_array($tagManager::TAG_FAVORITE, $tags)) {
+			$tagManager->addToFavorites($fileId);
+		} else {
+			$tagManager->removeFromFavorites($fileId);
+		}
+	}
 }
