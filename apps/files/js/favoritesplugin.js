@@ -47,11 +47,12 @@
 				render: function(actionSpec, isDefault, context) {
 					// TODO: use proper icon
 					var $file = context.$file;
-					var starState = '&#x2606;';
-					if ($file.data('favorite') === true) {
-						starState = '&#x2605;';
-					}
-					var $icon = $('<a href="#" class="action action-favorite permanent">' + starState + '</a>');
+					var isFavorite = $file.data('favorite') === true;
+					var starState = isFavorite ? '&#x2605' : '&#x2606;';
+					var $icon = $(
+						'<a href="#" class="action action-favorite ' + (isFavorite ? 'permanent' : '') + '">' +
+						starState + '</a>'
+					);
 					$file.find('td.favorite').prepend($icon);
 					return $icon;
 				},
@@ -61,9 +62,7 @@
 					var dir = context.dir || context.fileList.getCurrentDirectory();
 					var tags = $file.attr('data-tags');
 					if (_.isUndefined(tags)) {
-						console.warn('File has no data-tags attribue');
 						tags = '';
-						// TODO: return here as safety (empty string is fine)
 					}
 					tags = tags.split('|');
 					tags = _.without(tags, '');
@@ -86,7 +85,9 @@
 						// TODO: read from result
 						$actionEl.removeClass('icon-loading');
 						$actionEl.html(isFavorite ? '&#x2606;' : '&#x2605;');
+						$actionEl.toggleClass('permanent', !isFavorite);
 						$file.attr('data-tags', tags.join('|'));
+						$file.attr('data-favorite', !isFavorite);
 					});
 				}
 			});
@@ -104,8 +105,11 @@
 			var oldCreateRow = OCA.Files.FileList.prototype._createRow;
 			OCA.Files.FileList.prototype._createRow = function(fileData) {
 				var $tr = oldCreateRow.apply(this, arguments);
-				if (fileData.favorite === true) {
-					$tr.attr('data-favorite', true);
+				if (fileData.tags) {
+					$tr.attr('data-tags', fileData.tags.join('|'));
+					if (fileData.tags.indexOf(OC.TAG_FAVORITE) >= 0) {
+						$tr.attr('data-favorite', true);
+					}
 				}
 				$tr.prepend('<td class="favorite"></td>');
 				return $tr;

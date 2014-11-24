@@ -18,6 +18,8 @@ $templateManager->registerTemplate('application/vnd.oasis.opendocument.presentat
 $templateManager->registerTemplate('application/vnd.oasis.opendocument.text', 'core/templates/filetemplates/template.odt');
 $templateManager->registerTemplate('application/vnd.oasis.opendocument.spreadsheet', 'core/templates/filetemplates/template.ods');
 
+OC_FileProxy::register(new OCA\Files\TagsProxy());
+
 \OCA\Files\App::getNavigationManager()->add(
 	array(
 		"id" => 'files',
