@@ -14,11 +14,15 @@ use OCP\IRequest;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\DownloadResponse;
 use OC\Preview;
+use OCA\Files\Service\TagService;
 
 class ApiController extends Controller {
 
-	public function __construct($appName, IRequest $request){
+	private $tagService;
+
+	public function __construct($appName, IRequest $request, TagService $tagService){
 		parent::__construct($appName, $request);
+		$this->tagService = $tagService;
 	}
 
 
@@ -50,28 +54,26 @@ class ApiController extends Controller {
 	}
 
 	/**
-	 * Updates the metadata of the specified file path
+	 * Updates the info of the specified file path
+	 * The passed tags are absolute, which means they will
+	 * replace the actual tag selection.
 	 *
 	 * @NoAdminRequired
 	 *
 	 * @param string $path path
 	 * @param array  $tags array of tags
 	 */
-	public function updateFileMetadata($path, $tags) {
-		$view = new \OC\Files\View('/'.\OCP\User::getUser().'/files');
-		$fileInfo = $view->getFileInfo($path);
-		if (!$fileInfo) {
-			throw new \OCP\Files\NotFoundException();
+	public function updateFileInfo($path, $tags = null) {
+		$result = array();
+		// if tags specified or empty array, update tags
+		if (!is_null($tags)) {
+			try {
+				$this->tagService->updateFileTags($path, $tags);
+			} catch (\OCP\NotFoundException $e) {
+				return new JSONResponse($e->getMessage(), Http::STATUS_NOT_FOUND);
+			}
+			$result['tags'] = $tags;
 		}
-
-		$fileId = $fileInfo->getId();
-
-		// TODO: support for other tags
-		$tagManager = \OC::$server->getTagManager()->load('files');
-		if (in_array($tagManager::TAG_FAVORITE, $tags)) {
-			$tagManager->addToFavorites($fileId);
-		} else {
-			$tagManager->removeFromFavorites($fileId);
-		}
+		return new JSONResponse($result, Http::STATUS_OK);
 	}
 }

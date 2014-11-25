@@ -19,7 +19,7 @@ $application->registerRoutes(
 			'requirements' => array('file' => '.+')
 		),
 		array(
-			'name' => 'API#updateFileMetadata',
+			'name' => 'API#updateFileInfo',
 			'url' => '/api/v1/files/{path}',
 			'verb' => 'POST',
 			'requirements' => array('path' => '.+')

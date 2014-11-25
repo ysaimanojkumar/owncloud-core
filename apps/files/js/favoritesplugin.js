@@ -129,10 +129,11 @@
 			}
 			return $.ajax({
 				url: OC.generateUrl('/apps/files/api/v1/files/') + encodedPath,
-				data: {
+				contentType: 'application/json',
+				data: JSON.stringify({
 					format: 'json',
-					tags: tagNames
-				},
+					tags: tagNames || []
+				}),
 				dataType: 'json',
 				type: 'POST'
 			});
