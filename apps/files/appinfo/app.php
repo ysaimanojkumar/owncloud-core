@@ -1,4 +1,5 @@
 <?php
+use \OCA\Files\AppInfo\Application;
 
 $l = \OC::$server->getL10N('files');
 
@@ -18,7 +19,10 @@ $templateManager->registerTemplate('application/vnd.oasis.opendocument.presentat
 $templateManager->registerTemplate('application/vnd.oasis.opendocument.text', 'core/templates/filetemplates/template.odt');
 $templateManager->registerTemplate('application/vnd.oasis.opendocument.spreadsheet', 'core/templates/filetemplates/template.ods');
 
-OC_FileProxy::register(new OCA\Files\TagsProxy());
+$app = new Application();
+$c = $app->getContainer();
+
+OC_FileProxy::register(new OCA\Files\TagsProxy($c->query('Tagger')));
 
 \OCA\Files\App::getNavigationManager()->add(
 	array(

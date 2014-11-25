@@ -29,11 +29,8 @@ class TagsProxy extends \OC_FileProxy {
 
 	private static $tagManager;
 
-	private function getTagsManager() {
-		if (!self::$tagManager) {
-			self::$tagManager = \OC::$server->getTagManager()->load('files');
-		}
-		return self::$tagManager;
+	public function __construct(\OCP\ITags $tagger) {
+		$this->tagManager = $tagger;
 	}
 
 	/**
@@ -44,12 +41,11 @@ class TagsProxy extends \OC_FileProxy {
 	 * @return array updated results
 	 */
 	public function postGetDirectoryContents($path, $results) {
-		$tagManager = $this->getTagsManager();
 		foreach ($results as &$result) {
 			// only populate if it was never populated before
 			if (!isset($result['tags'])) {
 				// FIXME: horribly unefficient, maybe bundle a few ids together
-				$tags = $tagManager->getTagsForObjects((int)$result->getId());
+				$tags = $this->tagManager->getTagsForObjects((int)$result->getId());
 				if (!empty($tags)) {
 					$result['tags'] = array_map(
 						function ($tagEntry) {
