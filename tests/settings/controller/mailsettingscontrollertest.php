@@ -30,7 +30,7 @@ class MailSettingsControllerTest extends \Test\TestCase {
 		$this->container['AppName'] = 'settings';
 		$this->container['UserSession'] = $this->getMockBuilder('\OC\User\Session')
 			->disableOriginalConstructor()->getMock();
-		$this->container['Mail'] = $this->getMockBuilder('\OC_Mail')
+		$this->container['MailMessage'] = $this->getMockBuilder('\OCP\Mail\IMessage')
 			->disableOriginalConstructor()->getMock();
 		$this->container['Defaults'] = $this->getMockBuilder('\OC_Defaults')
 			->disableOriginalConstructor()->getMock();

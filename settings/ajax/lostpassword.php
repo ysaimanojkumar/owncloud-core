@@ -6,7 +6,7 @@ OCP\JSON::callCheck();
 $l = \OC::$server->getL10N('settings');
 
 // Get data
-if( isset( $_POST['email'] ) && OC_Mail::validateAddress($_POST['email']) ) {
+if( isset( $_POST['email'] ) && \OCP\Mail\Util::validateMailAddress($_POST['email']) ) {
 	$email=trim($_POST['email']);
 	OC_Preferences::setValue(OC_User::getUser(), 'settings', 'email', $email);
 	OC_JSON::success(array("data" => array( "message" => $l->t("Email saved") )));

@@ -144,6 +144,7 @@ interface IServerContainer {
 
 	/**
 	 * Returns an instance of the db facade
+	 *
 	 * @return \OCP\IDb
 	 */
 	function getDb();
@@ -158,6 +159,7 @@ interface IServerContainer {
 
 	/**
 	 * get an L10N instance
+	 *
 	 * @param string $app appid
 	 * @param string $lang
 	 * @return \OCP\IL10N
@@ -255,7 +257,7 @@ interface IServerContainer {
 	 * @return \OCP\ICertificateManager
 	 */
 	function getCertificateManager($user = null);
-	
+
 	/**
 	 * Create a new event source
 	 *
@@ -265,6 +267,7 @@ interface IServerContainer {
 
 	/**
 	 * Returns an instance of the HTTP helper class
+	 *
 	 * @return \OC\HTTPHelper
 	 */
 	function getHTTPHelper();
@@ -298,4 +301,12 @@ interface IServerContainer {
 	 * @return \OCP\App\IAppManager
 	 */
 	function getAppManager();
+
+	/**
+	 * Get the mailer instance
+	 *
+	 * @return \OCP\Mail\IMailer
+	 */
+	function getMailer();
 }
+

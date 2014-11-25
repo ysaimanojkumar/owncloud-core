@@ -42,7 +42,7 @@ class Application extends App {
 				$c->query('Config'),
 				$c->query('UserSession'),
 				$c->query('Defaults'),
-				$c->query('Mail'),
+				$c->query('Mailer'),
 				$c->query('DefaultMailAddress')
 			);
 		});
@@ -74,8 +74,8 @@ class Application extends App {
 		$container->registerService('UserSession', function(SimpleContainer $c) {
 			return $c->query('ServerContainer')->getUserSession();
 		});
-		$container->registerService('Mail', function(SimpleContainer $c) {
-			return new \OC_Mail;
+		$container->registerService('Mailer', function(SimpleContainer $c) {
+			return $c->query('ServerContainer')->getMailer();
 		});
 		$container->registerService('Defaults', function(SimpleContainer $c) {
 			return new \OC_Defaults;
