@@ -28,11 +28,12 @@ class TagService {
 	 *
 	 * @param string $path path
 	 * @param array  $tags array of tags
+	 * @return array list of tags
 	 */
 	public function updateFileTags($path, $tags) {
 		$fileInfo = $this->userFilesView->getFileInfo($path);
 		if (!$fileInfo) {
-			throw new \OCP\NotFoundException('File not found \"' . $path . '\"');
+			throw new \OCP\Files\NotFoundException('File not found \"' . $path . '\"');
 		}
 
 		$fileId = $fileInfo->getId();
@@ -48,6 +49,10 @@ class TagService {
 		foreach ($deletedTags as $tag) {
 			$this->tagger->unTag($fileId, $tag);
 		}
+
+		// TODO: re-read from tagger to make sure the
+		// list is up to date, in case of concurrent changes ?
+		return $tags;
 	}
 }
 
