@@ -14,7 +14,7 @@ namespace OC;
 /**
  * Class which provides access to the system config values stored in config.php
  * Internal class for bootstrap only.
- * fixes cyclicDI: AllConfig needs AppConfig needs Database needs AllConfig
+ * fixes cyclic DI: AllConfig needs AppConfig needs Database needs AllConfig
  */
 class SystemConfig {
 	/**
