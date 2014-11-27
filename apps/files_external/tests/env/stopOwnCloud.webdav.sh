@@ -3,10 +3,10 @@
 # ownCloud
 #
 # This script stops the docker container the files_external tests were run
-# against. It will also revert the config changes done in setupDocker.sh
+# against. It will also revert the config changes done in start step.
 #
 # @author Morris Jobke
-# @copyright 2014 Morris Jobke hey@morrisjobke.de
+# @copyright 2014 Morris Jobke <hey@morrisjobke.de>
 #
 
 if ! command -v docker >/dev/null 2>&1; then
@@ -17,18 +17,16 @@ fi
 echo "Docker executable found - stop and remove docker containers"
 
 # retrieve current folder to remove the config from the parent folder
-thisFolder=`echo $0 | replace "env/stopDocker.webdav.sh" ""`
-
-## webdav
-
-docker ps
+thisFolder=`echo $0 | replace "env/stopOwnCloud.webdav.sh" ""`
 
 # stopping and removing docker containers
-for container in `docker ps | grep morrisjobke/webdav | cut -f 1 -d " "`; do
-    echo "Stopping docker container $container"
-    docker stop $container
-    echo "Removing docker container $container"
-    docker rm $container
+for container in `cat $thisFolder/dockerContainerOwnCloud.webdav`; do
+    echo "Stopping and removing docker container $container"
+    # kills running container and removes it
+    docker rm -f $container
 done;
 
+# cleanup
 rm $thisFolder/config.webdav.php
+rm $thisFolder/dockerContainerOwnCloud.webdav
+

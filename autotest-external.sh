@@ -220,6 +220,7 @@ EOF
 
 	for startFile in `ls -1 $FILES_EXTERNAL_BACKEND_ENV_PATH | grep start`; do
 	    echo "start: $startFile"
+
 	    # execute start file
 	    ./$FILES_EXTERNAL_BACKEND_ENV_PATH/$startFile
 
