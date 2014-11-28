@@ -52,6 +52,9 @@ class Util {
 	private $recoveryKeyId;
 	private $isPublic;
 
+	/** @var \OCP\IConfig */
+	private $config;
+
 	/**
 	 * @param \OC\Files\View $view
 	 * @param string $userId
@@ -63,10 +66,10 @@ class Util {
 		$this->client = $client;
 		$this->userId = $userId;
 
-		$appConfig = \OC::$server->getAppConfig();
+		$this->config = \OC::$server->getConfig();
 
-		$this->publicShareKeyId = $appConfig->getValue('files_encryption', 'publicShareKeyId');
-		$this->recoveryKeyId = $appConfig->getValue('files_encryption', 'recoveryKeyId');
+		$this->publicShareKeyId = $this->config->getAppValue('files_encryption', 'publicShareKeyId');
+		$this->recoveryKeyId = $this->config->getAppValue('files_encryption', 'recoveryKeyId');
 
 		$this->userDir = '/' . $this->userId;
 		$this->fileFolderName = 'files';
@@ -1022,11 +1025,9 @@ class Util {
 	 */
 	public function getSharingUsersArray($sharingEnabled, $filePath) {
 
-		$appConfig = \OC::$server->getAppConfig();
-
 		// Check if key recovery is enabled
 		if (
-			$appConfig->getValue('files_encryption', 'recoveryAdminEnabled')
+			$this->config->getAppValue('files_encryption', 'recoveryAdminEnabled')
 			&& $this->recoveryEnabledForUser()
 		) {
 			$recoveryEnabled = true;
@@ -1057,7 +1058,7 @@ class Util {
 		// Admin UID to list of users to share to
 		if ($recoveryEnabled) {
 			// Find recoveryAdmin user ID
-			$recoveryKeyId = $appConfig->getValue('files_encryption', 'recoveryKeyId');
+			$recoveryKeyId = $this->config->getAppValue('files_encryption', 'recoveryKeyId');
 			// Add recoveryAdmin to list of users sharing
 			$userIds[] = $recoveryKeyId;
 		}
@@ -1158,7 +1159,7 @@ class Util {
 		if (\OCP\User::userExists($this->userId)) {
 			$migrationStatus = \OC_Preferences::getValue($this->userId, 'files_encryption', 'migration_status');
 			if ($migrationStatus === null) {
-				\OC_Preferences::setValue($this->userId, 'files_encryption', 'migration_status', (string)self::MIGRATION_OPEN);
+				$this->config->setUserValue($this->userId, 'files_encryption', 'migration_status', (string)self::MIGRATION_OPEN);
 				$migrationStatus = self::MIGRATION_OPEN;
 			}
 		}

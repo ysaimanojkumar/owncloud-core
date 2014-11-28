@@ -47,7 +47,7 @@ class Test_Migration extends \Test\TestCase {
 
 		$this->assertTableNotExist('encryption_test');
 
-		$migration = new Migration('encryption_test');
+		$migration = new Migration(\OC::$server->getConfig(), 'encryption_test');
 		$migration->dropTableEncryption();
 
 		$this->assertTableNotExist('encryption_test');
@@ -97,6 +97,8 @@ class Test_Migration extends \Test\TestCase {
 			$this->markTestSkipped('Fails on travis');
 		}
 
+		$config = \OC::$server->getConfig();
+
 		$this->assertTableNotExist('encryption_test');
 
 		// create test table
@@ -107,14 +109,14 @@ class Test_Migration extends \Test\TestCase {
 		array('user1', 'server-side', 1, 1));
 
 		// preform migration
-		$migration = new Migration('encryption_test');
+		$migration = new Migration($config, 'encryption_test');
 		$migration->dropTableEncryption();
 
 		// assert
 		$this->assertTableNotExist('encryption_test');
 
-		$rec = \OC_Preferences::getValue('user1', 'files_encryption', 'recovery_enabled');
-		$mig = \OC_Preferences::getValue('user1', 'files_encryption', 'migration_status');
+		$rec = $config->getUserValue('user1', 'files_encryption', 'recovery_enabled');
+		$mig = $config->getUserValue('user1', 'files_encryption', 'migration_status');
 
 		$this->assertEquals(1, $rec);
 		$this->assertEquals(1, $mig);
@@ -125,6 +127,8 @@ class Test_Migration extends \Test\TestCase {
 		if (getenv('TRAVIS')) {
 			$this->markTestSkipped('Fails on travis');
 		}
+
+		$config = \OC::$server->getConfig();
 
 		// create test table
 		OC_DB::createDbFromStructure(__DIR__ . '/encryption_table.xml');
@@ -143,14 +147,14 @@ class Test_Migration extends \Test\TestCase {
 		}
 
 		// preform migration
-		$migration = new Migration('encryption_test');
+		$migration = new Migration($config, 'encryption_test');
 		$migration->dropTableEncryption();
 
 		// assert
 		$this->assertTableNotExist('encryption_test');
 
-		$rec = \OC_Preferences::getValue('user1', 'files_encryption', 'recovery_enabled');
-		$mig = \OC_Preferences::getValue('user1', 'files_encryption', 'migration_status');
+		$rec = $config->getUserValue('user1', 'files_encryption', 'recovery_enabled');
+		$mig = $config->getUserValue('user1', 'files_encryption', 'migration_status');
 
 		$this->assertEquals(1, $rec);
 		$this->assertEquals(0, $mig);

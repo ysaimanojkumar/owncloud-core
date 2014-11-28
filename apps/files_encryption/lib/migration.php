@@ -23,9 +23,15 @@
 namespace OCA\Files_Encryption;
 
 
+use OCP\IConfig;
+
 class Migration {
 
-	public function __construct($tableName = 'encryption') {
+	/** @var \OCP\IConfig */
+	private $config;
+
+	public function __construct(IConfig $config, $tableName = 'encryption') {
+		$this->config = $config;
 		$this->tableName = $tableName;
 	}
 
@@ -40,8 +46,8 @@ class Migration {
 		$result = $query->execute(array())->fetchAll();
 
 		foreach ($result as $row) {
-			\OC_Preferences::setValue($row['uid'], 'files_encryption', 'recovery_enabled', $row['recovery_enabled']);
-			\OC_Preferences::setValue($row['uid'], 'files_encryption', 'migration_status', $row['migration_status']);
+			$this->config->setUserValue($row['uid'], 'files_encryption', 'recovery_enabled', $row['recovery_enabled']);
+			$this->config->setUserValue($row['uid'], 'files_encryption', 'migration_status', $row['migration_status']);
 		}
 
 		\OC_DB::dropTable($tableName);
