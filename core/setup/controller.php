@@ -35,6 +35,13 @@ class Controller {
 		$post = $this->loadAutoConfig($post);
 		$opts = $this->getSystemInfo();
 
+		// fixes some dependency cycle and re-initiate the database connection
+		// otherwise a SQLite database is created in the wrong directory
+		// because the database connection was created with an uninitialized config
+		$closure = \OC::$server->raw('DatabaseConnection');
+		\OC::$server->offsetUnset('DatabaseConnection');
+		\OC::$server->registerService('DatabaseConnection', $closure);
+
 		if(isset($post['install']) AND $post['install']=='true') {
 			// We have to launch the installation process :
 			$e = \OC_Setup::install($post);
