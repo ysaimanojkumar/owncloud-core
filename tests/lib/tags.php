@@ -137,27 +137,19 @@ class Test_Tags extends \Test\TestCase {
 		$tagger = $this->tagMgr->load($this->objectType, $defaultTags);
 
 		$tagger->tagAs(1, 'Friends');
+		$tagger->tagAs(1, 'Other');
 		$tagger->tagAs(2, 'Family');
 
 		$this->assertEquals(
 			array(
-				array(
-					'id' => 1,
-					'tag' => 'Friends',
-				),
+				1 => array('Friends', 'Other')
 			),
 			$tagger->getTagsForObjects(1)
 		);
 		$this->assertEquals(
 			array(
-				array(
-					'id' => 1,
-					'tag' => 'Friends',
-				),
-				array(
-					'id' => 2,
-					'tag' => 'Family',
-				),
+				1 => array('Friends', 'Other'),
+				2 => array('Family'),
 			),
 			$tagger->getTagsForObjects(array(1, 2))
 		);

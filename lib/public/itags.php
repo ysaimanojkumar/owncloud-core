@@ -78,15 +78,16 @@ interface ITags {
 	/**
 	 * Get a list of tags for the given item ids.
 	 *
-	 * This returns an array with object id / tag name:
+	 * This returns an array with object id / tag names:
 	 * [
-	 *   ['id' => 1, 'tag' => 'First tag'],
-	 *   ['id' => 1, 'tag' => 'Second tag'],
-	 *   ['id' => 2, 'tag' => 'First tag'],
+	 *   1 => array('First tag', 'Second tag'),
+	 *   2 => array('Second tag'),
+	 *   3 => array('Second tag', 'Third tag'),
 	 * ]
 	 *
 	 * @param array|int $objIds item ids
-	 * @return array of tag names and object ids
+	 * @return array with object id as key and an array
+	 * of tag names as value
 	 */
 	public function getTagsForObjects($objIds);
 
