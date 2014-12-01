@@ -200,10 +200,26 @@ class Tags implements \OCP\ITags {
 	}
 
 	/**
+	 * Add tag entry into the object entries structure
+	 *
+	 * @param array $entries
+	 * @param int $objId object id to insert
+	 * @param string $tag tag name to insert
+	 * @return $entries
+	 */
+	private function addObjectEntry(&$entries, $objId, $tag) {
+		if (!isset($entries[$objId])) {
+			$entry = $entries[$objId] = array();
+		}
+		$entry = $entries[$objId][] = $tag;
+		return $entries;
+	}
+
+	/**
 	 * Get the list of tags for the given ids.
 	 *
 	 * @param array|int $objIds
-	 * @return array of tags ids, tag names and object ids
+	 * @return array of tags id as key to array of tag names
 	 */
 	public function getTagsForObjects($objIds) {
 		if (!is_array($objIds)) {
@@ -223,10 +239,7 @@ class Tags implements \OCP\ITags {
 				$stmt = \OCP\DB::prepare($sql);
 				$result = $stmt->execute(array($this->user, $this->type, (int)$objIds[0]));
 				while ($row = $result->fetchRow()) {
-					$entries[] = array(
-						'id' => (int)$row['objid'],
-						'tag' => $row['category']
-					);
+					$this->addObjectEntry($entries, (int)$row['objid'], $row['category']);
 				}
 			} else {
 				$conn = \OC_DB::getConnection($sql);
@@ -236,10 +249,7 @@ class Tags implements \OCP\ITags {
 					array(null, null, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
 				);
 				while ($row = $result->fetch()) {
-					$entries[] = array(
-						'id' => (int)$row['objid'],
-						'tag' => $row['category']
-					);
+					$this->addObjectEntry($entries, (int)$row['objid'], $row['category']);
 				}
 			}
 			if (\OCP\DB::isError($result)) {
