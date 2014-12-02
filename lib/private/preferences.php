@@ -249,25 +249,6 @@ class Preferences {
 	}
 
 	/**
-	 * Remove app of user from preferences
-	 * @param string $user user
-	 * @param string $app app
-	 *
-	 * Removes all keys in preferences belonging to the app and the user.
-	 */
-	public function deleteApp($user, $app) {
-		$where = array(
-			'userid' => $user,
-			'appid' => $app,
-		);
-		$this->conn->delete('*PREFIX*preferences', $where);
-
-		if (isset($this->cache[$user])) {
-			unset($this->cache[$user][$app]);
-		}
-	}
-
-	/**
 	 * Remove user from preferences
 	 * @param string $user user
 	 *
