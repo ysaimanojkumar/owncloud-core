@@ -35,14 +35,18 @@ class Search implements ISearch {
 	/**
 	 * Search all providers for $query
 	 * @param string $query
+	 * @param string[] $inApps optionally limit results to the given apps
 	 * @return array An array of OC\Search\Result's
 	 */
-	public function search($query) {
+	public function search($query, array $inApps = array()) {
 		$this->initProviders();
 		$results = array();
 		foreach($this->providers as $provider) {
 			/** @var $provider Provider */
-			$results = array_merge($results, $provider->search($query));
+			$forApps = $provider->getOption(Provider::OPTION_APPS);
+			if (empty($inApps) || empty($forApps) || array_intersect($forApps, $inApps)) {
+				$results = array_merge($results, $provider->search($query));
+			}
 		}
 		return $results;
 	}
@@ -51,8 +55,8 @@ class Search implements ISearch {
 	 * Remove all registered search providers
 	 */
 	public function clearProviders() {
-		$this->providers=array();
-		$this->registeredProviders=array();
+		$this->providers = array();
+		$this->registeredProviders = array();
 	}
 
 	/**
@@ -67,7 +71,7 @@ class Search implements ISearch {
 			}
 		);
 		// force regeneration of providers on next search
-		$this->providers=array();
+		$this->providers = array();
 	}
 
 	/**
@@ -75,21 +79,21 @@ class Search implements ISearch {
 	 * @param string $class class name of a OC\Search\Provider
 	 * @param array $options optional
 	 */
-	public function registerProvider($class, $options=array()) {
-		$this->registeredProviders[]=array('class'=>$class, 'options'=>$options);
+	public function registerProvider($class, array $options = array()) {
+		$this->registeredProviders[] = array('class' => $class, 'options' => $options);
 	}
 
 	/**
 	 * Create instances of all the registered search providers
 	 */
 	private function initProviders() {
-		if(count($this->providers)>0) {
+		if( ! empty($this->providers) ) {
 			return;
 		}
 		foreach($this->registeredProviders as $provider) {
 			$class = $provider['class'];
 			$options = $provider['options'];
-			$this->providers[]=new $class($options);
+			$this->providers[] = new $class($options);
 		}
 	}
 

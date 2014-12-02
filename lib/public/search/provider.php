@@ -24,6 +24,8 @@ namespace OCP\Search;
  */
 abstract class Provider {
 
+	const OPTION_APPS = 'apps';
+
 	/**
 	 * List of options (currently unused)
 	 * @var array
@@ -32,10 +34,23 @@ abstract class Provider {
 
 	/**
 	 * Constructor
-	 * @param array $options
+	 * @param array $options as key => value
 	 */
-	public function __construct($options) {
+	public function __construct($options = array()) {
 		$this->options = $options;
+	}
+
+	/**
+	 * get a value from the options array or null
+	 * @param string $key
+	 * @return mixed
+	 */
+	public function getOption($key) {
+		if (is_array($this->options) && isset($this->options[$key])) {
+			return $this->options[$key];
+		} else {
+			return null;
+		}
 	}
 
 	/**
