@@ -125,13 +125,6 @@ class Test_Preferences extends \Test\TestCase {
 		$this->assertEquals(0, count($result->fetchAll()));
 	}
 
-	public function testDeleteApp() {
-		$this->assertTrue(\OC_Preferences::deleteApp('Deleteuser', 'deleteapp'));
-		$query = \OC_DB::prepare('SELECT `configvalue` FROM `*PREFIX*preferences` WHERE `userid` = ? AND `appid` = ?');
-		$result = $query->execute(array('Deleteuser', 'deleteapp'));
-		$this->assertEquals(0, count($result->fetchAll()));
-	}
-
 	public function testDeleteUser() {
 		$this->assertTrue(\OC_Preferences::deleteUser('Deleteuser'));
 		$query = \OC_DB::prepare('SELECT `configvalue` FROM `*PREFIX*preferences` WHERE `userid` = ?');
