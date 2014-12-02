@@ -140,19 +140,14 @@ class Test_Tags extends \Test\TestCase {
 		$tagger->tagAs(1, 'Other');
 		$tagger->tagAs(2, 'Family');
 
-		$this->assertEquals(
-			array(
-				1 => array('Friends', 'Other')
-			),
-			$tagger->getTagsForObjects(1)
-		);
-		$this->assertEquals(
-			array(
-				1 => array('Friends', 'Other'),
-				2 => array('Family'),
-			),
-			$tagger->getTagsForObjects(array(1, 2))
-		);
+		$tags = $tagger->getTagsForObjects(1);
+		$this->assertEquals(1, count($tags));
+		$this->assertSame(array('Friends', 'Other'), current($tags));
+
+		$tags = $tagger->getTagsForObjects(array(1, 2));
+		$this->assertEquals(2, count($tags));
+		$this->assertSame(array('Friends', 'Other'), $tags[1]);
+		$this->assertSame(array('Family'), $tags[2]);
 		$this->assertEquals(
 			array(),
 			$tagger->getTagsForObjects(4)
