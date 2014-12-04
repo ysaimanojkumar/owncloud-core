@@ -518,21 +518,24 @@ class Cache {
 			$userId = \OCP\User::getUser();
 		}
 		$sql = 'SELECT `fileid`, `storage`, `path`, `parent`, `name`, ' .
-			'`mimetype`, `mimepart`, `size`, `mtime`, `encrypted`, `unencrypted_size`, `etag`, `permissions` ' .
-			'FROM `*PREFIX*filecache` file, `*PREFIX*vcategory_to_object` tagmap, `*PREFIX*vcategory` tag ' .
+			'`mimetype`, `mimepart`, `size`, `mtime`, ' .
+			'`encrypted`, `unencrypted_size`, `etag`, `permissions` ' .
+			'FROM `*PREFIX*filecache` `file`, ' .
+			'`*PREFIX*vcategory_to_object` `tagmap`, ' .
+			'`*PREFIX*vcategory` `tag` ' .
 			// JOIN filecache to vcategory_to_object
-			'WHERE file.`fileid` = tagmap.`objid` '.
+			'WHERE `file`.`fileid` = `tagmap`.`objid` '.
 			// JOIN vcategory_to_object to vcategory
-			'AND tagmap.`type` = tag.`type` ' .
-			'AND tagmap.`categoryid` = tag.`id` ' .
+			'AND `tagmap`.`type` = `tag`.`type` ' .
+			'AND `tagmap`.`categoryid` = `tag`.`id` ' .
 			// conditions
-			'AND file.`storage` = ? '.
-			'AND tag.`type` = "files" ' .
-			'AND tag.`uid` = ? ';
+			'AND `file`.`storage` = ? '.
+			'AND `tag`.`type` = "files" ' .
+			'AND `tag`.`uid` = ? ';
 		if (is_int($tag)) {
-			$sql .= 'AND tag.`id` = ? ';
+			$sql .= 'AND `tag`.`id` = ? ';
 		} else {
-			$sql .= 'AND tag.`category` = ? ';
+			$sql .= 'AND `tag`.`category` = ? ';
 		}
 		$result = \OC_DB::executeAudited(
 			$sql,
