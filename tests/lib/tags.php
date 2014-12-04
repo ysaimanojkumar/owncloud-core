@@ -142,11 +142,15 @@ class Test_Tags extends \Test\TestCase {
 
 		$tags = $tagger->getTagsForObjects(1);
 		$this->assertEquals(1, count($tags));
-		$this->assertSame(array('Friends', 'Other'), current($tags));
+		$tags = current($tags);
+		sort($tags);
+		$this->assertSame(array('Friends', 'Other'), $tags);
 
 		$tags = $tagger->getTagsForObjects(array(1, 2));
 		$this->assertEquals(2, count($tags));
-		$this->assertSame(array('Friends', 'Other'), $tags[1]);
+		$tags1 = $tags[1];
+		sort($tags1);
+		$this->assertSame(array('Friends', 'Other'), $tags1);
 		$this->assertSame(array('Family'), $tags[2]);
 		$this->assertEquals(
 			array(),
