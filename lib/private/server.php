@@ -251,7 +251,7 @@ class Server extends SimpleContainer implements IServerContainer {
 			return new \OC\App\AppManager($userSession, $appConfig, $groupManager);
 		});
 		$this->registerService('IniWrapper', function ($c) {
-						return new IniGetWrapper();
+			return new IniGetWrapper();
 		});
 	}
 
@@ -653,9 +653,9 @@ class Server extends SimpleContainer implements IServerContainer {
 	/**
 	 * Get the IniWrapper
 	 *
-	 * @return \bantu\IniGetWrapper\IniGetWrapper
+	 * @return IniGetWrapper
 	 */
 	public function getIniWrapper() {
-			return $this->query('IniWrapper');
+		return $this->query('IniWrapper');
 	}
 }
