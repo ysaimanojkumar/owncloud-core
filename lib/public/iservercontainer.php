@@ -305,4 +305,11 @@ interface IServerContainer {
 	 * @return string
 	 */
 	function getWebRoot();
+
+	/**
+	 * Get the IniWrapper
+	 *
+	 * @return \bantu\IniGetWrapper\IniGetWrapper
+	 */
+	 function getIniWrapper();
 }
